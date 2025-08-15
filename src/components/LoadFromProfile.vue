@@ -1,10 +1,14 @@
 <template>
   <div class="load-from-profile">
-    <button 
-      @click="showLoadModal = true" 
+    <button
+      @click="showLoadModal = true"
       class="load-btn"
       :disabled="!hasProfileData"
-      :title="hasProfileData ? 'Load saved data from your profile' : 'No profile data available'"
+      :title="
+        hasProfileData
+          ? 'Load saved data from your profile'
+          : 'No profile data available'
+      "
     >
       📊 Load from Profile
     </button>
@@ -16,27 +20,28 @@
           <h3>Load from Financial Profile</h3>
           <button @click="closeModal" class="close-btn">&times;</button>
         </div>
-        
+
         <div class="modal-content">
           <p class="modal-description">
-            Select which profile data you'd like to load into the calculator fields. 
-            This will pre-populate the form with your saved financial information.
+            Select which profile data you'd like to load into the calculator
+            fields. This will pre-populate the form with your saved financial
+            information.
           </p>
-          
+
           <!-- Data Selection -->
           <div class="data-selection">
             <h4>Select Data to Load:</h4>
-            
+
             <div class="data-groups">
-              <div 
-                v-for="(group, groupKey) in availableData" 
-                :key="groupKey" 
+              <div
+                v-for="(group, groupKey) in availableData"
+                :key="groupKey"
                 class="data-group"
               >
                 <div class="group-header">
                   <label class="group-checkbox">
-                    <input 
-                      type="checkbox" 
+                    <input
+                      type="checkbox"
                       :checked="isGroupSelected(groupKey)"
                       @change="toggleGroup(groupKey)"
                     />
@@ -45,403 +50,416 @@
                   </label>
                   <small>{{ group.description }}</small>
                 </div>
-                
+
                 <div class="data-items">
-                  <label 
-                    v-for="(field, fieldKey) in group.fields" 
+                  <label
+                    v-for="(field, fieldKey) in group.fields"
                     :key="fieldKey"
                     class="data-item"
                   >
-                    <input 
-                      type="checkbox" 
+                    <input
+                      type="checkbox"
                       v-model="selectedData[groupKey][fieldKey]"
                       @change="updateGroupSelection(groupKey)"
                     />
                     <span class="checkmark"></span>
                     <span class="field-label">{{ field.label }}</span>
-                    <span class="field-value">${{ formatNumber(field.value) }}</span>
+                    <span class="field-value"
+                      >${{ formatNumber(field.value) }}</span
+                    >
                   </label>
                 </div>
-          </div>
-        </div>
-        
-        <!-- Last Updated Info -->
-        <div class="last-updated" v-if="hasProfileData">
-          <h4>Profile Data Status:</h4>
-          <div class="update-info">
-            <div class="info-item">
-              <span class="info-label">Last Updated:</span>
-              <span class="info-value">{{ formatDate(lastUpdated) }}</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">Data Source:</span>
-              <span class="info-value">{{ dataSource }}</span>
+              </div>
             </div>
           </div>
+
+          <!-- Last Updated Info -->
+          <div class="last-updated" v-if="hasProfileData">
+            <h4>Profile Data Status:</h4>
+            <div class="update-info">
+              <div class="info-item">
+                <span class="info-label">Last Updated:</span>
+                <span class="info-value">{{ formatDate(lastUpdated) }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Data Source:</span>
+                <span class="info-value">{{ dataSource }}</span>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      
-      <div class="modal-footer">
-        <button @click="closeModal" class="cancel-btn">Cancel</button>
-        <button 
-          @click="loadToCalculator" 
-          class="confirm-load-btn"
-          :disabled="!hasSelectedData || isLoading"
-        >
-          <span v-if="!isLoading">Load Selected Data</span>
-          <span v-else>Loading...</span>
-        </button>
+
+        <div class="modal-footer">
+          <button @click="closeModal" class="cancel-btn">Cancel</button>
+          <button
+            @click="loadToCalculator"
+            class="confirm-load-btn"
+            :disabled="!hasSelectedData || isLoading"
+          >
+            <span v-if="!isLoading">Load Selected Data</span>
+            <span v-else>Loading...</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
-import { profileActions } from '../store/profile'
+import { profileActions } from "../store/profile";
 
 export default {
-  name: 'LoadFromProfile',
+  name: "LoadFromProfile",
   props: {
     calculatorType: {
       type: String,
       required: true,
-      validator: value => ['downPayment', 'netWorth', 'cashFlow'].includes(value)
-    }
+      validator: (value) =>
+        ["downPayment", "netWorth", "cashFlow"].includes(value),
+    },
   },
-  
+
   data() {
     return {
       showLoadModal: false,
       isLoading: false,
       selectedData: {},
-      availableData: {}
-    }
+      availableData: {},
+    };
   },
-  
+
   computed: {
     hasProfileData() {
-      return profileActions.hasProfileData(this.calculatorType)
+      return profileActions.hasProfileData(this.calculatorType);
     },
-    
+
     profileValues() {
-      return profileActions.getProfileComparison(this.calculatorType)
+      return profileActions.getProfileComparison(this.calculatorType);
     },
-    
+
     hasSelectedData() {
-      return Object.values(this.selectedData).some(group => 
-        Object.values(group).some(selected => selected)
-      )
+      return Object.values(this.selectedData).some((group) =>
+        Object.values(group).some((selected) => selected)
+      );
     },
-    
+
     lastUpdated() {
-      const profileStore = profileActions.store
+      const profileStore = profileActions.store;
       switch (this.calculatorType) {
-        case 'downPayment':
-          return profileStore.lastUpdated.financialState || profileStore.lastUpdated.goals
-        case 'netWorth':
-          return profileStore.lastUpdated.netWorth
-        case 'cashFlow':
-          return profileStore.lastUpdated.cashFlow || profileStore.lastUpdated.financialState
+        case "downPayment":
+          return (
+            profileStore.lastUpdated.financialState ||
+            profileStore.lastUpdated.goals
+          );
+        case "netWorth":
+          return profileStore.lastUpdated.netWorth;
+        case "cashFlow":
+          return (
+            profileStore.lastUpdated.cashFlow ||
+            profileStore.lastUpdated.financialState
+          );
         default:
-          return null
+          return null;
       }
     },
-    
+
     dataSource() {
-      const profileStore = profileActions.store
+      const profileStore = profileActions.store;
       switch (this.calculatorType) {
-        case 'downPayment':
-          if (profileStore.lastUpdated.goals) return 'Down Payment Calculator'
-          if (profileStore.lastUpdated.financialState) return 'Financial Profile'
-          return 'Not available'
-        case 'netWorth':
-          return 'Net Worth Calculator'
-        case 'cashFlow':
-          if (profileStore.lastUpdated.cashFlow) return 'Cash Flow Calculator'
-          if (profileStore.lastUpdated.financialState) return 'Financial Profile'
-          return 'Not available'
+        case "downPayment":
+          if (profileStore.lastUpdated.goals) return "Down Payment Calculator";
+          if (profileStore.lastUpdated.financialState)
+            return "Financial Profile";
+          return "Not available";
+        case "netWorth":
+          return "Net Worth Calculator";
+        case "cashFlow":
+          if (profileStore.lastUpdated.cashFlow) return "Cash Flow Calculator";
+          if (profileStore.lastUpdated.financialState)
+            return "Financial Profile";
+          return "Not available";
         default:
-          return 'Not available'
+          return "Not available";
       }
-    }
+    },
   },
-  
+
   watch: {
     calculatorType: {
       handler() {
-        this.initializeAvailableData()
+        this.initializeAvailableData();
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
-  
+
   methods: {
     initializeAvailableData() {
       switch (this.calculatorType) {
-        case 'downPayment':
+        case "downPayment":
           this.availableData = {
             income: {
-              title: 'Income',
-              description: 'Your monthly income information',
+              title: "Income",
+              description: "Your monthly income information",
               fields: {
                 monthlyIncome: {
-                  label: 'Monthly Income',
-                  value: this.profileValues.monthlyIncome || 0
-                }
-              }
+                  label: "Monthly Income",
+                  value: this.profileValues.monthlyIncome || 0,
+                },
+              },
             },
             savings: {
-              title: 'Savings',
-              description: 'Your current savings amounts',
+              title: "Savings",
+              description: "Your current savings amounts",
               fields: {
                 existingSavings: {
-                  label: 'Existing Savings',
-                  value: this.profileValues.existingSavings || 0
-                }
-              }
+                  label: "Existing Savings",
+                  value: this.profileValues.existingSavings || 0,
+                },
+              },
             },
             goals: {
-              title: 'Financial Goals',
-              description: 'Your home purchase targets',
+              title: "Financial Goals",
+              description: "Your home purchase targets",
               fields: {
                 downPaymentTarget: {
-                  label: 'Down Payment Target',
-                  value: this.profileValues.downPaymentTarget || 0
+                  label: "Down Payment Target",
+                  value: this.profileValues.downPaymentTarget || 0,
                 },
                 monthlySavingsGoal: {
-                  label: 'Monthly Savings Goal',
-                  value: this.profileValues.monthlySavingsGoal || 0
-                }
-              }
-            }
-          }
-          break
-          
-        case 'netWorth':
+                  label: "Monthly Savings Goal",
+                  value: this.profileValues.monthlySavingsGoal || 0,
+                },
+              },
+            },
+          };
+          break;
+
+        case "netWorth":
           this.availableData = {
             assets: {
-              title: 'Assets',
-              description: 'Your current asset values',
-              fields: {}
+              title: "Assets",
+              description: "Your current asset values",
+              fields: {},
             },
             liabilities: {
-              title: 'Liabilities',
-              description: 'Your current debt amounts',
-              fields: {}
-            }
-          }
-          
+              title: "Liabilities",
+              description: "Your current debt amounts",
+              fields: {},
+            },
+          };
+
           // Populate asset fields
           if (this.profileValues.assets) {
-            Object.keys(this.profileValues.assets).forEach(key => {
+            Object.keys(this.profileValues.assets).forEach((key) => {
               this.availableData.assets.fields[key] = {
                 label: this.formatAssetLabel(key),
-                value: this.profileValues.assets[key] || 0
-              }
-            })
+                value: this.profileValues.assets[key] || 0,
+              };
+            });
           }
-          
+
           // Populate liability fields
           if (this.profileValues.liabilities) {
-            Object.keys(this.profileValues.liabilities).forEach(key => {
+            Object.keys(this.profileValues.liabilities).forEach((key) => {
               this.availableData.liabilities.fields[key] = {
                 label: this.formatLiabilityLabel(key),
-                value: this.profileValues.liabilities[key] || 0
-              }
-            })
+                value: this.profileValues.liabilities[key] || 0,
+              };
+            });
           }
-          break
-          
-        case 'cashFlow':
+          break;
+
+        case "cashFlow":
           this.availableData = {
             income: {
-              title: 'Income',
-              description: 'Your monthly income',
+              title: "Income",
+              description: "Your monthly income",
               fields: {
                 monthlyIncome: {
-                  label: 'Monthly Income',
-                  value: this.profileValues.monthlyIncome || 0
-                }
-              }
+                  label: "Monthly Income",
+                  value: this.profileValues.monthlyIncome || 0,
+                },
+              },
             },
             fixedExpenses: {
-              title: 'Fixed Expenses',
-              description: 'Your recurring monthly expenses',
-              fields: {}
+              title: "Fixed Expenses",
+              description: "Your recurring monthly expenses",
+              fields: {},
             },
             variableExpenses: {
-              title: 'Variable Expenses',
-              description: 'Your flexible monthly expenses',
-              fields: {}
+              title: "Variable Expenses",
+              description: "Your flexible monthly expenses",
+              fields: {},
             },
             savings: {
-              title: 'Savings Targets',
-              description: 'Your monthly savings goals',
-              fields: {}
-            }
-          }
-          
+              title: "Savings Targets",
+              description: "Your monthly savings goals",
+              fields: {},
+            },
+          };
+
           // Populate expense fields
           if (this.profileValues.fixedExpenses) {
-            Object.keys(this.profileValues.fixedExpenses).forEach(key => {
+            Object.keys(this.profileValues.fixedExpenses).forEach((key) => {
               this.availableData.fixedExpenses.fields[key] = {
                 label: this.formatExpenseLabel(key),
-                value: this.profileValues.fixedExpenses[key] || 0
-              }
-            })
+                value: this.profileValues.fixedExpenses[key] || 0,
+              };
+            });
           }
-          
+
           if (this.profileValues.variableExpenses) {
-            Object.keys(this.profileValues.variableExpenses).forEach(key => {
+            Object.keys(this.profileValues.variableExpenses).forEach((key) => {
               this.availableData.variableExpenses.fields[key] = {
                 label: this.formatExpenseLabel(key),
-                value: this.profileValues.variableExpenses[key] || 0
-              }
-            })
+                value: this.profileValues.variableExpenses[key] || 0,
+              };
+            });
           }
-          
+
           if (this.profileValues.savings) {
-            Object.keys(this.profileValues.savings).forEach(key => {
+            Object.keys(this.profileValues.savings).forEach((key) => {
               this.availableData.savings.fields[key] = {
                 label: this.formatSavingsLabel(key),
-                value: this.profileValues.savings[key] || 0
-              }
-            })
+                value: this.profileValues.savings[key] || 0,
+              };
+            });
           }
-          break
+          break;
       }
-      
+
       // Initialize selected data
-      this.selectedData = {}
-      Object.keys(this.availableData).forEach(groupKey => {
-        this.selectedData[groupKey] = {}
-        Object.keys(this.availableData[groupKey].fields).forEach(fieldKey => {
-          this.selectedData[groupKey][fieldKey] = true
-        })
-      })
+      this.selectedData = {};
+      Object.keys(this.availableData).forEach((groupKey) => {
+        this.selectedData[groupKey] = {};
+        Object.keys(this.availableData[groupKey].fields).forEach((fieldKey) => {
+          this.selectedData[groupKey][fieldKey] = true;
+        });
+      });
     },
-    
+
     toggleGroup(groupKey) {
-      const isSelected = this.isGroupSelected(groupKey)
-      Object.keys(this.selectedData[groupKey]).forEach(fieldKey => {
-        this.selectedData[groupKey][fieldKey] = !isSelected
-      })
+      const isSelected = this.isGroupSelected(groupKey);
+      Object.keys(this.selectedData[groupKey]).forEach((fieldKey) => {
+        this.selectedData[groupKey][fieldKey] = !isSelected;
+      });
     },
-    
+
     isGroupSelected(groupKey) {
-      return Object.values(this.selectedData[groupKey]).every(selected => selected)
+      return Object.values(this.selectedData[groupKey]).every(
+        (selected) => selected
+      );
     },
-    
+
     updateGroupSelection(groupKey) {
       // This method is called when individual fields change
       // Group selection logic is handled by isGroupSelected computed property
     },
-    
+
     async loadToCalculator() {
-      this.isLoading = true
-      
+      this.isLoading = true;
+
       try {
         // Prepare data to load based on selected fields
-        const dataToLoad = {}
-        
-        Object.keys(this.selectedData).forEach(groupKey => {
-          Object.keys(this.selectedData[groupKey]).forEach(fieldKey => {
+        const dataToLoad = {};
+
+        Object.keys(this.selectedData).forEach((groupKey) => {
+          Object.keys(this.selectedData[groupKey]).forEach((fieldKey) => {
             if (this.selectedData[groupKey][fieldKey]) {
-              const field = this.availableData[groupKey].fields[fieldKey]
+              const field = this.availableData[groupKey].fields[fieldKey];
               if (field.value !== undefined) {
-                if (!dataToLoad[groupKey]) dataToLoad[groupKey] = {}
-                dataToLoad[groupKey][fieldKey] = field.value
+                if (!dataToLoad[groupKey]) dataToLoad[groupKey] = {};
+                dataToLoad[groupKey][fieldKey] = field.value;
               }
             }
-          })
-        })
-        
+          });
+        });
+
         // Emit load event with selected data
-        this.$emit('load', dataToLoad)
-        
+        this.$emit("load", dataToLoad);
+
         // Close modal
-        this.closeModal()
-        
+        this.closeModal();
       } catch (error) {
-        console.error('Failed to load profile data:', error)
+        console.error("Failed to load profile data:", error);
       } finally {
-        this.isLoading = false
+        this.isLoading = false;
       }
     },
-    
+
     closeModal() {
-      this.showLoadModal = false
+      this.showLoadModal = false;
     },
-    
+
     formatNumber(value) {
-      if (typeof value !== 'number') return '0'
-      return value.toLocaleString('en-US', {
+      if (typeof value !== "number") return "0";
+      return value.toLocaleString("en-US", {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-      })
+        maximumFractionDigits: 0,
+      });
     },
-    
+
     formatDate(dateString) {
-      if (!dateString) return 'Never'
-      const date = new Date(dateString)
-      return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      })
+      if (!dateString) return "Never";
+      const date = new Date(dateString);
+      return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
     },
-    
+
     formatAssetLabel(key) {
       const labels = {
-        cashChecking: 'Cash & Checking',
-        highInterestSavings: 'High-Interest Savings',
-        tfsa: 'TFSA',
-        rrsp: 'RRSP',
-        fhsa: 'FHSA',
-        investments: 'Other Investments',
-        otherAssets: 'Other Assets'
-      }
-      return labels[key] || key
+        cashChecking: "Cash & Checking",
+        highInterestSavings: "High-Interest Savings",
+        tfsa: "TFSA",
+        rrsp: "RRSP",
+        fhsa: "FHSA",
+        investments: "Other Investments",
+        otherAssets: "Other Assets",
+      };
+      return labels[key] || key;
     },
-    
+
     formatLiabilityLabel(key) {
       const labels = {
-        creditCards: 'Credit Cards',
-        linesOfCredit: 'Lines of Credit',
-        carLoans: 'Car Loans',
-        studentLoans: 'Student Loans',
-        otherDebts: 'Other Debts'
-      }
-      return labels[key] || key
+        creditCards: "Credit Cards",
+        linesOfCredit: "Lines of Credit",
+        carLoans: "Car Loans",
+        studentLoans: "Student Loans",
+        otherDebts: "Other Debts",
+      };
+      return labels[key] || key;
     },
-    
+
     formatExpenseLabel(key) {
       const labels = {
-        rentMortgage: 'Rent/Mortgage',
-        utilities: 'Utilities',
-        internet: 'Internet',
-        phone: 'Phone',
-        insurance: 'Insurance',
-        transitCar: 'Transit/Car',
-        subscriptions: 'Subscriptions',
-        minimumDebtPayments: 'Minimum Debt Payments'
-      }
-      return labels[key] || key
+        rentMortgage: "Rent/Mortgage",
+        utilities: "Utilities",
+        internet: "Internet",
+        phone: "Phone",
+        insurance: "Insurance",
+        transitCar: "Transit/Car",
+        subscriptions: "Subscriptions",
+        minimumDebtPayments: "Minimum Debt Payments",
+      };
+      return labels[key] || key;
     },
-    
+
     formatSavingsLabel(key) {
       const labels = {
-        emergencyFund: 'Emergency Fund',
-        homeFund: 'Home Fund',
-        rrspFhsa: 'RRSP/FHSA'
-      }
-      return labels[key] || key
-    }
-  }
-}
+        emergencyFund: "Emergency Fund",
+        homeFund: "Home Fund",
+        rrspFhsa: "RRSP/FHSA",
+      };
+      return labels[key] || key;
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -592,7 +610,7 @@ export default {
 }
 
 .group-checkbox input[type="checkbox"]:checked + .checkmark::after {
-  content: '✓';
+  content: "✓";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -735,11 +753,11 @@ export default {
     margin: 1rem;
     max-height: 95vh;
   }
-  
+
   .modal-content {
     padding: 1rem;
   }
-  
+
   .modal-footer {
     flex-direction: column;
   }
