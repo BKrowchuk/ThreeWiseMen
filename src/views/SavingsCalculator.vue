@@ -106,7 +106,7 @@
               class="conversion-display"
               v-if="formData.propertyPrice && formData.closingCosts"
             >
-              <small>${formatNumber(closingCostsAmount)}</small>
+              <small>${{ formatNumber(closingCostsAmount) }}</small>
             </div>
           </div>
 
