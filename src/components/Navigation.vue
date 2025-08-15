@@ -14,15 +14,34 @@
       >
         <svg
           class="menu-icon"
+          :class="{ active: isDrawerOpen, 'theme-adaptive': true }"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
         >
+          <!-- Enhanced hamburger to X animation -->
           <path
+            class="menu-line menu-line-1"
             stroke-linecap="round"
             stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 6h16M4 12h16M4 18h16"
+            stroke-width="2.5"
+            :d="isDrawerOpen ? 'M6 18L18 6' : 'M3 6h18'"
+          />
+          <path
+            class="menu-line menu-line-2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2.5"
+            :d="isDrawerOpen ? 'M6 6l12 12' : 'M3 12h18'"
+            :opacity="isDrawerOpen ? 0 : 1"
+          />
+          <path
+            class="menu-line menu-line-3"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2.5"
+            :d="isDrawerOpen ? '' : 'M3 18h18'"
+            :opacity="isDrawerOpen ? 0 : 1"
           />
         </svg>
       </button>
@@ -44,19 +63,51 @@
       >
         <svg
           class="theme-icon"
+          :class="{
+            'dark-mode': themeStore.isDark,
+            'light-mode': !themeStore.isDark,
+            'theme-adaptive': true,
+          }"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
         >
-          <!-- Sun icon for dark mode -->
-          <g v-if="themeStore.isDark">
-            <circle cx="12" cy="12" r="5" />
-            <path
-              d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+          <!-- Enhanced Sun icon for dark mode -->
+          <g v-if="themeStore.isDark" class="sun-icon">
+            <circle
+              cx="12"
+              cy="12"
+              r="4"
+              fill="currentColor"
+              stroke="none"
+              class="sun-center"
             />
+            <g class="sun-rays" stroke-width="2.5" stroke-linecap="round">
+              <path d="M12 2v2" />
+              <path d="M12 20v2" />
+              <path d="M4.93 4.93l1.41 1.41" />
+              <path d="M17.66 17.66l1.41 1.41" />
+              <path d="M2 12h2" />
+              <path d="M20 12h2" />
+              <path d="M6.34 17.66l-1.41 1.41" />
+              <path d="M19.07 4.93l-1.41 1.41" />
+            </g>
           </g>
-          <!-- Moon icon for light mode -->
-          <path v-else d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          <!-- Enhanced Moon icon for light mode -->
+          <g v-else class="moon-icon">
+            <path
+              d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+              fill="currentColor"
+              stroke="currentColor"
+              stroke-width="1"
+            />
+            <!-- Stars around moon for better visual -->
+            <g class="stars" fill="currentColor" stroke="none">
+              <circle cx="18" cy="6" r="0.5" />
+              <circle cx="20" cy="8" r="0.5" />
+              <circle cx="19" cy="10" r="0.5" />
+            </g>
+          </g>
         </svg>
       </button>
     </div>
@@ -264,7 +315,10 @@ export default {
   border-radius: 8px;
   cursor: pointer;
   color: var(--nav-text);
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 8px;
+  box-sizing: border-box;
 }
 
 .menu-toggle:hover,
@@ -272,11 +326,52 @@ export default {
   background-color: var(--nav-hover);
   outline: 2px solid var(--accent-color);
   outline-offset: 2px;
+  transform: scale(1.05);
 }
 
 .menu-icon {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+  display: block;
+  stroke: currentColor;
+  fill: none;
+}
+
+/* Enhanced Menu Icon Animations */
+.menu-line {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.menu-icon.active .menu-line-1 {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.menu-icon.active .menu-line-2 {
+  opacity: 0;
+  transform: scale(0);
+}
+
+.menu-icon.active .menu-line-3 {
+  opacity: 0;
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+/* Theme-adaptive menu icon */
+.menu-icon.theme-adaptive {
+  color: var(--nav-text);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+[data-theme="dark"] .menu-icon.theme-adaptive {
+  color: var(--nav-text);
+  filter: drop-shadow(0 1px 2px rgba(255, 255, 255, 0.1));
+}
+
+.menu-toggle:hover .menu-icon {
+  color: var(--accent-color);
 }
 
 /* Brand Section */
@@ -315,7 +410,10 @@ export default {
   border-radius: 8px;
   cursor: pointer;
   color: var(--nav-text);
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 8px;
+  box-sizing: border-box;
 }
 
 .theme-toggle:hover,
@@ -323,12 +421,120 @@ export default {
   background-color: var(--nav-hover);
   outline: 2px solid var(--accent-color);
   outline-offset: 2px;
+  transform: scale(1.05);
 }
 
 .theme-icon {
-  width: 20px;
-  height: 20px;
+  width: 28px;
+  height: 28px;
   stroke-width: 2;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+  display: block;
+  stroke: currentColor;
+  fill: none;
+}
+
+/* Enhanced Theme Icon Animations */
+.theme-icon.dark-mode {
+  color: #fbbf24; /* Warm sun color */
+  transform: rotate(0deg);
+}
+
+.theme-icon.light-mode {
+  color: #3b82f6; /* Cool moon color */
+  transform: rotate(180deg);
+}
+
+.theme-icon.theme-adaptive {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+}
+
+[data-theme="dark"] .theme-icon.theme-adaptive {
+  filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.15));
+}
+
+/* Sun icon animations */
+.sun-icon {
+  animation: sunAppear 0.4s ease-out;
+}
+
+.sun-center {
+  animation: sunPulse 2s ease-in-out infinite alternate;
+}
+
+.sun-rays {
+  animation: sunRotate 8s linear infinite;
+  transform-origin: center;
+}
+
+/* Moon icon animations */
+.moon-icon {
+  animation: moonAppear 0.4s ease-out;
+}
+
+.stars {
+  animation: starsTwinkle 3s ease-in-out infinite alternate;
+}
+
+/* Hover effects for theme toggle */
+.theme-toggle:hover .theme-icon.dark-mode {
+  color: #f59e0b;
+  transform: rotate(15deg) scale(1.1);
+}
+
+.theme-toggle:hover .theme-icon.light-mode {
+  color: #2563eb;
+  transform: rotate(195deg) scale(1.1);
+}
+
+@keyframes sunAppear {
+  from {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+@keyframes moonAppear {
+  from {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+@keyframes sunPulse {
+  from {
+    opacity: 0.8;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes sunRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes starsTwinkle {
+  from {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Navigation Drawer */
@@ -501,12 +707,13 @@ export default {
   .theme-toggle {
     width: 40px;
     height: 40px;
+    padding: 6px;
   }
 
   .menu-icon,
   .theme-icon {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
   }
 
   .nav-drawer {
@@ -532,8 +739,30 @@ export default {
   .drawer-backdrop,
   .menu-toggle,
   .theme-toggle,
-  .nav-item {
+  .nav-item,
+  .menu-icon,
+  .theme-icon,
+  .menu-line {
     transition: none;
+    animation: none;
+  }
+
+  .sun-icon,
+  .moon-icon,
+  .sun-center,
+  .sun-rays,
+  .stars {
+    animation: none;
+  }
+
+  .theme-icon.dark-mode,
+  .theme-icon.light-mode {
+    transform: none;
+  }
+
+  .menu-toggle:hover,
+  .theme-toggle:hover {
+    transform: none;
   }
 }
 
