@@ -9,6 +9,8 @@ import CashFlowCalculator from "./views/CashFlowCalculator.vue";
 import BudgetPlanner from "./views/BudgetPlanner.vue";
 import Investments from "./views/Investments.vue";
 import FinancialProfile from "./views/FinancialProfile.vue";
+import { themeActions } from "./store/theme.js";
+import "./assets/themes.css";
 
 const routes = [
   { path: "/", component: Dashboard },
@@ -28,4 +30,8 @@ const router = createRouter({
 
 const app = createApp(App);
 app.use(router);
+
+// Initialize theme system
+themeActions.init();
+
 app.mount("#app");

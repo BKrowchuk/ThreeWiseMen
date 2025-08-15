@@ -995,6 +995,8 @@ export default {
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
+  background: var(--bg-secondary);
+  min-height: 100vh;
 }
 
 .page-header {
@@ -1007,30 +1009,30 @@ export default {
 
 .header-content h1 {
   font-size: 2.5rem;
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 1rem;
 }
 
 .header-content p {
   font-size: 1.2rem;
-  color: #7f8c8d;
+  color: var(--text-secondary);
   max-width: 600px;
 }
 
 .back-link {
   display: inline-block;
-  color: #667eea;
+  color: var(--color-primary);
   text-decoration: none;
   font-weight: 500;
   padding: 0.75rem 1.5rem;
-  border: 2px solid #667eea;
+  border: 2px solid var(--color-primary);
   border-radius: 6px;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
 }
 
 .back-link:hover {
-  background-color: #667eea;
-  color: white;
+  background-color: var(--color-primary);
+  color: var(--text-inverse);
 }
 
 .calculator-container {
@@ -1043,17 +1045,17 @@ export default {
 
 .form-section,
 .results-section {
-  background: white;
+  background: var(--calc-card-bg);
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--calc-card-shadow);
   width: 100%;
   min-width: 0;
 }
 
 .form-section h2,
 .results-section h2 {
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 2rem;
   font-size: 1.5rem;
 }
@@ -1072,7 +1074,7 @@ export default {
 }
 
 .left-column {
-  border-right: 2px solid #e1e8ed;
+  border-right: 2px solid var(--border-primary);
   padding-right: 1rem;
 }
 
@@ -1081,34 +1083,34 @@ export default {
 }
 
 .section-group {
-  background: #f8f9fa;
+  background: var(--bg-tertiary);
   padding: 1.5rem;
   border-radius: 8px;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid var(--color-primary);
 }
 
 .section-group.income-section {
-  border-left-color: #27ae60;
-  background: #f0f9f4;
+  border-left-color: var(--success-primary);
+  background: var(--success-light);
 }
 
 .section-group.expenses-section {
-  border-left-color: #e74c3c;
-  background: #fdf2f2;
+  border-left-color: var(--error-primary);
+  background: var(--error-light);
 }
 
 .section-group.variable-section {
-  border-left-color: #f39c12;
-  background: #fef9e7;
+  border-left-color: var(--warning-primary);
+  background: var(--warning-light);
 }
 
 .section-group.savings-section {
-  border-left-color: #3498db;
-  background: #f0f4ff;
+  border-left-color: var(--info-primary);
+  background: var(--info-light);
 }
 
 .section-group h3 {
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
   font-size: 1.2rem;
   display: flex;
@@ -1117,7 +1119,7 @@ export default {
 }
 
 .section-description {
-  color: #7f8c8d;
+  color: var(--text-muted);
   font-size: 0.9rem;
   margin-bottom: 1.5rem;
 }
@@ -1135,7 +1137,7 @@ export default {
 
 .form-group label {
   font-weight: 600;
-  color: #2c3e50;
+  color: var(--text-primary);
   font-size: 0.95rem;
   display: flex;
   align-items: center;
@@ -1143,13 +1145,13 @@ export default {
 }
 
 .tooltip {
-  color: #7f8c8d;
+  color: var(--text-muted);
   cursor: help;
   font-size: 0.8rem;
 }
 
 .example-text {
-  color: #7f8c8d;
+  color: var(--text-muted);
   font-size: 0.8rem;
   font-style: italic;
 }
@@ -1163,7 +1165,7 @@ export default {
 .currency-symbol {
   position: absolute;
   left: 12px;
-  color: #7f8c8d;
+  color: var(--text-muted);
   font-weight: 500;
   z-index: 1;
 }
@@ -1171,45 +1173,49 @@ export default {
 .input-wrapper input {
   width: 100%;
   padding: 12px 12px 12px 35px;
-  border: 2px solid #e1e8ed;
+  border: 2px solid var(--input-border);
   border-radius: 8px;
   font-size: 1rem;
-  transition: border-color 0.3s ease;
+  background-color: var(--input-bg);
+  color: var(--input-text);
+  transition: border-color var(--transition-normal);
 }
 
 .input-wrapper input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--color-primary);
+  box-shadow: var(--input-focus-shadow);
 }
 
 .calculate-section {
   text-align: center;
   padding-top: 1rem;
-  border-top: 2px solid #e1e8ed;
+  border-top: 2px solid var(--border-primary);
 }
 
 .calculate-btn {
-  background: #667eea;
-  color: white;
+  background: var(--color-primary);
+  color: var(--text-inverse);
   border: none;
   padding: 14px 28px;
   border-radius: 8px;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
 }
 
 .calculate-btn:hover:not(:disabled) {
-  background: #5a6fd8;
+  background: var(--color-primary-dark);
   transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
 }
 
 .calculate-btn:disabled {
-  background: #bdc3c7;
+  background: var(--text-disabled);
   cursor: not-allowed;
   transform: none;
+  opacity: 0.6;
 }
 
 /* Results Section */
@@ -1221,37 +1227,37 @@ export default {
 }
 
 .result-card {
-  background: #f8f9fa;
+  background: var(--calc-result-bg);
   padding: 1.5rem;
   border-radius: 8px;
   text-align: center;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid var(--color-primary);
 }
 
 .result-card.income {
-  border-left-color: #27ae60;
-  background: #f0f9f4;
+  border-left-color: var(--success-primary);
+  background: var(--success-light);
 }
 
 .result-card.fixed-expenses,
 .result-card.variable-expenses {
-  border-left-color: #e74c3c;
-  background: #fdf2f2;
+  border-left-color: var(--error-primary);
+  background: var(--error-light);
 }
 
 .result-card.savings {
-  border-left-color: #3498db;
-  background: #f0f4ff;
+  border-left-color: var(--info-primary);
+  background: var(--info-light);
 }
 
 .result-card.cash-flow {
-  border-left-color: #667eea;
-  background: #f0f4ff;
+  border-left-color: var(--color-primary);
+  background: var(--info-light);
 }
 
 .result-card h3 {
   font-size: 1rem;
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
 }
 
@@ -1262,21 +1268,21 @@ export default {
 }
 
 .result-value.positive {
-  color: #27ae60;
+  color: var(--success-primary);
 }
 
 .result-value.negative {
-  color: #e74c3c;
+  color: var(--error-primary);
 }
 
 .result-detail {
   font-size: 0.85rem;
-  color: #7f8c8d;
+  color: var(--text-muted);
 }
 
 .summary-section,
 .projections-section {
-  background: #f8f9fa;
+  background: var(--bg-tertiary);
   padding: 1.5rem;
   border-radius: 8px;
   margin-bottom: 2rem;
@@ -1284,7 +1290,7 @@ export default {
 
 .summary-section h3,
 .projections-section h3 {
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   font-size: 1.2rem;
 }
@@ -1302,21 +1308,22 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem;
-  background: white;
+  background: var(--calc-card-bg);
   border-radius: 6px;
+  border: 1px solid var(--border-secondary);
 }
 
 .summary-item.total,
 .projection-item.total {
   font-weight: 600;
-  background: #f0f4ff;
-  border-left: 3px solid #667eea;
+  background: var(--info-light);
+  border-left: 3px solid var(--color-primary);
 }
 
 .summary-label,
 .projection-label {
   font-weight: 500;
-  color: #2c3e50;
+  color: var(--text-primary);
 }
 
 .summary-value,
@@ -1326,22 +1333,22 @@ export default {
 
 .summary-value.positive,
 .projection-value.positive {
-  color: #27ae60;
+  color: var(--success-primary);
 }
 
 .summary-value.negative,
 .projection-value.negative {
-  color: #e74c3c;
+  color: var(--error-primary);
 }
 
 .health-indicator {
-  background: #f8f9fa;
+  background: var(--bg-tertiary);
   padding: 1.5rem;
   border-radius: 8px;
 }
 
 .health-indicator h3 {
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   font-size: 1.2rem;
 }
@@ -1351,28 +1358,29 @@ export default {
   align-items: center;
   gap: 1rem;
   padding: 1.5rem;
-  background: white;
+  background: var(--calc-card-bg);
   border-radius: 8px;
+  border: 1px solid var(--border-secondary);
 }
 
 .health-status.excellent {
-  border-left: 4px solid #27ae60;
+  border-left: 4px solid var(--success-primary);
 }
 
 .health-status.good {
-  border-left: 4px solid #3498db;
+  border-left: 4px solid var(--info-primary);
 }
 
 .health-status.fair {
-  border-left: 4px solid #f39c12;
+  border-left: 4px solid var(--warning-primary);
 }
 
 .health-status.poor {
-  border-left: 4px solid #e74c3c;
+  border-left: 4px solid var(--error-primary);
 }
 
 .health-status.critical {
-  border-left: 4px solid #c0392b;
+  border-left: 4px solid var(--error-dark);
 }
 
 .status-icon {
@@ -1399,7 +1407,7 @@ export default {
 }
 
 .validation-errors h3 {
-  color: #e74c3c;
+  color: var(--error-primary);
   margin-bottom: 1rem;
   font-size: 1.2rem;
 }
@@ -1410,7 +1418,7 @@ export default {
 }
 
 .error-item {
-  color: #e74c3c;
+  color: var(--error-primary);
   margin-bottom: 0.5rem;
   line-height: 1.4;
 }

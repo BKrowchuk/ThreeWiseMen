@@ -4,6 +4,146 @@
 
 This document details the comprehensive restructure of the ThreeWiseMen application to create a dedicated Calculators section with multiple financial planning tools. The restructure transforms the single savings calculator into a comprehensive suite of financial calculators with shared state management and cross-calculator data synchronization.
 
+## Latest Updates
+
+### Dark Mode Implementation (December 2024)
+
+**Comprehensive Dark Theme System**
+
+A complete dark mode implementation has been added to the ThreeWiseMen application, providing users with a modern, eye-friendly alternative to the default light theme.
+
+#### Theme Management System
+
+**Theme Store (`src/store/theme.js`)**
+
+- Reactive theme state management using Vue 3 composition API
+- Support for three theme modes: `light`, `dark`, and `system`
+- Automatic system preference detection using `prefers-color-scheme` media query
+- Real-time theme switching with smooth transitions
+- Persistent theme preferences using localStorage
+- Automatic theme application on app initialization
+
+**Theme Toggle Component (`src/components/ThemeToggle.vue`)**
+
+- Intuitive sun/moon icon toggle button
+- Smooth icon transitions and hover effects
+- Theme indicator text showing current mode
+- Dropdown menu for selecting specific theme preferences
+- Responsive design that adapts to mobile screens
+- Accessible keyboard navigation and ARIA labels
+
+#### Comprehensive Color System
+
+**CSS Custom Properties (`src/assets/themes.css`)**
+
+- Complete color palette for both light and dark themes
+- Semantic color naming for consistent usage
+- Specialized calculator color variables
+- Status colors (success, warning, error, info) for both themes
+- Smooth transitions between theme changes (300ms duration)
+- High contrast support for accessibility
+- Reduced motion support for users with motion sensitivity
+
+**Color Categories:**
+
+- **Background Colors:** Primary, secondary, tertiary, elevated surfaces
+- **Text Colors:** Primary, secondary, muted, disabled, inverse
+- **Interactive Elements:** Buttons, links, hover states, focus indicators
+- **Form Elements:** Input backgrounds, borders, focus states, placeholders
+- **Calculator Specific:** Card backgrounds, result highlights, input styling
+- **Status Colors:** Success, warning, error, info with appropriate contrast
+
+#### Logo Switching System
+
+**Dynamic Logo Selection**
+
+- Automatic logo switching based on current theme
+- Light logo (`logo-light.png`) displayed in dark mode
+- Regular logo (`logo.png`) displayed in light mode
+- Implemented in both App.vue navigation and Dashboard welcome section
+- Reactive updates when theme changes
+
+#### Component Updates
+
+**Navigation (App.vue)**
+
+- Theme-aware navigation bar styling
+- Dynamic logo switching implementation
+- Theme toggle integration in navigation menu
+- Smooth color transitions for all navigation elements
+
+**Dashboard (src/views/Dashboard.vue)**
+
+- Complete dark mode styling for welcome section
+- Theme-aware summary cards and statistics
+- Dynamic logo switching in welcome header
+- Consistent color scheme throughout dashboard components
+
+**Calculators Landing Page (src/views/Calculators.vue)**
+
+- Dark mode styling for calculator cards
+- Theme-aware hover effects and animations
+- Consistent gradient backgrounds using theme variables
+- Responsive design maintained across both themes
+
+**Down Payment Calculator (src/views/DownPaymentCalculator.vue)**
+
+- Complete form styling with theme-aware inputs
+- Dark mode result cards and calculation breakdowns
+- Theme-aware validation error styling
+- Consistent button and interactive element styling
+
+**Net Worth Calculator (src/views/NetWorthCalculator.vue)**
+
+- Assets and liabilities columns with theme-appropriate colors
+- Dark mode form inputs and calculation results
+- Theme-aware tooltips and help text
+- Consistent styling with other calculator components
+
+#### Technical Implementation
+
+**Theme Application**
+
+- CSS custom properties for consistent theming
+- Data attributes (`data-theme`) for CSS targeting
+- Document root class management (`theme-light`, `theme-dark`)
+- Meta theme-color updates for mobile browser chrome
+- Automatic theme detection and application on page load
+
+**Performance Optimizations**
+
+- Efficient CSS variable usage for minimal repaints
+- Smooth transitions without performance impact
+- Lazy theme application to prevent flash of unstyled content
+- Optimized localStorage operations for theme persistence
+
+**Accessibility Features**
+
+- WCAG AA compliant color contrast ratios
+- High contrast mode support
+- Reduced motion support for accessibility
+- Proper focus indicators in both themes
+- Semantic color usage for better screen reader support
+
+#### User Experience
+
+**Seamless Theme Switching**
+
+- Instant theme application without page refresh
+- Smooth color transitions prevent jarring changes
+- Theme preference persistence across browser sessions
+- System preference detection for automatic theme selection
+- Visual feedback during theme changes
+
+**Mobile Optimization**
+
+- Responsive theme toggle that adapts to screen size
+- Touch-friendly theme switching interface
+- Optimized mobile browser chrome color updates
+- Consistent experience across all device sizes
+
+This dark mode implementation provides a comprehensive, accessible, and performant theming system that enhances the user experience while maintaining the application's professional appearance and functionality.
+
 ## Application Restructure
 
 ### Navigation Structure Changes

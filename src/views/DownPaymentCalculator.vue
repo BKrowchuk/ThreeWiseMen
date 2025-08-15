@@ -189,8 +189,8 @@
             >
               {{ isCalculating ? "Calculating..." : "Calculate Savings Plan" }}
             </button>
-            
-            <LoadFromProfile 
+
+            <LoadFromProfile
               calculator-type="downPayment"
               @load="onProfileLoad"
             />
@@ -333,7 +333,7 @@
         </div>
 
         <!-- Save to Profile Component -->
-        <SaveToProfile 
+        <SaveToProfile
           calculator-type="downPayment"
           :calculated-data="downPaymentSaveData"
           @saved="onProfileSaved"
@@ -362,7 +362,7 @@ export default {
   name: "DownPaymentCalculator",
   components: {
     SaveToProfile,
-    LoadFromProfile
+    LoadFromProfile,
   },
   data() {
     return {
@@ -460,7 +460,7 @@ export default {
         existingSavings: this.parseCurrency(this.formData.existingSavings),
         downPaymentTarget: this.downPaymentAmount,
         monthlySavingsGoal: this.monthlySavingsTarget,
-        timeline: parseInt(this.formData.timeline) || 0
+        timeline: parseInt(this.formData.timeline) || 0,
       };
     },
   },
@@ -638,36 +638,49 @@ export default {
 
     // Handle profile save
     onProfileSaved(savedData) {
-      console.log('Profile saved:', savedData);
+      console.log("Profile saved:", savedData);
       // Could add additional logic here if needed
     },
 
     // Handle profile load
     onProfileLoad(loadedData) {
-      console.log('Profile loaded:', loadedData);
-      
+      console.log("Profile loaded:", loadedData);
+
       // Populate form fields with loaded data
       if (loadedData.income?.monthlyIncome) {
-        this.formData.monthlyIncome = this.formatNumber(loadedData.income.monthlyIncome);
+        this.formData.monthlyIncome = this.formatNumber(
+          loadedData.income.monthlyIncome
+        );
       }
-      
+
       if (loadedData.savings?.existingSavings) {
-        this.formData.existingSavings = this.formatNumber(loadedData.savings.existingSavings);
+        this.formData.existingSavings = this.formatNumber(
+          loadedData.savings.existingSavings
+        );
       }
-      
+
       if (loadedData.goals?.downPaymentTarget) {
         // Convert down payment target to appropriate mode
-        if (this.downPaymentMode === 'percentage') {
-          const propertyPrice = this.parseCurrency(this.formData.propertyPrice) || 1;
-          this.formData.downPayment = ((loadedData.goals.downPaymentTarget / propertyPrice) * 100).toFixed(2);
+        if (this.downPaymentMode === "percentage") {
+          const propertyPrice =
+            this.parseCurrency(this.formData.propertyPrice) || 1;
+          this.formData.downPayment = (
+            (loadedData.goals.downPaymentTarget / propertyPrice) *
+            100
+          ).toFixed(2);
         } else {
-          this.formData.downPayment = this.formatNumber(loadedData.goals.downPaymentTarget);
+          this.formData.downPayment = this.formatNumber(
+            loadedData.goals.downPaymentTarget
+          );
         }
       }
-      
+
       if (loadedData.goals?.monthlySavingsGoal) {
         // Could use this to suggest a timeline
-        console.log('Monthly savings goal loaded:', loadedData.goals.monthlySavingsGoal);
+        console.log(
+          "Monthly savings goal loaded:",
+          loadedData.goals.monthlySavingsGoal
+        );
       }
     },
   },
@@ -679,6 +692,7 @@ export default {
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
+  background: var(--bg-secondary);
 }
 
 .page-header {
@@ -691,30 +705,30 @@ export default {
 
 .header-content h1 {
   font-size: 2.5rem;
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 1rem;
 }
 
 .header-content p {
   font-size: 1.2rem;
-  color: #7f8c8d;
+  color: var(--text-secondary);
   max-width: 600px;
 }
 
 .back-link {
   display: inline-block;
-  color: #667eea;
+  color: var(--color-primary);
   text-decoration: none;
   font-weight: 500;
   padding: 0.75rem 1.5rem;
-  border: 2px solid #667eea;
+  border: 2px solid var(--color-primary);
   border-radius: 6px;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
 }
 
 .back-link:hover {
-  background-color: #667eea;
-  color: white;
+  background-color: var(--color-primary);
+  color: var(--text-inverse);
 }
 
 .calculator-container {
@@ -727,17 +741,17 @@ export default {
 
 .form-section,
 .results-section {
-  background: white;
+  background: var(--calc-card-bg);
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--calc-card-shadow);
   width: 100%;
   min-width: 0;
 }
 
 .form-section h2,
 .results-section h2 {
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 2rem;
   font-size: 1.5rem;
 }
@@ -750,20 +764,20 @@ export default {
 }
 
 .form-column {
-  background: #f8f9fa;
+  background: var(--bg-tertiary);
   padding: 1.5rem;
   border-radius: 8px;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid var(--color-primary);
 }
 
 .column-header {
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #e1e8ed;
+  border-bottom: 2px solid var(--border-primary);
 }
 
 .column-header h3 {
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
   font-size: 1.2rem;
   display: flex;
@@ -772,7 +786,7 @@ export default {
 }
 
 .column-header p {
-  color: #7f8c8d;
+  color: var(--text-muted);
   font-size: 0.9rem;
   margin: 0;
 }
@@ -790,7 +804,7 @@ export default {
 
 .form-group label {
   font-weight: 600;
-  color: #2c3e50;
+  color: var(--text-primary);
   font-size: 0.95rem;
 }
 
@@ -804,7 +818,7 @@ export default {
 .input-symbol {
   position: absolute;
   left: 12px;
-  color: #7f8c8d;
+  color: var(--text-muted);
   font-weight: 500;
   z-index: 1;
 }
@@ -812,15 +826,17 @@ export default {
 .input-wrapper input {
   width: 100%;
   padding: 12px 12px 12px 35px;
-  border: 2px solid #e1e8ed;
+  border: 2px solid var(--input-border);
   border-radius: 8px;
   font-size: 1rem;
-  transition: border-color 0.3s ease;
+  transition: border-color var(--transition-normal);
+  background-color: var(--input-bg);
+  color: var(--input-text);
 }
 
 .input-wrapper input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--input-border-focus);
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
@@ -830,7 +846,7 @@ export default {
 
 .toggle-buttons {
   display: flex;
-  border: 2px solid #e1e8ed;
+  border: 2px solid var(--border-primary);
   border-radius: 8px;
   overflow: hidden;
 }
@@ -839,33 +855,33 @@ export default {
   flex: 1;
   padding: 8px 16px;
   border: none;
-  background: white;
-  color: #7f8c8d;
+  background: var(--input-bg);
+  color: var(--text-muted);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
   font-size: 0.9rem;
   font-weight: 500;
 }
 
 .toggle-btn.active {
-  background: #667eea;
-  color: white;
+  background: var(--color-primary);
+  color: var(--text-inverse);
 }
 
 .toggle-btn:hover:not(.active) {
-  background: #f8f9fa;
+  background: var(--bg-tertiary);
 }
 
 .conversion-display {
   margin-top: 0.25rem;
-  color: #7f8c8d;
+  color: var(--text-muted);
   font-size: 0.85rem;
 }
 
 .calculate-section {
   text-align: center;
   padding-top: 1rem;
-  border-top: 2px solid #e1e8ed;
+  border-top: 2px solid var(--border-primary);
 }
 
 .action-buttons {
@@ -883,24 +899,24 @@ export default {
 }
 
 .calculate-btn {
-  background: #667eea;
-  color: white;
+  background: var(--color-primary);
+  color: var(--text-inverse);
   border: none;
   padding: 14px 28px;
   border-radius: 8px;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
 }
 
 .calculate-btn:hover:not(:disabled) {
-  background: #5a6fd8;
+  background: var(--color-primary-dark);
   transform: translateY(-2px);
 }
 
 .calculate-btn:disabled {
-  background: #bdc3c7;
+  background: var(--text-disabled);
   cursor: not-allowed;
   transform: none;
 }
@@ -914,44 +930,48 @@ export default {
 }
 
 .result-card {
-  background: #f8f9fa;
+  background: var(--calc-result-bg);
   padding: 1.5rem;
   border-radius: 8px;
   text-align: center;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid var(--color-primary);
 }
 
 .result-card.total-costs {
-  border-left-color: #e74c3c;
-  background: #fdf2f2;
+  border-left-color: var(--error-primary);
+  background: var(--error-light);
 }
 
 .result-card.amount-needed {
-  border-left-color: #f39c12;
-  background: #fef9e7;
+  border-left-color: var(--warning-primary);
+  background: var(--warning-light);
 }
 
 .result-card h3 {
   font-size: 1rem;
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
 }
 
 .result-value {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
 }
 
 .result-detail {
   font-size: 0.85rem;
-  color: #7f8c8d;
+  color: var(--text-muted);
 }
 
 .monthly-target {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-secondary)
+  );
+  color: var(--text-inverse);
   padding: 2rem;
   border-radius: 12px;
   text-align: center;
@@ -975,14 +995,14 @@ export default {
 }
 
 .affordability-analysis {
-  background: #f8f9fa;
+  background: var(--calc-result-bg);
   padding: 1.5rem;
   border-radius: 8px;
   margin-bottom: 2rem;
 }
 
 .affordability-analysis h3 {
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   font-size: 1.2rem;
 }
@@ -998,33 +1018,33 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem;
-  background: white;
+  background: var(--calc-card-bg);
   border-radius: 6px;
 }
 
 .analysis-item.warning {
-  background: #fdf2f2;
-  border-left: 3px solid #e74c3c;
+  background: var(--error-light);
+  border-left: 3px solid var(--error-primary);
 }
 
 .analysis-label {
   font-weight: 500;
-  color: #2c3e50;
+  color: var(--text-primary);
 }
 
 .analysis-value {
   font-weight: 600;
-  color: #667eea;
+  color: var(--color-primary);
 }
 
 .calculation-breakdown {
-  background: #f8f9fa;
+  background: var(--calc-result-bg);
   padding: 1.5rem;
   border-radius: 8px;
 }
 
 .calculation-breakdown h3 {
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   font-size: 1.2rem;
 }
@@ -1040,13 +1060,13 @@ export default {
   align-items: flex-start;
   gap: 0.75rem;
   padding: 0.75rem;
-  background: white;
+  background: var(--calc-card-bg);
   border-radius: 6px;
 }
 
 .step-number {
-  background: #667eea;
-  color: white;
+  background: var(--color-primary);
+  color: var(--text-inverse);
   width: 24px;
   height: 24px;
   border-radius: 50%;
@@ -1059,20 +1079,20 @@ export default {
 }
 
 .step-text {
-  color: #2c3e50;
+  color: var(--text-primary);
   line-height: 1.4;
 }
 
 .validation-errors {
-  background: #fdf2f2;
-  border: 2px solid #e74c3c;
+  background: var(--error-light);
+  border: 2px solid var(--error-primary);
   border-radius: 8px;
   padding: 1.5rem;
   margin-bottom: 2rem;
 }
 
 .validation-errors h3 {
-  color: #e74c3c;
+  color: var(--error-primary);
   margin-bottom: 1rem;
   font-size: 1.2rem;
 }
@@ -1083,7 +1103,7 @@ export default {
 }
 
 .error-item {
-  color: #e74c3c;
+  color: var(--error-primary);
   margin-bottom: 0.5rem;
   line-height: 1.4;
 }

@@ -637,6 +637,8 @@ export default {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
+  background: var(--bg-secondary);
+  min-height: 100vh;
 }
 
 .page-header {
@@ -645,41 +647,41 @@ export default {
   align-items: center;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #e1e8ed;
+  border-bottom: 2px solid var(--border-primary);
 }
 
 .header-content h1 {
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
   font-size: 2.5rem;
 }
 
 .header-content p {
-  color: #7f8c8d;
+  color: var(--text-secondary);
   font-size: 1.1rem;
 }
 
 .back-link {
-  color: #667eea;
+  color: var(--color-primary);
   text-decoration: none;
   font-weight: 500;
   padding: 0.5rem 1rem;
   border-radius: 6px;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
 }
 
 .back-link:hover {
-  background: #f8f9fa;
-  color: #5a6fd8;
+  background: var(--bg-tertiary);
+  color: var(--color-primary-dark);
 }
 
 /* Profile Summary */
 .profile-summary {
-  background: white;
+  background: var(--calc-card-bg);
   border-radius: 12px;
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--calc-card-shadow);
 }
 
 .summary-header {

@@ -75,6 +75,7 @@ export default {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
+  background: var(--bg-secondary);
 }
 
 .page-header {
@@ -84,13 +85,13 @@ export default {
 
 .page-header h1 {
   font-size: 2.5rem;
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 1rem;
 }
 
 .page-header p {
   font-size: 1.2rem;
-  color: #7f8c8d;
+  color: var(--text-secondary);
   max-width: 600px;
   margin: 0 auto;
 }
@@ -103,12 +104,12 @@ export default {
 }
 
 .calculator-card {
-  background: white;
+  background: var(--calc-card-bg);
   padding: 2.5rem;
   border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--calc-card-shadow);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
   border: 2px solid transparent;
   position: relative;
   overflow: hidden;
@@ -121,15 +122,15 @@ export default {
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
   transform: scaleX(0);
-  transition: transform 0.3s ease;
+  transition: transform var(--transition-normal);
 }
 
 .calculator-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-  border-color: #667eea;
+  box-shadow: var(--shadow-xl);
+  border-color: var(--color-primary);
 }
 
 .calculator-card:hover::before {
@@ -144,13 +145,13 @@ export default {
 
 .calculator-card h3 {
   font-size: 1.5rem;
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   font-weight: 600;
 }
 
 .calculator-card p {
-  color: #7f8c8d;
+  color: var(--text-secondary);
   line-height: 1.6;
   margin-bottom: 2rem;
   font-size: 1rem;
@@ -161,20 +162,20 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding-top: 1rem;
-  border-top: 1px solid #e1e8ed;
+  border-top: 1px solid var(--border-primary);
 }
 
 .action-text {
-  color: #667eea;
+  color: var(--color-primary);
   font-weight: 600;
   font-size: 0.95rem;
 }
 
 .action-arrow {
-  color: #667eea;
+  color: var(--color-primary);
   font-size: 1.2rem;
   font-weight: 600;
-  transition: transform 0.3s ease;
+  transition: transform var(--transition-normal);
 }
 
 .calculator-card:hover .action-arrow {
@@ -187,18 +188,18 @@ export default {
 
 .back-link {
   display: inline-block;
-  color: #667eea;
+  color: var(--color-primary);
   text-decoration: none;
   font-weight: 500;
   padding: 0.75rem 1.5rem;
-  border: 2px solid #667eea;
+  border: 2px solid var(--color-primary);
   border-radius: 6px;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
 }
 
 .back-link:hover {
-  background-color: #667eea;
-  color: white;
+  background-color: var(--color-primary);
+  color: var(--text-inverse);
 }
 
 @media (max-width: 768px) {

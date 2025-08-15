@@ -2,11 +2,7 @@
   <div class="dashboard">
     <div class="welcome-section">
       <div class="welcome-header">
-        <img
-          src="/src/assets/logo.png"
-          alt="Three Wise Men Logo"
-          class="welcome-logo"
-        />
+        <img :src="logoSource" alt="Three Wise Men Logo" class="welcome-logo" />
         <div class="welcome-text">
           <h1>Welcome to Your Financial Dashboard</h1>
           <p>
@@ -149,6 +145,7 @@
 <script>
 import { computed } from "vue";
 import { calculatorStore } from "../store/calculators";
+import { themeStore } from "../store/theme.js";
 
 export default {
   name: "Dashboard",
@@ -199,12 +196,20 @@ export default {
       });
     };
 
+    // Logo source based on theme
+    const logoSource = computed(() => {
+      return themeStore.isDark
+        ? "/src/assets/logo-light.png"
+        : "/src/assets/logo.png";
+    });
+
     return {
       downPaymentSummary,
       netWorthSummary,
       cashFlowSummary,
       hasCalculatorData,
       formatNumber,
+      logoSource,
     };
   },
 };
@@ -216,6 +221,8 @@ export default {
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
+  background: var(--bg-secondary);
+  min-height: 100vh;
 }
 
 .welcome-section {
@@ -234,18 +241,18 @@ export default {
   width: 80px;
   height: 80px;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-lg);
 }
 
 .welcome-text h1 {
   font-size: 2.5rem;
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 1rem;
 }
 
 .welcome-text p {
   font-size: 1.2rem;
-  color: #7f8c8d;
+  color: var(--text-secondary);
   max-width: 700px;
   margin: 0 auto;
 }
@@ -258,19 +265,19 @@ export default {
 }
 
 .tool-card {
-  background: white;
+  background: var(--calc-card-bg);
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--calc-card-shadow);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
   border: 2px solid transparent;
 }
 
 .tool-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-  border-color: #667eea;
+  box-shadow: var(--shadow-xl);
+  border-color: var(--color-primary);
 }
 
 .tool-icon {
@@ -280,12 +287,12 @@ export default {
 
 .tool-card h3 {
   font-size: 1.5rem;
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 1rem;
 }
 
 .tool-card p {
-  color: #7f8c8d;
+  color: var(--text-secondary);
   line-height: 1.6;
 }
 
@@ -296,7 +303,7 @@ export default {
 
 .summary-section h2 {
   font-size: 2rem;
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 2rem;
   text-align: center;
 }
@@ -309,11 +316,11 @@ export default {
 }
 
 .summary-card {
-  background: white;
+  background: var(--calc-card-bg);
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  border-left: 4px solid #667eea;
+  box-shadow: var(--calc-card-shadow);
+  border-left: 4px solid var(--color-primary);
 }
 
 .summary-header {
@@ -329,7 +336,7 @@ export default {
 
 .summary-header h3 {
   font-size: 1.3rem;
-  color: #2c3e50;
+  color: var(--text-primary);
   margin: 0;
 }
 
@@ -342,7 +349,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem 0;
-  border-bottom: 1px solid #e1e8ed;
+  border-bottom: 1px solid var(--border-primary);
 }
 
 .summary-item:last-child {
@@ -351,38 +358,38 @@ export default {
 
 .summary-label {
   font-weight: 500;
-  color: #7f8c8d;
+  color: var(--text-muted);
 }
 
 .summary-value {
   font-weight: 600;
-  color: #2c3e50;
+  color: var(--text-primary);
 }
 
 .summary-value.positive {
-  color: #27ae60;
+  color: var(--success-primary);
 }
 
 .summary-value.negative {
-  color: #e74c3c;
+  color: var(--error-primary);
 }
 
 .summary-link {
   display: inline-block;
-  color: #667eea;
+  color: var(--color-primary);
   text-decoration: none;
   font-weight: 500;
   padding: 0.5rem 1rem;
-  border: 2px solid #667eea;
+  border: 2px solid var(--color-primary);
   border-radius: 6px;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
   text-align: center;
   width: 100%;
 }
 
 .summary-link:hover {
-  background-color: #667eea;
-  color: white;
+  background-color: var(--color-primary);
+  color: var(--text-inverse);
 }
 
 /* Responsive Design */
@@ -398,8 +405,22 @@ export default {
     max-width: 100%;
   }
 
-  .welcome-section h1 {
+  .welcome-header {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .welcome-logo {
+    width: 60px;
+    height: 60px;
+  }
+
+  .welcome-text h1 {
     font-size: 2rem;
+  }
+
+  .welcome-text p {
+    font-size: 1rem;
   }
 
   .tools-grid {
@@ -422,13 +443,26 @@ export default {
     padding: 0.75rem;
   }
 
-  .welcome-section h1 {
+  .welcome-logo {
+    width: 50px;
+    height: 50px;
+  }
+
+  .welcome-text h1 {
     font-size: 1.75rem;
+  }
+
+  .welcome-text p {
+    font-size: 0.9rem;
   }
 
   .tool-card,
   .summary-card {
     padding: 1.5rem;
+  }
+
+  .summary-section h2 {
+    font-size: 1.25rem;
   }
 }
 </style>

@@ -468,27 +468,29 @@ export default {
 }
 
 .load-btn {
-  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-  color: white;
+  background: var(--color-primary);
+  color: var(--text-inverse);
   border: none;
   padding: 10px 20px;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 500;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-md);
 }
 
 .load-btn:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+  box-shadow: var(--shadow-lg);
+  background: var(--color-primary-dark);
 }
 
 .load-btn:disabled {
-  background: #6c757d;
+  background: var(--text-disabled);
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
+  opacity: 0.6;
 }
 
 /* Modal Styles */
@@ -498,7 +500,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--modal-overlay);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -507,13 +509,14 @@ export default {
 }
 
 .load-modal {
-  background: white;
+  background: var(--modal-bg);
   border-radius: 12px;
   max-width: 600px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-2xl);
+  border: 1px solid var(--border-primary);
 }
 
 .modal-header {
@@ -521,12 +524,12 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem;
-  border-bottom: 1px solid #dee2e6;
+  border-bottom: 1px solid var(--border-primary);
 }
 
 .modal-header h3 {
   margin: 0;
-  color: #2c3e50;
+  color: var(--text-primary);
   font-size: 1.3rem;
 }
 
@@ -535,7 +538,7 @@ export default {
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: #6c757d;
+  color: var(--text-muted);
   padding: 0;
   width: 30px;
   height: 30px;
@@ -543,11 +546,12 @@ export default {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transition: background-color 0.2s;
+  transition: background-color var(--transition-normal);
 }
 
 .close-btn:hover {
-  background-color: #f8f9fa;
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
 }
 
 .modal-content {
@@ -555,13 +559,13 @@ export default {
 }
 
 .modal-description {
-  color: #6c757d;
+  color: var(--text-secondary);
   margin-bottom: 1.5rem;
   line-height: 1.5;
 }
 
 .data-selection h4 {
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   font-size: 1.1rem;
 }
@@ -573,10 +577,10 @@ export default {
 }
 
 .data-group {
-  border: 1px solid #dee2e6;
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
   padding: 1rem;
-  background: #f8f9fa;
+  background: var(--bg-tertiary);
 }
 
 .group-header {
@@ -598,15 +602,16 @@ export default {
 .checkmark {
   width: 18px;
   height: 18px;
-  border: 2px solid #6c757d;
+  border: 2px solid var(--input-border);
   border-radius: 3px;
   position: relative;
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
+  background: var(--input-bg);
 }
 
 .group-checkbox input[type="checkbox"]:checked + .checkmark {
-  background: #007bff;
-  border-color: #007bff;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
 }
 
 .group-checkbox input[type="checkbox"]:checked + .checkmark::after {
@@ -631,9 +636,11 @@ export default {
   align-items: center;
   gap: 0.75rem;
   padding: 0.5rem;
-  background: white;
+  background: var(--input-bg);
   border-radius: 6px;
   cursor: pointer;
+  border: 1px solid var(--border-secondary);
+  transition: all var(--transition-normal);
 }
 
 .data-item input[type="checkbox"] {
@@ -646,18 +653,18 @@ export default {
 }
 
 .data-item input[type="checkbox"]:checked + .checkmark {
-  background: #007bff;
-  border-color: #007bff;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
 }
 
 .field-label {
   flex: 1;
-  color: #495057;
+  color: var(--text-primary);
   font-weight: 500;
 }
 
 .field-value {
-  color: #28a745;
+  color: var(--success-primary);
   font-weight: 600;
   font-family: monospace;
 }
@@ -666,11 +673,11 @@ export default {
 .last-updated {
   margin-top: 2rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #dee2e6;
+  border-top: 1px solid var(--border-primary);
 }
 
 .last-updated h4 {
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   font-size: 1.1rem;
 }
@@ -686,17 +693,18 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem;
-  background: #f8f9fa;
+  background: var(--bg-tertiary);
   border-radius: 4px;
+  border: 1px solid var(--border-secondary);
 }
 
 .info-label {
-  color: #6c757d;
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
 .info-value {
-  color: #2c3e50;
+  color: var(--text-primary);
   font-weight: 500;
   font-size: 0.9rem;
 }
@@ -707,38 +715,41 @@ export default {
   justify-content: flex-end;
   gap: 1rem;
   padding: 1.5rem;
-  border-top: 1px solid #dee2e6;
-  background: #f8f9fa;
+  border-top: 1px solid var(--border-primary);
+  background: var(--bg-tertiary);
 }
 
 .cancel-btn {
-  background: #6c757d;
-  color: white;
+  background: var(--button-secondary-bg);
+  color: var(--button-secondary-text);
   border: none;
   padding: 10px 20px;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 500;
-  transition: background-color 0.2s;
+  transition: all var(--transition-normal);
 }
 
 .cancel-btn:hover {
-  background: #5a6268;
+  background: var(--button-secondary-hover);
+  transform: translateY(-1px);
 }
 
 .confirm-load-btn {
-  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-  color: white;
+  background: var(--color-primary);
+  color: var(--text-inverse);
   border: none;
   padding: 10px 20px;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 500;
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
 }
 
 .confirm-load-btn:hover:not(:disabled) {
   transform: translateY(-1px);
+  background: var(--color-primary-dark);
+  box-shadow: var(--shadow-lg);
 }
 
 .confirm-load-btn:disabled {

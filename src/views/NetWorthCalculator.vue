@@ -721,6 +721,7 @@ export default {
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
+  background: var(--bg-secondary);
 }
 
 .page-header {
@@ -733,30 +734,30 @@ export default {
 
 .header-content h1 {
   font-size: 2.5rem;
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 1rem;
 }
 
 .header-content p {
   font-size: 1.2rem;
-  color: #7f8c8d;
+  color: var(--text-secondary);
   max-width: 600px;
 }
 
 .back-link {
   display: inline-block;
-  color: #667eea;
+  color: var(--color-primary);
   text-decoration: none;
   font-weight: 500;
   padding: 0.75rem 1.5rem;
-  border: 2px solid #667eea;
+  border: 2px solid var(--color-primary);
   border-radius: 6px;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
 }
 
 .back-link:hover {
-  background-color: #667eea;
-  color: white;
+  background-color: var(--color-primary);
+  color: var(--text-inverse);
 }
 
 .calculator-container {
@@ -769,17 +770,17 @@ export default {
 
 .form-section,
 .results-section {
-  background: white;
+  background: var(--calc-card-bg);
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--calc-card-shadow);
   width: 100%;
   min-width: 0;
 }
 
 .form-section h2,
 .results-section h2 {
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 2rem;
   font-size: 1.5rem;
 }
@@ -792,30 +793,30 @@ export default {
 }
 
 .form-column {
-  background: #f8f9fa;
+  background: var(--bg-tertiary);
   padding: 1.5rem;
   border-radius: 8px;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid var(--color-primary);
 }
 
 .assets-column {
-  border-left-color: #27ae60;
-  background: #f0f9f4;
+  border-left-color: var(--success-primary);
+  background: var(--success-light);
 }
 
 .liabilities-column {
-  border-left-color: #e74c3c;
-  background: #fdf2f2;
+  border-left-color: var(--error-primary);
+  background: var(--error-light);
 }
 
 .column-header {
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #e1e8ed;
+  border-bottom: 2px solid var(--border-primary);
 }
 
 .column-header h3 {
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
   font-size: 1.2rem;
   display: flex;
@@ -824,7 +825,7 @@ export default {
 }
 
 .column-header p {
-  color: #7f8c8d;
+  color: var(--text-muted);
   font-size: 0.9rem;
   margin: 0;
 }
@@ -842,7 +843,7 @@ export default {
 
 .form-group label {
   font-weight: 600;
-  color: #2c3e50;
+  color: var(--text-primary);
   font-size: 0.95rem;
   display: flex;
   align-items: center;
@@ -850,7 +851,7 @@ export default {
 }
 
 .tooltip {
-  color: #7f8c8d;
+  color: var(--text-muted);
   cursor: help;
   font-size: 0.8rem;
 }
@@ -864,7 +865,7 @@ export default {
 .currency-symbol {
   position: absolute;
   left: 12px;
-  color: #7f8c8d;
+  color: var(--text-muted);
   font-weight: 500;
   z-index: 1;
 }
@@ -872,43 +873,45 @@ export default {
 .input-wrapper input {
   width: 100%;
   padding: 12px 12px 12px 35px;
-  border: 2px solid #e1e8ed;
+  border: 2px solid var(--input-border);
   border-radius: 8px;
   font-size: 1rem;
-  transition: border-color 0.3s ease;
+  transition: border-color var(--transition-normal);
+  background-color: var(--input-bg);
+  color: var(--input-text);
 }
 
 .input-wrapper input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--input-border-focus);
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .calculate-section {
   text-align: center;
   padding-top: 1rem;
-  border-top: 2px solid #e1e8ed;
+  border-top: 2px solid var(--border-primary);
 }
 
 .calculate-btn {
-  background: #667eea;
-  color: white;
+  background: var(--color-primary);
+  color: var(--text-inverse);
   border: none;
   padding: 14px 28px;
   border-radius: 8px;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
 }
 
 .calculate-btn:hover:not(:disabled) {
-  background: #5a6fd8;
+  background: var(--color-primary-dark);
   transform: translateY(-2px);
 }
 
 .calculate-btn:disabled {
-  background: #bdc3c7;
+  background: var(--text-disabled);
   cursor: not-allowed;
   transform: none;
 }

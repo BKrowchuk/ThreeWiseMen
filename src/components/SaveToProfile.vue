@@ -2,15 +2,13 @@
   <div class="save-to-profile">
     <!-- Save Button -->
     <div class="save-section" v-if="showSaveButton">
-      <button 
-        @click="openSaveModal" 
-        class="save-btn"
-        :disabled="isSaving"
-      >
+      <button @click="openSaveModal" class="save-btn" :disabled="isSaving">
         <span v-if="!isSaving">💾 Save to Profile</span>
         <span v-else>Saving...</span>
       </button>
-      <p class="save-hint">Save these results to your persistent financial profile</p>
+      <p class="save-hint">
+        Save these results to your persistent financial profile
+      </p>
     </div>
 
     <!-- Save Modal -->
@@ -20,27 +18,28 @@
           <h3>Save to Financial Profile</h3>
           <button @click="closeModal" class="close-btn">&times;</button>
         </div>
-        
+
         <div class="modal-content">
           <p class="modal-description">
-            Select which calculated values you'd like to save to your financial profile. 
-            This data will persist across sessions and can be used to pre-populate future calculations.
+            Select which calculated values you'd like to save to your financial
+            profile. This data will persist across sessions and can be used to
+            pre-populate future calculations.
           </p>
-          
+
           <!-- Field Selection -->
           <div class="field-selection">
             <h4>Select Fields to Save:</h4>
-            
+
             <div class="field-groups">
-              <div 
-                v-for="(group, groupKey) in saveableFields" 
-                :key="groupKey" 
+              <div
+                v-for="(group, groupKey) in saveableFields"
+                :key="groupKey"
                 class="field-group"
               >
                 <div class="group-header">
                   <label class="group-checkbox">
-                    <input 
-                      type="checkbox" 
+                    <input
+                      type="checkbox"
                       :checked="isGroupSelected(groupKey)"
                       @change="toggleGroup(groupKey)"
                     />
@@ -49,48 +48,56 @@
                   </label>
                   <small>{{ group.description }}</small>
                 </div>
-                
+
                 <div class="field-items">
-                  <label 
-                    v-for="(field, fieldKey) in group.fields" 
+                  <label
+                    v-for="(field, fieldKey) in group.fields"
                     :key="fieldKey"
                     class="field-item"
                   >
-                    <input 
-                      type="checkbox" 
+                    <input
+                      type="checkbox"
                       v-model="selectedFields[groupKey][fieldKey]"
                       @change="updateGroupSelection(groupKey)"
                     />
                     <span class="checkmark"></span>
                     <span class="field-label">{{ field.label }}</span>
-                    <span class="field-value">${{ formatNumber(field.value) }}</span>
+                    <span class="field-value"
+                      >${{ formatNumber(field.value) }}</span
+                    >
                   </label>
                 </div>
               </div>
             </div>
           </div>
-          
+
           <!-- Profile Comparison -->
           <div class="profile-comparison" v-if="hasProfileData">
             <h4>Profile Comparison:</h4>
             <div class="comparison-grid">
-              <div 
-                v-for="(group, groupKey) in saveableFields" 
+              <div
+                v-for="(group, groupKey) in saveableFields"
                 :key="groupKey"
                 class="comparison-group"
               >
                 <h5>{{ group.title }}</h5>
                 <div class="comparison-items">
-                  <div 
-                    v-for="(field, fieldKey) in group.fields" 
+                  <div
+                    v-for="(field, fieldKey) in group.fields"
                     :key="fieldKey"
                     class="comparison-item"
                   >
                     <span class="field-name">{{ field.label }}:</span>
                     <div class="value-comparison">
-                      <span class="profile-value">${{ formatNumber(profileValues[groupKey]?.[fieldKey] || 0) }}</span>
+                      <span class="profile-value"
+                        >${{
+                          formatNumber(profileValues[groupKey]?.[fieldKey] || 0)
+                        }}</span
+                      >
                       <span class="arrow">→</span>
-                      <span class="new-value">${{ formatNumber(field.value) }}</span>
+                      <span class="new-value"
+                        >${{ formatNumber(field.value) }}</span
+                      >
                     </div>
                   </div>
                 </div>
@@ -98,11 +105,11 @@
             </div>
           </div>
         </div>
-        
+
         <div class="modal-footer">
           <button @click="closeModal" class="cancel-btn">Cancel</button>
-          <button 
-            @click="saveToProfile" 
+          <button
+            @click="saveToProfile"
             class="confirm-save-btn"
             :disabled="!hasSelectedFields || isSaving"
           >
@@ -112,7 +119,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Success Message -->
     <div class="success-message" v-if="showSuccess">
       <div class="success-content">
@@ -128,271 +135,278 @@
 </template>
 
 <script>
-import { profileActions } from '../store/profile'
+import { profileActions } from "../store/profile";
 
 export default {
-  name: 'SaveToProfile',
+  name: "SaveToProfile",
   props: {
     calculatorType: {
       type: String,
       required: true,
-      validator: value => ['downPayment', 'netWorth', 'cashFlow'].includes(value)
+      validator: (value) =>
+        ["downPayment", "netWorth", "cashFlow"].includes(value),
     },
     calculatedData: {
       type: Object,
-      required: true
+      required: true,
     },
     showSaveButton: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
-  
+
   data() {
     return {
       showModal: false,
       isSaving: false,
       showSuccess: false,
-      successMessage: '',
+      successMessage: "",
       selectedFields: {},
-      saveableFields: {}
-    }
+      saveableFields: {},
+    };
   },
-  
+
   computed: {
     hasProfileData() {
-      return profileActions.hasProfileData(this.calculatorType)
+      return profileActions.hasProfileData(this.calculatorType);
     },
-    
+
     profileValues() {
-      return profileActions.getProfileComparison(this.calculatorType)
+      return profileActions.getProfileComparison(this.calculatorType);
     },
-    
+
     hasSelectedFields() {
-      return Object.values(this.selectedFields).some(group => 
-        Object.values(group).some(selected => selected)
-      )
-    }
+      return Object.values(this.selectedFields).some((group) =>
+        Object.values(group).some((selected) => selected)
+      );
+    },
   },
-  
+
   watch: {
     calculatedData: {
       handler() {
-        this.initializeSaveableFields()
+        this.initializeSaveableFields();
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
-  
+
   methods: {
     initializeSaveableFields() {
       switch (this.calculatorType) {
-        case 'downPayment':
+        case "downPayment":
           this.saveableFields = {
             income: {
-              title: 'Income',
-              description: 'Your monthly income information',
+              title: "Income",
+              description: "Your monthly income information",
               fields: {
                 monthlyIncome: {
-                  label: 'Monthly Income',
-                  value: this.calculatedData.monthlyIncome || 0
-                }
-              }
+                  label: "Monthly Income",
+                  value: this.calculatedData.monthlyIncome || 0,
+                },
+              },
             },
             savings: {
-              title: 'Savings',
-              description: 'Your current savings and targets',
+              title: "Savings",
+              description: "Your current savings and targets",
               fields: {
                 existingSavings: {
-                  label: 'Existing Savings',
-                  value: this.calculatedData.existingSavings || 0
-                }
-              }
+                  label: "Existing Savings",
+                  value: this.calculatedData.existingSavings || 0,
+                },
+              },
             },
             goals: {
-              title: 'Financial Goals',
-              description: 'Your home purchase goals',
+              title: "Financial Goals",
+              description: "Your home purchase goals",
               fields: {
                 downPaymentTarget: {
-                  label: 'Down Payment Target',
-                  value: this.calculatedData.downPaymentTarget || 0
+                  label: "Down Payment Target",
+                  value: this.calculatedData.downPaymentTarget || 0,
                 },
                 monthlySavingsGoal: {
-                  label: 'Monthly Savings Goal',
-                  value: this.calculatedData.monthlySavingsGoal || 0
-                }
-              }
-            }
-          }
-          break
-          
-        case 'netWorth':
+                  label: "Monthly Savings Goal",
+                  value: this.calculatedData.monthlySavingsGoal || 0,
+                },
+              },
+            },
+          };
+          break;
+
+        case "netWorth":
           this.saveableFields = {
             assets: {
-              title: 'Assets',
-              description: 'Your current asset values',
-              fields: this.calculatedData.assets || {}
+              title: "Assets",
+              description: "Your current asset values",
+              fields: this.calculatedData.assets || {},
             },
             liabilities: {
-              title: 'Liabilities',
-              description: 'Your current debt amounts',
-              fields: this.calculatedData.liabilities || {}
-            }
-          }
-          break
-          
-        case 'cashFlow':
+              title: "Liabilities",
+              description: "Your current debt amounts",
+              fields: this.calculatedData.liabilities || {},
+            },
+          };
+          break;
+
+        case "cashFlow":
           this.saveableFields = {
             income: {
-              title: 'Income',
-              description: 'Your monthly income',
+              title: "Income",
+              description: "Your monthly income",
               fields: {
                 monthlyIncome: {
-                  label: 'Monthly Income',
-                  value: this.calculatedData.income?.monthlyIncome || 0
-                }
-              }
+                  label: "Monthly Income",
+                  value: this.calculatedData.income?.monthlyIncome || 0,
+                },
+              },
             },
             fixedExpenses: {
-              title: 'Fixed Expenses',
-              description: 'Your recurring monthly expenses',
-              fields: this.calculatedData.fixedExpenses || {}
+              title: "Fixed Expenses",
+              description: "Your recurring monthly expenses",
+              fields: this.calculatedData.fixedExpenses || {},
             },
             variableExpenses: {
-              title: 'Variable Expenses',
-              description: 'Your flexible monthly expenses',
-              fields: this.calculatedData.variableExpenses || {}
+              title: "Variable Expenses",
+              description: "Your flexible monthly expenses",
+              fields: this.calculatedData.variableExpenses || {},
             },
             savings: {
-              title: 'Savings Targets',
-              description: 'Your monthly savings goals',
-              fields: this.calculatedData.savings || {}
-            }
-          }
-          break
+              title: "Savings Targets",
+              description: "Your monthly savings goals",
+              fields: this.calculatedData.savings || {},
+            },
+          };
+          break;
       }
-      
+
       // Initialize selected fields
-      this.selectedFields = {}
-      Object.keys(this.saveableFields).forEach(groupKey => {
-        this.selectedFields[groupKey] = {}
-        Object.keys(this.saveableFields[groupKey].fields).forEach(fieldKey => {
-          this.selectedFields[groupKey][fieldKey] = true
-        })
-      })
+      this.selectedFields = {};
+      Object.keys(this.saveableFields).forEach((groupKey) => {
+        this.selectedFields[groupKey] = {};
+        Object.keys(this.saveableFields[groupKey].fields).forEach(
+          (fieldKey) => {
+            this.selectedFields[groupKey][fieldKey] = true;
+          }
+        );
+      });
     },
-    
+
     openSaveModal() {
-      this.showModal = true
+      this.showModal = true;
     },
-    
+
     closeModal() {
-      this.showModal = false
+      this.showModal = false;
     },
-    
+
     toggleGroup(groupKey) {
-      const isSelected = this.isGroupSelected(groupKey)
-      Object.keys(this.selectedFields[groupKey]).forEach(fieldKey => {
-        this.selectedFields[groupKey][fieldKey] = !isSelected
-      })
+      const isSelected = this.isGroupSelected(groupKey);
+      Object.keys(this.selectedFields[groupKey]).forEach((fieldKey) => {
+        this.selectedFields[groupKey][fieldKey] = !isSelected;
+      });
     },
-    
+
     isGroupSelected(groupKey) {
-      return Object.values(this.selectedFields[groupKey]).every(selected => selected)
+      return Object.values(this.selectedFields[groupKey]).every(
+        (selected) => selected
+      );
     },
-    
+
     updateGroupSelection(groupKey) {
       // This method is called when individual fields change
       // Group selection logic is handled by isGroupSelected computed property
     },
-    
+
     async saveToProfile() {
-      this.isSaving = true
-      
+      this.isSaving = true;
+
       try {
         // Prepare data to save based on selected fields
-        const dataToSave = {}
-        
-        Object.keys(this.selectedFields).forEach(groupKey => {
-          Object.keys(this.selectedFields[groupKey]).forEach(fieldKey => {
+        const dataToSave = {};
+
+        Object.keys(this.selectedFields).forEach((groupKey) => {
+          Object.keys(this.selectedFields[groupKey]).forEach((fieldKey) => {
             if (this.selectedFields[groupKey][fieldKey]) {
-              const field = this.saveableFields[groupKey].fields[fieldKey]
+              const field = this.saveableFields[groupKey].fields[fieldKey];
               if (field.value !== undefined) {
-                if (!dataToSave[groupKey]) dataToSave[groupKey] = {}
-                dataToSave[groupKey][fieldKey] = field.value
+                if (!dataToSave[groupKey]) dataToSave[groupKey] = {};
+                dataToSave[groupKey][fieldKey] = field.value;
               }
             }
-          })
-        })
-        
+          });
+        });
+
         // Save to profile based on calculator type
         switch (this.calculatorType) {
-          case 'downPayment':
+          case "downPayment":
             profileActions.saveDownPaymentData({
               monthlyIncome: dataToSave.income?.monthlyIncome,
               existingSavings: dataToSave.savings?.existingSavings,
               downPaymentTarget: dataToSave.goals?.downPaymentTarget,
               monthlySavingsGoal: dataToSave.goals?.monthlySavingsGoal,
-              timeline: this.calculatedData.timeline
-            })
-            break
-            
-          case 'netWorth':
+              timeline: this.calculatedData.timeline,
+            });
+            break;
+
+          case "netWorth":
             profileActions.saveNetWorthData({
               assets: dataToSave.assets,
               liabilities: dataToSave.liabilities,
-              totalNetWorth: this.calculatedData.totalNetWorth
-            })
-            break
-            
-          case 'cashFlow':
+              totalNetWorth: this.calculatedData.totalNetWorth,
+            });
+            break;
+
+          case "cashFlow":
             profileActions.saveCashFlowData({
               income: dataToSave.income,
               fixedExpenses: dataToSave.fixedExpenses,
               variableExpenses: dataToSave.variableExpenses,
               savings: dataToSave.savings,
-              totalCashFlow: this.calculatedData.totalCashFlow
-            })
-            break
+              totalCashFlow: this.calculatedData.totalCashFlow,
+            });
+            break;
         }
-        
+
         // Show success message
-        this.successMessage = this.generateSuccessMessage(dataToSave)
-        this.showSuccess = true
-        this.closeModal()
-        
+        this.successMessage = this.generateSuccessMessage(dataToSave);
+        this.showSuccess = true;
+        this.closeModal();
+
         // Emit save event
-        this.$emit('saved', dataToSave)
-        
+        this.$emit("saved", dataToSave);
       } catch (error) {
-        console.error('Failed to save to profile:', error)
+        console.error("Failed to save to profile:", error);
         // Could add error handling here
       } finally {
-        this.isSaving = false
+        this.isSaving = false;
       }
     },
-    
+
     generateSuccessMessage(dataToSave) {
-      const savedCount = Object.values(dataToSave).reduce((total, group) => 
-        total + Object.keys(group).length, 0
-      )
-      
-      return `Successfully saved ${savedCount} field${savedCount !== 1 ? 's' : ''} to your financial profile.`
+      const savedCount = Object.values(dataToSave).reduce(
+        (total, group) => total + Object.keys(group).length,
+        0
+      );
+
+      return `Successfully saved ${savedCount} field${
+        savedCount !== 1 ? "s" : ""
+      } to your financial profile.`;
     },
-    
+
     hideSuccess() {
-      this.showSuccess = false
+      this.showSuccess = false;
     },
-    
+
     formatNumber(value) {
-      if (typeof value !== 'number') return '0'
-      return value.toLocaleString('en-US', {
+      if (typeof value !== "number") return "0";
+      return value.toLocaleString("en-US", {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-      })
-    }
-  }
-}
+        maximumFractionDigits: 0,
+      });
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -404,27 +418,29 @@ export default {
   text-align: center;
   margin: 2rem 0;
   padding: 1.5rem;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  background: var(--calc-card-bg);
   border-radius: 12px;
-  border: 2px solid #dee2e6;
+  border: 2px solid var(--border-primary);
+  box-shadow: var(--calc-card-shadow);
 }
 
 .save-btn {
-  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-  color: white;
+  background: var(--success-primary);
+  color: var(--text-inverse);
   border: none;
   padding: 14px 28px;
   border-radius: 8px;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-lg);
 }
 
 .save-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+  box-shadow: var(--shadow-xl);
+  background: var(--success-dark);
 }
 
 .save-btn:disabled {
@@ -435,7 +451,7 @@ export default {
 
 .save-hint {
   margin-top: 0.75rem;
-  color: #6c757d;
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
@@ -446,7 +462,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--modal-overlay);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -455,13 +471,14 @@ export default {
 }
 
 .save-modal {
-  background: white;
+  background: var(--modal-bg);
   border-radius: 12px;
   max-width: 600px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-2xl);
+  border: 1px solid var(--border-primary);
 }
 
 .modal-header {
@@ -469,12 +486,12 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem;
-  border-bottom: 1px solid #dee2e6;
+  border-bottom: 1px solid var(--border-primary);
 }
 
 .modal-header h3 {
   margin: 0;
-  color: #2c3e50;
+  color: var(--text-primary);
   font-size: 1.3rem;
 }
 
@@ -483,7 +500,7 @@ export default {
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: #6c757d;
+  color: var(--text-muted);
   padding: 0;
   width: 30px;
   height: 30px;
@@ -491,11 +508,12 @@ export default {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transition: background-color 0.2s;
+  transition: background-color var(--transition-normal);
 }
 
 .close-btn:hover {
-  background-color: #f8f9fa;
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
 }
 
 .modal-content {
@@ -503,13 +521,13 @@ export default {
 }
 
 .modal-description {
-  color: #6c757d;
+  color: var(--text-secondary);
   margin-bottom: 1.5rem;
   line-height: 1.5;
 }
 
 .field-selection h4 {
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   font-size: 1.1rem;
 }
@@ -521,10 +539,10 @@ export default {
 }
 
 .field-group {
-  border: 1px solid #dee2e6;
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
   padding: 1rem;
-  background: #f8f9fa;
+  background: var(--bg-tertiary);
 }
 
 .group-header {
@@ -546,19 +564,20 @@ export default {
 .checkmark {
   width: 18px;
   height: 18px;
-  border: 2px solid #6c757d;
+  border: 2px solid var(--input-border);
   border-radius: 3px;
   position: relative;
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
+  background: var(--input-bg);
 }
 
 .group-checkbox input[type="checkbox"]:checked + .checkmark {
-  background: #28a745;
-  border-color: #28a745;
+  background: var(--success-primary);
+  border-color: var(--success-primary);
 }
 
 .group-checkbox input[type="checkbox"]:checked + .checkmark::after {
-  content: '✓';
+  content: "✓";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -579,9 +598,11 @@ export default {
   align-items: center;
   gap: 0.75rem;
   padding: 0.5rem;
-  background: white;
+  background: var(--input-bg);
   border-radius: 6px;
   cursor: pointer;
+  border: 1px solid var(--border-secondary);
+  transition: all var(--transition-normal);
 }
 
 .field-item input[type="checkbox"] {
@@ -594,18 +615,18 @@ export default {
 }
 
 .field-item input[type="checkbox"]:checked + .checkmark {
-  background: #007bff;
-  border-color: #007bff;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
 }
 
 .field-label {
   flex: 1;
-  color: #495057;
+  color: var(--text-primary);
   font-weight: 500;
 }
 
 .field-value {
-  color: #28a745;
+  color: var(--success-primary);
   font-weight: 600;
   font-family: monospace;
 }
@@ -614,11 +635,11 @@ export default {
 .profile-comparison {
   margin-top: 2rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #dee2e6;
+  border-top: 1px solid var(--border-primary);
 }
 
 .profile-comparison h4 {
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   font-size: 1.1rem;
 }
@@ -630,7 +651,7 @@ export default {
 }
 
 .comparison-group h5 {
-  color: #495057;
+  color: var(--text-secondary);
   margin-bottom: 0.5rem;
   font-size: 1rem;
 }
@@ -646,12 +667,13 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem;
-  background: #f8f9fa;
+  background: var(--bg-tertiary);
   border-radius: 4px;
+  border: 1px solid var(--border-secondary);
 }
 
 .field-name {
-  color: #6c757d;
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
@@ -663,17 +685,17 @@ export default {
 }
 
 .profile-value {
-  color: #6c757d;
+  color: var(--text-muted);
   text-decoration: line-through;
 }
 
 .arrow {
-  color: #007bff;
+  color: var(--color-primary);
   font-weight: bold;
 }
 
 .new-value {
-  color: #28a745;
+  color: var(--success-primary);
   font-weight: 600;
 }
 
@@ -683,38 +705,41 @@ export default {
   justify-content: flex-end;
   gap: 1rem;
   padding: 1.5rem;
-  border-top: 1px solid #dee2e6;
-  background: #f8f9fa;
+  border-top: 1px solid var(--border-primary);
+  background: var(--bg-tertiary);
 }
 
 .cancel-btn {
-  background: #6c757d;
-  color: white;
+  background: var(--button-secondary-bg);
+  color: var(--button-secondary-text);
   border: none;
   padding: 10px 20px;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 500;
-  transition: background-color 0.2s;
+  transition: all var(--transition-normal);
 }
 
 .cancel-btn:hover {
-  background: #5a6268;
+  background: var(--button-secondary-hover);
+  transform: translateY(-1px);
 }
 
 .confirm-save-btn {
-  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-  color: white;
+  background: var(--success-primary);
+  color: var(--text-inverse);
   border: none;
   padding: 10px 20px;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 500;
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
 }
 
 .confirm-save-btn:hover:not(:disabled) {
   transform: translateY(-1px);
+  background: var(--success-dark);
+  box-shadow: var(--shadow-lg);
 }
 
 .confirm-save-btn:disabled {
@@ -733,14 +758,14 @@ export default {
 }
 
 .success-content {
-  background: #d4edda;
-  border: 1px solid #c3e6cb;
+  background: var(--success-light);
+  border: 1px solid var(--success-primary);
   border-radius: 8px;
   padding: 1rem;
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
 }
 
 .success-icon {
@@ -749,13 +774,13 @@ export default {
 
 .success-text h4 {
   margin: 0 0 0.25rem 0;
-  color: #155724;
+  color: var(--success-dark);
   font-size: 1rem;
 }
 
 .success-text p {
   margin: 0;
-  color: #155724;
+  color: var(--success-dark);
   font-size: 0.9rem;
 }
 
@@ -764,7 +789,7 @@ export default {
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
-  color: #155724;
+  color: var(--success-dark);
   padding: 0;
   width: 24px;
   height: 24px;
@@ -772,11 +797,12 @@ export default {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transition: background-color 0.2s;
+  transition: background-color var(--transition-normal);
 }
 
 .close-success:hover {
-  background-color: #c3e6cb;
+  background-color: var(--success-primary);
+  color: var(--text-inverse);
 }
 
 @keyframes slideIn {
@@ -796,15 +822,15 @@ export default {
     margin: 1rem;
     max-height: 95vh;
   }
-  
+
   .modal-content {
     padding: 1rem;
   }
-  
+
   .modal-footer {
     flex-direction: column;
   }
-  
+
   .success-message {
     top: 10px;
     right: 10px;

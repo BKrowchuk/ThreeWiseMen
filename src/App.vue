@@ -3,11 +3,7 @@
     <nav class="navbar">
       <div class="nav-container">
         <div class="nav-brand">
-          <img
-            src="/src/assets/logo.png"
-            alt="Three Wise Men Logo"
-            class="nav-logo"
-          />
+          <img :src="logoSource" alt="Three Wise Men Logo" class="nav-logo" />
           <div class="brand-text">
             <h1>Three Wise Men</h1>
             <p>Financial Planning Dashboard</p>
@@ -38,6 +34,9 @@
             >
           </li>
         </ul>
+
+        <!-- Theme Toggle -->
+        <ThemeToggle />
       </div>
     </nav>
 
@@ -48,8 +47,21 @@
 </template>
 
 <script>
+import ThemeToggle from "./components/ThemeToggle.vue";
+import { themeStore } from "./store/theme.js";
+
 export default {
   name: "App",
+  components: {
+    ThemeToggle,
+  },
+  computed: {
+    logoSource() {
+      return themeStore.isDark
+        ? "/src/assets/logo-light.png"
+        : "/src/assets/logo.png";
+    },
+  },
 };
 </script>
 
@@ -60,21 +72,8 @@ export default {
   box-sizing: border-box;
 }
 
-body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f5f7fa;
-  color: #333;
-}
-
 #app {
   min-height: 100vh;
-}
-
-.navbar {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 1rem 0;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .nav-container {
@@ -96,43 +95,46 @@ body {
   width: 50px;
   height: 50px;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-md);
 }
 
 .brand-text h1 {
   font-size: 1.8rem;
   font-weight: 700;
   margin-bottom: 0.25rem;
+  color: var(--nav-text);
 }
 
 .brand-text p {
   font-size: 0.9rem;
   opacity: 0.9;
+  color: var(--nav-text);
 }
 
 .nav-menu {
   display: flex;
   list-style: none;
   gap: 2rem;
+  align-items: center;
 }
 
 .nav-link {
-  color: white;
+  color: var(--nav-text);
   text-decoration: none;
   font-weight: 500;
   padding: 0.5rem 1rem;
   border-radius: 6px;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
 }
 
 .nav-link:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--nav-hover);
   transform: translateY(-2px);
 }
 
 .router-link-active {
-  background-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: var(--nav-active);
+  box-shadow: var(--shadow-md);
 }
 
 .main-content {
@@ -145,10 +147,31 @@ body {
   .nav-container {
     flex-direction: column;
     gap: 1rem;
+    padding: 0 1rem;
+  }
+
+  .nav-brand {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .brand-text h1 {
+    font-size: 1.5rem;
+  }
+
+  .brand-text p {
+    font-size: 0.8rem;
   }
 
   .nav-menu {
-    gap: 1rem;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .nav-link {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
   }
 
   .main-content {

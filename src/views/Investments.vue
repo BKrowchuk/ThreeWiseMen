@@ -26,6 +26,9 @@ export default {
 <style scoped>
 .investments {
   text-align: center;
+  background: var(--bg-secondary);
+  min-height: 100vh;
+  padding: 2rem;
 }
 
 .page-header {
@@ -34,20 +37,20 @@ export default {
 
 .page-header h1 {
   font-size: 2.5rem;
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 1rem;
 }
 
 .page-header p {
   font-size: 1.2rem;
-  color: #7f8c8d;
+  color: var(--text-secondary);
 }
 
 .placeholder-content {
-  background: white;
+  background: var(--calc-card-bg);
   padding: 4rem 2rem;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--calc-card-shadow);
   max-width: 600px;
   margin: 0 auto;
 }
@@ -59,30 +62,30 @@ export default {
 
 .placeholder-content h2 {
   font-size: 2rem;
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 1rem;
 }
 
 .placeholder-content p {
-  color: #7f8c8d;
+  color: var(--text-secondary);
   line-height: 1.6;
   margin-bottom: 2rem;
 }
 
 .back-link {
   display: inline-block;
-  color: #667eea;
+  color: var(--color-primary);
   text-decoration: none;
   font-weight: 500;
   padding: 0.75rem 1.5rem;
-  border: 2px solid #667eea;
+  border: 2px solid var(--color-primary);
   border-radius: 6px;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
 }
 
 .back-link:hover {
-  background-color: #667eea;
-  color: white;
+  background-color: var(--color-primary);
+  color: var(--text-inverse);
 }
 
 @media (max-width: 768px) {
