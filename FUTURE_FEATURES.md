@@ -1,5 +1,15 @@
 # ThreeWiseMen - Future Features & Roadmap
 
+## My Notes
+
+**Todo**
+
+- net worth theme
+- load from profile
+- save to profile
+- back buttons
+- budget and investments
+
 ## 🎯 Core Calculator Enhancements
 
 ### Down Payment Calculator

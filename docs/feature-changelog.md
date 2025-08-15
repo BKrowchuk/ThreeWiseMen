@@ -6,6 +6,129 @@ This document details the comprehensive restructure of the ThreeWiseMen applicat
 
 ## Latest Updates
 
+### Net Worth Calculator Save Functionality Fixes & Modal Dialog Improvements (December 2024)
+
+**Complete Net Worth Save-to-Profile System Overhaul**
+
+A comprehensive fix and enhancement of the Net Worth Calculator's save functionality, resolving transparency issues with the save dialog and implementing a robust, user-friendly save workflow with proper error handling and validation.
+
+#### Dialog Modal System Fixes
+
+**CSS Variables & Theme Integration**
+
+- **Missing Modal Variables**: Added missing `--modal-overlay`, `--modal-bg`, and `--shadow-2xl` CSS custom properties to the theme system
+- **Light Theme Modals**: Added semi-transparent dark overlay (`rgba(0, 0, 0, 0.5)`) with solid white modal background
+- **Dark Theme Modals**: Enhanced with darker overlay (`rgba(0, 0, 0, 0.7)`) and proper dark theme modal background (`#1e293b`)
+- **Consistent Shadows**: Added `--shadow-2xl` for enhanced modal depth with theme-appropriate shadow intensities
+
+**Modal Transparency Resolution**
+
+- **Background Fix**: Resolved transparent dialog issue where modals appeared without proper backdrop
+- **Z-Index Management**: Ensured modals appear above all other content with proper stacking context
+- **Theme Consistency**: Modal styling now works correctly in both light and dark modes
+- **Backdrop Interaction**: Proper click-outside-to-close functionality with solid overlay backgrounds
+
+#### Net Worth Save Data Collection Fixes
+
+**Asset & Liability Field Processing**
+
+- **Proper Field Formatting**: Fixed SaveToProfile component to properly format asset and liability fields with descriptive labels
+- **Data Structure Consistency**: Aligned net worth field structure with other calculator types using proper field objects
+- **Label Mapping**: Added comprehensive label mapping functions for all asset and liability types:
+  - Assets: Cash & Checking, High-Interest Savings, TFSA, RRSP, FHSA, Other Investments, Other Assets
+  - Liabilities: Credit Cards, Lines of Credit, Car Loans, Student Loans, Other Debts
+
+**Data Validation & Processing**
+
+- **Currency Parsing**: Enhanced data collection to properly parse and validate numeric currency values
+- **Zero Value Handling**: Improved handling of empty and zero-value fields during save operations
+- **Type Safety**: Added proper type checking and validation for all numeric field inputs
+
+#### Enhanced Save Dialog User Experience
+
+**Field Selection & Management**
+
+- **Select All/Clear All**: Added bulk selection controls for easier field management
+- **Save Preview Section**: Real-time preview showing exactly what will be saved before confirmation
+- **Field Count Display**: Dynamic count of selected fields with proper singular/plural handling
+- **Group Selection Status**: Visual indicators showing which groups have selected fields
+
+**Save Preview & Confirmation**
+
+- **Enhanced Preview**: Shows detailed breakdown of selected fields by category (Assets/Liabilities)
+- **Field Summary**: Displays count and type of fields being saved for each category
+- **Confirmation Feedback**: Clear messaging about what data will be updated in the profile
+
+#### Improved Error Handling & User Feedback
+
+**Robust Save Operations**
+
+- **Try-Catch Protection**: Comprehensive error handling around all save operations
+- **Detailed Error Logging**: Enhanced debugging information for save failure diagnosis
+- **User-Friendly Messages**: Clear error messages shown to users when save operations fail
+- **Success Enhancement**: Detailed success messages showing exactly what was saved
+
+**Enhanced Success Messaging**
+
+- **Detailed Save Confirmation**: Success messages now specify exactly what was saved (e.g., "Successfully saved 5 fields to your profile: 3 assets fields, 2 liabilities fields")
+- **Save Event Enhancement**: Improved data emission to parent components with save details and field counts
+- **Loading States**: Proper loading indicators during save operations with disabled button states
+
+#### Profile Integration & Load Functionality
+
+**Load from Profile Integration**
+
+- **LoadFromProfile Component**: Added LoadFromProfile component to Net Worth Calculator for complete bi-directional data flow
+- **Auto-Population**: Profile data properly loads and populates calculator fields with formatted values
+- **Auto-Calculation**: Automatic calculation trigger when profile data is loaded
+- **Data Synchronization**: Proper formatting between stored numeric values and display strings
+
+**Profile Data Consistency**
+
+- **Data Format Alignment**: Ensured profile storage format matches calculator data structure
+- **Field Mapping**: Consistent field names and types between save and load operations
+- **Historical Tracking**: Proper net worth history tracking with timestamps and snapshot storage
+
+#### Technical Implementation Details
+
+**Component Architecture Improvements**
+
+- **SaveToProfile.vue Enhancements**:
+
+  - Added field formatting methods (`formatAssetLabel`, `formatLiabilityLabel`)
+  - Enhanced data preparation logic for net worth calculator type
+  - Improved computed properties for field selection management
+  - Added bulk selection methods (`selectAll`, `clearAll`)
+
+- **NetWorthCalculator.vue Integration**:
+  - Added LoadFromProfile component integration
+  - Enhanced profile load handling with proper data formatting
+  - Improved save event handling and response processing
+  - Fixed asset breakdown computation issue
+
+**CSS & Styling Enhancements**
+
+- **Modal Styling**: Complete modal system styling with proper theme integration
+- **Action Button Styling**: Clean, consistent styling for Select All/Clear All buttons
+- **Preview Section**: Beautiful preview section with info-themed background and proper contrast
+- **Responsive Design**: Modal system works correctly on all screen sizes
+
+#### Testing & Quality Assurance
+
+**Complete Workflow Validation**
+
+- **Save-to-Profile Flow**: Full testing of save dialog opening, field selection, and save completion
+- **Load-from-Profile Flow**: Validation of profile data loading and calculator population
+- **Data Persistence**: Verification that saved data appears correctly in Financial Profile page
+- **Cross-Session Storage**: Testing of data persistence across browser sessions using localStorage
+- **Error Scenarios**: Validation of error handling for various failure conditions
+
+**Browser Compatibility**
+
+- **Theme System**: Modal styling works correctly across light and dark themes
+- **Input Validation**: Proper currency input parsing and validation across different input formats
+- **Responsive Design**: Modal and dialog systems work on mobile, tablet, and desktop viewports
+
 ### Navigation Component Extraction & Modern Drawer Design (December 2024)
 
 **Modern Navigation Drawer Implementation**

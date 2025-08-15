@@ -402,6 +402,9 @@
           </div>
         </div>
 
+        <!-- Load from Profile Component -->
+        <LoadFromProfile calculator-type="netWorth" @loaded="onProfileLoaded" />
+
         <!-- Save to Profile Component -->
         <SaveToProfile
           calculator-type="netWorth"
@@ -426,11 +429,13 @@
 <script>
 import { calculatorStore, calculatorActions } from "../store/calculators";
 import SaveToProfile from "../components/SaveToProfile.vue";
+import LoadFromProfile from "../components/LoadFromProfile.vue";
 
 export default {
   name: "NetWorthCalculator",
   components: {
     SaveToProfile,
+    LoadFromProfile,
   },
   data() {
     return {
@@ -711,6 +716,42 @@ export default {
     onProfileSaved(savedData) {
       console.log("Profile saved:", savedData);
       // Could add additional logic here if needed
+    },
+
+    // Handle profile load
+    onProfileLoaded(loadedData) {
+      console.log("Profile loaded:", loadedData);
+
+      // Update form data with loaded values
+      Object.keys(loadedData).forEach((groupKey) => {
+        if (groupKey === "assets" || groupKey === "liabilities") {
+          Object.keys(loadedData[groupKey]).forEach((fieldKey) => {
+            if (
+              this.formData[groupKey] &&
+              this.formData[groupKey].hasOwnProperty(fieldKey)
+            ) {
+              // Format the number value back to display format
+              const value = loadedData[groupKey][fieldKey];
+              this.formData[groupKey][fieldKey] = this.formatNumber(value);
+            }
+          });
+        }
+      });
+
+      // Clear any existing validation errors
+      this.validationErrors = [];
+
+      // Auto-calculate if we have loaded data
+      if (
+        Object.values(this.formData.assets).some(
+          (v) => v && this.parseCurrency(v) > 0
+        ) ||
+        Object.values(this.formData.liabilities).some(
+          (v) => v && this.parseCurrency(v) > 0
+        )
+      ) {
+        this.calculateNetWorth();
+      }
     },
   },
 };

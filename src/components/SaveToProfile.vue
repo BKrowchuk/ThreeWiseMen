@@ -31,7 +31,9 @@
             <div class="selection-header">
               <h4>Select Fields to Save:</h4>
               <div class="selection-actions">
-                <button @click="selectAll" class="action-btn">Select All</button>
+                <button @click="selectAll" class="action-btn">
+                  Select All
+                </button>
                 <button @click="clearAll" class="action-btn">Clear All</button>
               </div>
             </div>
@@ -82,13 +84,25 @@
             <h4>Preview of Changes:</h4>
             <div class="preview-summary">
               <p>
-                <strong>{{ selectedFieldCount }} field{{ selectedFieldCount !== 1 ? 's' : '' }}</strong> 
+                <strong
+                  >{{ selectedFieldCount }} field{{
+                    selectedFieldCount !== 1 ? "s" : ""
+                  }}</strong
+                >
                 will be saved to your profile.
               </p>
               <div class="preview-groups">
-                <div v-for="(group, groupKey) in selectedFieldSummary" :key="groupKey" class="preview-group">
+                <div
+                  v-for="(group, groupKey) in selectedFieldSummary"
+                  :key="groupKey"
+                  class="preview-group"
+                >
                   <span class="group-name">{{ group.title }}:</span>
-                  <span class="field-count">{{ group.count }} field{{ group.count !== 1 ? 's' : '' }}</span>
+                  <span class="field-count"
+                    >{{ group.count }} field{{
+                      group.count !== 1 ? "s" : ""
+                    }}</span
+                  >
                 </div>
               </div>
             </div>
@@ -218,11 +232,13 @@ export default {
     selectedFieldSummary() {
       const summary = {};
       Object.keys(this.selectedFields).forEach((groupKey) => {
-        const selectedInGroup = Object.values(this.selectedFields[groupKey]).filter(Boolean).length;
+        const selectedInGroup = Object.values(
+          this.selectedFields[groupKey]
+        ).filter(Boolean).length;
         if (selectedInGroup > 0) {
           summary[groupKey] = {
             title: this.saveableFields[groupKey]?.title || groupKey,
-            count: selectedInGroup
+            count: selectedInGroup,
           };
         }
       });
@@ -451,30 +467,59 @@ export default {
             break;
         }
 
-        // Show success message
-        this.successMessage = this.generateSuccessMessage(dataToSave);
+        // Show enhanced success message
+        this.successMessage = this.generateEnhancedSuccessMessage(dataToSave);
         this.showSuccess = true;
         this.closeModal();
 
-        // Emit save event
-        this.$emit("saved", dataToSave);
+        // Emit save event with more details
+        this.$emit("saved", {
+          data: dataToSave,
+          fieldCount: this.selectedFieldCount,
+          calculator: this.calculatorType,
+        });
       } catch (error) {
         console.error("Failed to save to profile:", error);
-        // Could add error handling here
+        this.handleSaveError(error);
       } finally {
         this.isSaving = false;
       }
     },
 
-    generateSuccessMessage(dataToSave) {
+    generateEnhancedSuccessMessage(dataToSave) {
       const savedCount = Object.values(dataToSave).reduce(
         (total, group) => total + Object.keys(group).length,
         0
       );
 
+      const groupDetails = Object.keys(dataToSave)
+        .map((groupKey) => {
+          const groupTitle = this.saveableFields[groupKey]?.title || groupKey;
+          const fieldCount = Object.keys(dataToSave[groupKey]).length;
+          return `${fieldCount} ${groupTitle.toLowerCase()} field${
+            fieldCount !== 1 ? "s" : ""
+          }`;
+        })
+        .join(", ");
+
       return `Successfully saved ${savedCount} field${
         savedCount !== 1 ? "s" : ""
-      } to your financial profile.`;
+      } to your profile: ${groupDetails}.`;
+    },
+
+    handleSaveError(error) {
+      // Show user-friendly error message
+      this.successMessage =
+        "Failed to save data to your profile. Please try again.";
+      this.showSuccess = true; // We'll style this as error
+
+      // Log detailed error for debugging
+      console.error("Save to profile error details:", {
+        error: error.message,
+        stack: error.stack,
+        calculatorType: this.calculatorType,
+        selectedFields: this.selectedFields,
+      });
     },
 
     hideSuccess() {
@@ -633,10 +678,38 @@ export default {
   line-height: 1.5;
 }
 
-.field-selection h4 {
-  color: var(--text-primary);
+.selection-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 1rem;
+}
+
+.selection-header h4 {
+  color: var(--text-primary);
+  margin: 0;
   font-size: 1.1rem;
+}
+
+.selection-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.action-btn {
+  background: var(--button-secondary-bg);
+  color: var(--button-secondary-text);
+  border: 1px solid var(--border-primary);
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.action-btn:hover {
+  background: var(--button-secondary-hover);
+  border-color: var(--border-hover);
 }
 
 .field-groups {
@@ -736,6 +809,53 @@ export default {
   color: var(--success-primary);
   font-weight: 600;
   font-family: monospace;
+}
+
+/* Save Preview */
+.save-preview {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: var(--info-light);
+  border: 1px solid var(--info-primary);
+  border-radius: 8px;
+}
+
+.save-preview h4 {
+  color: var(--info-primary);
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.preview-summary p {
+  color: var(--info-text);
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.preview-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.preview-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.group-name {
+  color: var(--info-text);
+  font-weight: 500;
+}
+
+.field-count {
+  color: var(--info-primary);
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
 /* Profile Comparison */
