@@ -401,6 +401,13 @@
             </div>
           </div>
         </div>
+
+        <!-- Save to Profile Component -->
+        <SaveToProfile
+          calculator-type="netWorth"
+          :calculated-data="netWorthSaveData"
+          @saved="onProfileSaved"
+        />
       </div>
 
       <!-- Validation Errors -->
@@ -418,9 +425,13 @@
 
 <script>
 import { calculatorStore, calculatorActions } from "../store/calculators";
+import SaveToProfile from "../components/SaveToProfile.vue";
 
 export default {
   name: "NetWorthCalculator",
+  components: {
+    SaveToProfile,
+  },
   data() {
     return {
       formData: {
@@ -609,6 +620,29 @@ export default {
       return labels[key] || key;
     },
 
+    // Data to save to profile
+    netWorthSaveData() {
+      const assets = {};
+      const liabilities = {};
+
+      // Convert assets to numbers
+      Object.keys(this.formData.assets).forEach((key) => {
+        assets[key] = this.parseCurrency(this.formData.assets[key]) || 0;
+      });
+
+      // Convert liabilities to numbers
+      Object.keys(this.formData.liabilities).forEach((key) => {
+        liabilities[key] =
+          this.parseCurrency(this.formData.liabilities[key]) || 0;
+      });
+
+      return {
+        assets,
+        liabilities,
+        totalNetWorth: this.netWorth,
+      };
+    },
+
     // Validate form inputs
     validateForm() {
       this.validationErrors = [];
@@ -671,6 +705,12 @@ export default {
         }
         this.isCalculating = false;
       }, 500);
+    },
+
+    // Handle profile save
+    onProfileSaved(savedData) {
+      console.log("Profile saved:", savedData);
+      // Could add additional logic here if needed
     },
   },
 };

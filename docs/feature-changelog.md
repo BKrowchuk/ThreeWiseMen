@@ -671,3 +671,229 @@ These improvements ensure that users can efficiently use the full width of their
 - **Improved Stability:** More robust handling of edge cases and data corruption
 - **Better User Experience:** Prevents application crashes during calculations
 - **Data Integrity:** Safer processing of form inputs and stored data
+
+## Save to Profile Functionality
+
+### Overview
+
+A comprehensive "Save to Profile" system has been implemented that allows users to selectively save calculator results to their persistent financial profile. This creates a clear distinction between calculator tools (exploratory) and planning/tracking features (persistent).
+
+### New Components
+
+#### 1. Profile Store (`src/store/profile.js`)
+
+**Purpose:** Centralized management of persistent user financial data separate from calculator results.
+
+**Store Structure:**
+
+```javascript
+{
+  financialState: {
+    monthlyIncome: 0,
+    existingSavings: 0,
+    emergencyFund: 0,
+    homeFund: 0,
+    rrspFhsa: 0,
+    assets: { /* individual asset values */ },
+    liabilities: { /* individual liability amounts */ },
+    budget: { /* expense and savings categories */ },
+    goals: { /* financial targets and timelines */ }
+  },
+  netWorthHistory: [], // Historical snapshots
+  cashFlowHistory: [], // Historical snapshots
+  lastUpdated: { /* timestamps for different sections */ }
+}
+```
+
+**Key Features:**
+
+- Separate storage from calculator results
+- Historical data tracking (last 12 snapshots)
+- Timestamp tracking for all updates
+- Selective field updating capabilities
+
+#### 2. SaveToProfile Component (`src/components/SaveToProfile.vue`)
+
+**Purpose:** Reusable component for saving calculator results to the user's financial profile.
+
+**Features:**
+
+- **Selective Field Saving:** Users can choose which calculated values to save
+- **Group-based Selection:** Fields organized into logical groups (Income, Savings, Goals, etc.)
+- **Profile Comparison:** Shows current profile values vs. new calculated values
+- **Visual Feedback:** Success messages and loading states
+- **Modal Interface:** Clean, organized save workflow
+
+**Save Options by Calculator:**
+
+- **Down Payment Calculator:** Monthly income, existing savings, down payment target, monthly savings goal
+- **Net Worth Calculator:** Individual asset amounts, liability amounts, total net worth snapshot
+- **Cash Flow Calculator:** Monthly income, fixed/variable expenses, savings targets
+
+#### 3. LoadFromProfile Component (`src/components/LoadFromProfile.vue`)
+
+**Purpose:** Allows users to pre-populate calculator fields with saved profile data.
+
+**Features:**
+
+- **Selective Data Loading:** Choose which profile data to load
+- **Data Source Information:** Shows when and where data was last updated
+- **Smart Field Mapping:** Automatically maps profile data to appropriate calculator fields
+- **Disabled State:** Button disabled when no profile data is available
+
+#### 4. Financial Profile Management (`src/views/FinancialProfile.vue`)
+
+**Purpose:** Comprehensive interface for managing saved financial data.
+
+**Features:**
+
+- **Profile Overview:** Summary cards showing key financial metrics
+- **Editable Sections:** Income & Savings, Assets, Liabilities, Financial Goals
+- **Historical Data:** View net worth and cash flow trends over time
+- **Data Management:** Clear profile data, load from profile options
+- **Last Updated Tracking:** Timestamps for all profile sections
+
+### Integration with Calculators
+
+#### Down Payment Calculator
+
+- **Save Button:** Appears after successful calculations
+- **Saveable Fields:** Monthly income, existing savings, down payment target, monthly savings goal
+- **Load Button:** Pre-populates form fields with profile data
+- **Profile Comparison:** Shows difference between current and saved values
+
+#### Net Worth Calculator
+
+- **Save Button:** Appears after successful calculations
+- **Saveable Fields:** Individual asset and liability amounts, total net worth
+- **Historical Tracking:** Maintains snapshots of net worth over time
+- **Load Button:** Pre-populates asset and liability fields
+
+#### Cash Flow Calculator
+
+- **Save Button:** Appears after successful calculations
+- **Saveable Fields:** Monthly income, fixed/variable expenses, savings targets
+- **Budget Templates:** Can create budget templates from calculations
+- **Load Button:** Pre-populates expense and income fields
+
+### User Experience Features
+
+#### Save Workflow
+
+1. **Calculate Results:** User completes calculator and sees results
+2. **Save Button:** Prominent "💾 Save to Profile" button appears
+3. **Field Selection:** Modal allows selective saving of calculated values
+4. **Profile Comparison:** Shows what will change in the profile
+5. **Confirmation:** Clear feedback about what was saved
+6. **Success Message:** Toast notification confirms successful save
+
+#### Load Workflow
+
+1. **Load Button:** "📊 Load from Profile" button in calculator forms
+2. **Data Selection:** Modal shows available profile data
+3. **Field Mapping:** Automatic mapping to appropriate calculator fields
+4. **Form Population:** Calculator fields pre-filled with profile data
+5. **Data Source Info:** Shows when profile data was last updated
+
+#### Profile Management
+
+1. **Navigation:** New "Financial Profile" link in main navigation
+2. **Overview Dashboard:** Summary cards with key financial metrics
+3. **Editable Sections:** Inline editing for all profile data
+4. **Historical Tracking:** View financial progress over time
+5. **Data Management:** Clear profile, export options, etc.
+
+### Technical Implementation
+
+#### Data Persistence
+
+- **Separate Storage:** Profile data stored in `threeWiseMenProfile` localStorage key
+- **Calculator Data:** Calculator results stored in `threeWiseMenCalculators` localStorage key
+- **Cross-Session Persistence:** All data survives browser restarts
+- **Data Validation:** Safe handling of corrupted or missing data
+
+#### Component Communication
+
+- **Event-Based:** Components communicate via Vue events
+- **Store Integration:** Profile store manages all persistent data
+- **Reactive Updates:** UI automatically updates when profile data changes
+- **Error Handling:** Graceful fallbacks for missing or invalid data
+
+#### Performance Considerations
+
+- **Lazy Loading:** Profile components only load when needed
+- **Efficient Updates:** Only changed fields trigger re-renders
+- **Memory Management:** Historical data limited to last 12 snapshots
+- **Optimized Storage:** Efficient localStorage usage
+
+### User Mental Model
+
+#### Calculator vs. Profile Distinction
+
+- **Calculators:** Exploratory tools for "what-if" scenarios
+- **Profile:** Persistent record of actual financial state
+- **Selective Saving:** Users control what gets permanently saved
+- **Data Ownership:** Full control over personal financial data
+
+#### Workflow Patterns
+
+1. **Exploration:** Use calculators to explore different scenarios
+2. **Decision Making:** Compare results and make informed decisions
+3. **Commitment:** Save relevant results to profile when ready
+4. **Tracking:** Monitor progress over time using profile data
+5. **Iteration:** Use profile data to inform future calculations
+
+### Testing Strategy
+
+#### Component Testing
+
+- **SaveToProfile Component:** Field selection, validation, save workflow
+- **LoadFromProfile Component:** Data loading, field mapping, error handling
+- **FinancialProfile Component:** Data editing, historical display, management functions
+
+#### Integration Testing
+
+- **Calculator Integration:** Save/load functionality across all calculators
+- **Data Flow:** Profile store updates and persistence
+- **Cross-Calculator Sync:** Data consistency between different tools
+
+#### User Experience Testing
+
+- **Save Workflow:** Complete save process from calculation to confirmation
+- **Load Workflow:** Complete load process from selection to form population
+- **Profile Management:** All profile editing and management functions
+
+### Future Enhancements
+
+#### Planned Features
+
+- **Data Export:** Export profile data to CSV/PDF
+- **Data Import:** Import financial data from external sources
+- **Advanced Analytics:** Charts and graphs for financial trends
+- **Goal Tracking:** Progress tracking toward financial goals
+- **Notifications:** Reminders for profile updates and goal progress
+
+#### Integration Opportunities
+
+- **Bank APIs:** Direct import of account balances
+- **Investment Platforms:** Portfolio value synchronization
+- **Budget Apps:** Expense tracking integration
+- **Tax Software:** Tax-related financial data export
+
+### Benefits
+
+#### For Users
+
+- **Data Persistence:** Financial information survives across sessions
+- **Progress Tracking:** Monitor financial health over time
+- **Efficiency:** Pre-populate forms with known information
+- **Control:** Choose what financial data to save permanently
+- **Insights:** Historical trends and financial progress
+
+#### For Developers
+
+- **Clear Architecture:** Separation of concerns between calculators and profiles
+- **Reusable Components:** Modular save/load functionality
+- **Scalable Design:** Easy to add new calculator types
+- **Maintainable Code:** Consistent patterns across all components
+- **User Experience:** Professional, intuitive interface design

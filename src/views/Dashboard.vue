@@ -1,11 +1,20 @@
 <template>
   <div class="dashboard">
     <div class="welcome-section">
-      <h1>Welcome to Your Financial Dashboard</h1>
-      <p>
-        Take control of your financial future with our comprehensive planning
-        tools
-      </p>
+      <div class="welcome-header">
+        <img
+          src="/src/assets/logo.png"
+          alt="Three Wise Men Logo"
+          class="welcome-logo"
+        />
+        <div class="welcome-text">
+          <h1>Welcome to Your Financial Dashboard</h1>
+          <p>
+            Take control of your financial future with our comprehensive
+            planning tools
+          </p>
+        </div>
+      </div>
     </div>
 
     <!-- Calculator Summary Section -->
@@ -213,13 +222,28 @@ export default {
   margin-bottom: 3rem;
 }
 
-.welcome-section h1 {
+.welcome-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.welcome-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.welcome-text h1 {
   font-size: 2.5rem;
   color: #2c3e50;
   margin-bottom: 1rem;
 }
 
-.welcome-section p {
+.welcome-text p {
   font-size: 1.2rem;
   color: #7f8c8d;
   max-width: 700px;

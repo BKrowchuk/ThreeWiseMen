@@ -3,8 +3,15 @@
     <nav class="navbar">
       <div class="nav-container">
         <div class="nav-brand">
-          <h1>Three Wise Men</h1>
-          <p>Financial Planning Dashboard</p>
+          <img
+            src="/src/assets/logo.png"
+            alt="Three Wise Men Logo"
+            class="nav-logo"
+          />
+          <div class="brand-text">
+            <h1>Three Wise Men</h1>
+            <p>Financial Planning Dashboard</p>
+          </div>
         </div>
         <ul class="nav-menu">
           <li class="nav-item">
@@ -79,13 +86,26 @@ body {
   align-items: center;
 }
 
-.nav-brand h1 {
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.brand-text h1 {
   font-size: 1.8rem;
   font-weight: 700;
   margin-bottom: 0.25rem;
 }
 
-.nav-brand p {
+.brand-text p {
   font-size: 0.9rem;
   opacity: 0.9;
 }

@@ -5,9 +5,13 @@ A modern, responsive financial planning dashboard built with Vue.js 3 and Vue Ro
 ## Features
 
 - **Dashboard**: Overview of all financial planning tools
-- **Savings Calculator**: Plan and track savings goals (coming soon)
+- **Calculators**: Comprehensive suite of financial calculators
+  - **Down Payment Calculator**: Plan home purchase savings with detailed calculations
+  - **Net Worth Calculator**: Calculate total financial position and track progress
+  - **Cash Flow Calculator**: Analyze monthly income vs expenses and identify savings opportunities
 - **Budget Planner**: Create and manage monthly budgets (coming soon)
 - **Investments**: Track and analyze investment portfolios (coming soon)
+- **Financial Profile**: Persistent financial data management with save/load functionality
 
 ## Technology Stack
 
@@ -57,12 +61,22 @@ npm run dev
 ```
 src/
 ├── views/
-│   ├── Dashboard.vue          # Main dashboard view
-│   ├── SavingsCalculator.vue  # Savings calculator (placeholder)
-│   ├── BudgetPlanner.vue      # Budget planner (placeholder)
-│   └── Investments.vue        # Investments tracker (placeholder)
-├── App.vue                    # Main application component
-└── main.js                    # Application entry point
+│   ├── Dashboard.vue              # Main dashboard view
+│   ├── Calculators.vue            # Calculators landing page
+│   ├── DownPaymentCalculator.vue  # Down payment planning calculator
+│   ├── NetWorthCalculator.vue     # Net worth calculation and tracking
+│   ├── CashFlowCalculator.vue     # Cash flow analysis calculator
+│   ├── BudgetPlanner.vue          # Budget planner (coming soon)
+│   ├── Investments.vue            # Investments tracker (coming soon)
+│   └── FinancialProfile.vue       # Financial profile management
+├── components/
+│   ├── SaveToProfile.vue          # Save calculator results to profile
+│   └── LoadFromProfile.vue        # Load profile data into calculators
+├── store/
+│   ├── calculators.js             # Calculator state management
+│   └── profile.js                 # Financial profile state management
+├── App.vue                        # Main application component
+└── main.js                        # Application entry point
 ```
 
 ## Development
@@ -74,13 +88,39 @@ This application is built with Vue.js 3 and follows modern Vue development pract
 - Responsive design with CSS Grid and Flexbox
 - Mobile-first approach
 
+## Key Features
+
+### Save to Profile System
+
+- **Selective Data Saving**: Choose which calculator results to save to your financial profile
+- **Persistent Storage**: Financial data survives across browser sessions
+- **Profile Comparison**: See how new calculations compare to saved profile data
+- **Historical Tracking**: Monitor financial progress over time with automatic snapshots
+
+### Calculator Integration
+
+- **Load from Profile**: Pre-populate calculator fields with saved financial data
+- **Smart Field Mapping**: Automatic mapping between profile data and calculator fields
+- **Data Synchronization**: Keep profile data up-to-date across all calculators
+- **Cross-Calculator Consistency**: Shared data like monthly income automatically synchronized
+
+### Profile Management
+
+- **Comprehensive Overview**: Dashboard showing key financial metrics and progress
+- **Editable Sections**: Inline editing for all profile data categories
+- **Data Management**: Clear profile data, export options, and backup functionality
+- **Last Updated Tracking**: Timestamps for all profile sections and data sources
+
 ## Future Enhancements
 
 The following features are planned for future development:
 
-- **Savings Calculator**: Goal setting, progress tracking, compound interest calculations
+- **Advanced Analytics**: Charts, graphs, and trend analysis for financial data
+- **Goal Tracking**: Progress monitoring toward financial goals with notifications
+- **Data Export/Import**: CSV/PDF export and external data import capabilities
 - **Budget Planner**: Expense categorization, spending analysis, budget templates
 - **Investments**: Portfolio tracking, performance analytics, investment recommendations
+- **Mobile App**: Native mobile application for on-the-go financial planning
 
 ## Contributing
 

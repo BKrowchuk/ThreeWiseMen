@@ -622,6 +622,13 @@
             </div>
           </div>
         </div>
+
+        <!-- Save to Profile Component -->
+        <SaveToProfile
+          calculator-type="cashFlow"
+          :calculated-data="cashFlowSaveData"
+          @saved="onProfileSaved"
+        />
       </div>
 
       <!-- Validation Errors -->
@@ -639,9 +646,13 @@
 
 <script>
 import { calculatorStore, calculatorActions } from "../store/calculators";
+import SaveToProfile from "../components/SaveToProfile.vue";
 
 export default {
   name: "CashFlowCalculator",
+  components: {
+    SaveToProfile,
+  },
   data() {
     return {
       formData: {
@@ -789,6 +800,40 @@ export default {
         }
       }
     },
+
+    // Data to save to profile
+    cashFlowSaveData() {
+      const fixedExpenses = {};
+      const variableExpenses = {};
+      const savings = {};
+
+      // Convert fixed expenses to numbers
+      Object.keys(this.formData.fixedExpenses).forEach((key) => {
+        fixedExpenses[key] =
+          this.parseCurrency(this.formData.fixedExpenses[key]) || 0;
+      });
+
+      // Convert variable expenses to numbers
+      Object.keys(this.formData.variableExpenses).forEach((key) => {
+        variableExpenses[key] =
+          this.parseCurrency(this.formData.variableExpenses[key]) || 0;
+      });
+
+      // Convert savings to numbers
+      Object.keys(this.formData.savings).forEach((key) => {
+        savings[key] = this.parseCurrency(this.formData.savings[key]) || 0;
+      });
+
+      return {
+        income: {
+          monthlyIncome: this.totalIncome,
+        },
+        fixedExpenses,
+        variableExpenses,
+        savings,
+        totalCashFlow: this.cashSurplus,
+      };
+    },
   },
   methods: {
     // Format currency input on blur
@@ -934,6 +979,12 @@ export default {
         }
         this.isCalculating = false;
       }, 500);
+    },
+
+    // Handle profile save
+    onProfileSaved(savedData) {
+      console.log("Profile saved:", savedData);
+      // Could add additional logic here if needed
     },
   },
 };

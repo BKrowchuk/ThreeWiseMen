@@ -180,14 +180,21 @@
 
         <!-- Calculate Button -->
         <div class="calculate-section">
-          <button
-            type="submit"
-            class="calculate-btn"
-            :disabled="isCalculating"
-            @click="calculateSavings"
-          >
-            {{ isCalculating ? "Calculating..." : "Calculate Savings Plan" }}
-          </button>
+          <div class="action-buttons">
+            <button
+              type="submit"
+              class="calculate-btn"
+              :disabled="isCalculating"
+              @click="calculateSavings"
+            >
+              {{ isCalculating ? "Calculating..." : "Calculate Savings Plan" }}
+            </button>
+            
+            <LoadFromProfile 
+              calculator-type="downPayment"
+              @load="onProfileLoad"
+            />
+          </div>
         </div>
       </div>
 
@@ -349,11 +356,13 @@
 <script>
 import { calculatorStore, calculatorActions } from "../store/calculators";
 import SaveToProfile from "../components/SaveToProfile.vue";
+import LoadFromProfile from "../components/LoadFromProfile.vue";
 
 export default {
   name: "DownPaymentCalculator",
   components: {
-    SaveToProfile
+    SaveToProfile,
+    LoadFromProfile
   },
   data() {
     return {
@@ -626,6 +635,41 @@ export default {
         this.isCalculating = false;
       }, 500);
     },
+
+    // Handle profile save
+    onProfileSaved(savedData) {
+      console.log('Profile saved:', savedData);
+      // Could add additional logic here if needed
+    },
+
+    // Handle profile load
+    onProfileLoad(loadedData) {
+      console.log('Profile loaded:', loadedData);
+      
+      // Populate form fields with loaded data
+      if (loadedData.income?.monthlyIncome) {
+        this.formData.monthlyIncome = this.formatNumber(loadedData.income.monthlyIncome);
+      }
+      
+      if (loadedData.savings?.existingSavings) {
+        this.formData.existingSavings = this.formatNumber(loadedData.savings.existingSavings);
+      }
+      
+      if (loadedData.goals?.downPaymentTarget) {
+        // Convert down payment target to appropriate mode
+        if (this.downPaymentMode === 'percentage') {
+          const propertyPrice = this.parseCurrency(this.formData.propertyPrice) || 1;
+          this.formData.downPayment = ((loadedData.goals.downPaymentTarget / propertyPrice) * 100).toFixed(2);
+        } else {
+          this.formData.downPayment = this.formatNumber(loadedData.goals.downPaymentTarget);
+        }
+      }
+      
+      if (loadedData.goals?.monthlySavingsGoal) {
+        // Could use this to suggest a timeline
+        console.log('Monthly savings goal loaded:', loadedData.goals.monthlySavingsGoal);
+      }
+    },
   },
 };
 </script>
@@ -822,6 +866,20 @@ export default {
   text-align: center;
   padding-top: 1rem;
   border-top: 2px solid #e1e8ed;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .action-buttons {
+    flex-direction: row;
+    justify-content: center;
+  }
 }
 
 .calculate-btn {
