@@ -1,114 +1,185 @@
 <template>
-  <nav class="navbar" :class="{ 'sidebar-open': isSidebarOpen }">
-    <!-- Mobile Menu Toggle -->
-    <button
-      class="mobile-toggle"
-      @click="toggleSidebar"
-      :aria-label="isSidebarOpen ? 'Close navigation menu' : 'Open navigation menu'"
-      :aria-expanded="isSidebarOpen"
-      aria-controls="navigation-menu"
-    >
-      <span class="hamburger-line" :class="{ active: isSidebarOpen }"></span>
-      <span class="hamburger-line" :class="{ active: isSidebarOpen }"></span>
-      <span class="hamburger-line" :class="{ active: isSidebarOpen }"></span>
-    </button>
-
-    <!-- Navigation Container -->
+  <!-- Top Navigation Bar -->
+  <nav class="navbar">
     <div class="nav-container">
-      <!-- Brand Section -->
+      <!-- Left: Menu Toggle -->
+      <button
+        class="menu-toggle"
+        @click="toggleDrawer"
+        :aria-label="
+          isDrawerOpen ? 'Close navigation menu' : 'Open navigation menu'
+        "
+        :aria-expanded="isDrawerOpen"
+        aria-controls="navigation-drawer"
+      >
+        <svg
+          class="menu-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
+        </svg>
+      </button>
+
+      <!-- Center: Brand -->
       <div class="nav-brand">
         <img :src="logoSource" alt="Three Wise Men Logo" class="nav-logo" />
-        <div class="brand-text">
-          <h1>Three Wise Men</h1>
-          <p>Financial Planning Dashboard</p>
+        <h1 class="brand-title">Three Wise Men</h1>
+      </div>
+
+      <!-- Right: Theme Toggle -->
+      <button
+        class="theme-toggle"
+        @click="toggleTheme"
+        :aria-label="
+          'Switch to ' + (themeStore.isDark ? 'light' : 'dark') + ' mode'
+        "
+        :title="'Switch to ' + (themeStore.isDark ? 'light' : 'dark') + ' mode'"
+      >
+        <svg
+          class="theme-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <!-- Sun icon for dark mode -->
+          <g v-if="themeStore.isDark">
+            <circle cx="12" cy="12" r="5" />
+            <path
+              d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+            />
+          </g>
+          <!-- Moon icon for light mode -->
+          <path v-else d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Navigation Drawer -->
+  <div
+    class="nav-drawer"
+    :class="{ open: isDrawerOpen }"
+    id="navigation-drawer"
+    role="navigation"
+    aria-label="Navigation menu"
+  >
+    <!-- Drawer Header -->
+    <div class="drawer-header">
+      <div class="drawer-brand">
+        <img :src="logoSource" alt="Three Wise Men Logo" class="drawer-logo" />
+        <div class="drawer-brand-text">
+          <h2>Three Wise Men</h2>
+          <p>Financial Planning</p>
         </div>
       </div>
-
-      <!-- Desktop Navigation Menu -->
-      <div class="nav-desktop">
-        <ul class="nav-menu" role="menubar" aria-label="Main navigation">
-          <li class="nav-item" v-for="item in navigationItems" :key="item.path" role="none">
-            <router-link
-              :to="item.path"
-              class="nav-link"
-              role="menuitem"
-              :aria-current="$route.path === item.path ? 'page' : null"
-              @click="closeSidebar"
-            >
-              {{ item.label }}
-            </router-link>
-          </li>
-        </ul>
-
-        <!-- Theme Toggle -->
-        <ThemeToggle />
-      </div>
+      <button
+        class="drawer-close"
+        @click="closeDrawer"
+        aria-label="Close navigation menu"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
     </div>
 
-    <!-- Mobile/Tablet Sidebar -->
-    <div
-      class="nav-sidebar"
-      :class="{ open: isSidebarOpen }"
-      id="navigation-menu"
-      role="navigation"
-      aria-label="Mobile navigation menu"
-    >
-      <!-- Skip to main content link for accessibility -->
-      <a href="#main-content" class="skip-link" @click="closeSidebar">
-        Skip to main content
-      </a>
-
-      <ul class="sidebar-menu" role="menubar" aria-label="Main navigation">
-        <li class="sidebar-item" v-for="item in navigationItems" :key="item.path" role="none">
+    <!-- Navigation Menu -->
+    <nav class="drawer-nav">
+      <ul class="nav-list" role="menubar">
+        <li v-for="item in navigationItems" :key="item.path" role="none">
           <router-link
             :to="item.path"
-            class="sidebar-link"
+            class="nav-item"
             role="menuitem"
             :aria-current="$route.path === item.path ? 'page' : null"
-            @click="closeSidebar"
-            @keydown.enter="closeSidebar"
-            @keydown.space.prevent="closeSidebar"
+            @click="closeDrawer"
           >
-            {{ item.label }}
+            <svg
+              class="nav-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+            >
+              <path
+                v-if="item.path === '/'"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+              />
+              <path
+                v-else-if="item.path === '/calculators'"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+              />
+              <path
+                v-else-if="item.path === '/budget-planner'"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+              />
+              <path
+                v-else-if="item.path === '/investments'"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+              />
+              <path
+                v-else-if="item.path === '/financial-profile'"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              />
+              <circle v-else cx="12" cy="12" r="3" />
+            </svg>
+            <span>{{ item.label }}</span>
           </router-link>
         </li>
       </ul>
+    </nav>
+  </div>
 
-      <!-- Mobile Theme Toggle -->
-      <div class="sidebar-theme-toggle">
-        <ThemeToggle />
-      </div>
-    </div>
-
-    <!-- Sidebar Backdrop -->
-    <div
-      class="sidebar-backdrop"
-      :class="{ active: isSidebarOpen }"
-      @click="closeSidebar"
-      @keydown.escape="closeSidebar"
-      :aria-hidden="!isSidebarOpen"
-    ></div>
-  </nav>
+  <!-- Drawer Backdrop -->
+  <div
+    class="drawer-backdrop"
+    :class="{ active: isDrawerOpen }"
+    @click="closeDrawer"
+    :aria-hidden="!isDrawerOpen"
+  ></div>
 </template>
 
 <script>
-import ThemeToggle from "./ThemeToggle.vue";
-import { themeStore } from "../store/theme.js";
+import { themeStore, themeActions } from "../store/theme.js";
 
 export default {
   name: "Navigation",
-  components: {
-    ThemeToggle,
-  },
+  components: {},
   data() {
     return {
-      isSidebarOpen: false,
+      isDrawerOpen: false,
       navigationItems: [
         { path: "/", label: "Dashboard" },
         { path: "/calculators", label: "Calculators" },
         { path: "/budget-planner", label: "Budget Planner" },
         { path: "/investments", label: "Investments" },
-        { path: "/financial-profile", label: "Financial Profile" },
+        { path: "/financial-profile", label: "Profile" },
       ],
     };
   },
@@ -118,207 +189,150 @@ export default {
         ? "/src/assets/logo-light.png"
         : "/src/assets/logo.png";
     },
+    themeStore() {
+      return themeStore;
+    },
   },
   methods: {
-    toggleSidebar() {
-      this.isSidebarOpen = !this.isSidebarOpen;
-      this.manageFocus();
+    toggleDrawer() {
+      this.isDrawerOpen = !this.isDrawerOpen;
       this.manageBodyScroll();
     },
-    closeSidebar() {
-      this.isSidebarOpen = false;
+    closeDrawer() {
+      this.isDrawerOpen = false;
       this.manageBodyScroll();
     },
-    manageFocus() {
-      if (this.isSidebarOpen) {
-        // Focus first sidebar link when opened
-        this.$nextTick(() => {
-          const firstLink = this.$el.querySelector('.sidebar-link');
-          if (firstLink) firstLink.focus();
-        });
-      }
+    toggleTheme() {
+      themeActions.toggleTheme();
     },
     manageBodyScroll() {
-      // Prevent body scroll when sidebar is open on mobile
-      if (window.innerWidth <= 768) {
-        document.body.style.overflow = this.isSidebarOpen ? 'hidden' : '';
-      }
-    },
-    handleResize() {
-      // Close sidebar when resizing to desktop
-      if (window.innerWidth > 768 && this.isSidebarOpen) {
-        this.closeSidebar();
-      }
+      // Prevent body scroll when drawer is open
+      document.body.style.overflow = this.isDrawerOpen ? "hidden" : "";
     },
     handleEscapeKey(event) {
-      if (event.key === 'Escape' && this.isSidebarOpen) {
-        this.closeSidebar();
+      if (event.key === "Escape" && this.isDrawerOpen) {
+        this.closeDrawer();
       }
     },
   },
   mounted() {
-    window.addEventListener('resize', this.handleResize);
-    document.addEventListener('keydown', this.handleEscapeKey);
+    document.addEventListener("keydown", this.handleEscapeKey);
   },
   beforeUnmount() {
-    window.removeEventListener('resize', this.handleResize);
-    document.removeEventListener('keydown', this.handleEscapeKey);
+    document.removeEventListener("keydown", this.handleEscapeKey);
     // Clean up body scroll lock
-    document.body.style.overflow = '';
+    document.body.style.overflow = "";
   },
   watch: {
     $route() {
-      // Close sidebar when route changes
-      this.closeSidebar();
+      // Close drawer when route changes
+      this.closeDrawer();
     },
   },
 };
 </script>
 
 <style scoped>
-/* Navigation Container */
+/* Top Navigation Bar */
 .navbar {
   background-color: var(--nav-bg);
   border-bottom: 1px solid var(--border-color);
   position: sticky;
   top: 0;
   z-index: 1000;
-  transition: all var(--transition-normal);
+  width: 100%;
 }
 
 .nav-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
+  width: 100%;
+  padding: 0 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 80px;
+  height: 64px;
+}
+
+/* Menu Toggle Button */
+.menu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--nav-text);
+  transition: all 0.2s ease;
+}
+
+.menu-toggle:hover,
+.menu-toggle:focus {
+  background-color: var(--nav-hover);
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.menu-icon {
+  width: 24px;
+  height: 24px;
 }
 
 /* Brand Section */
 .nav-brand {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  flex-shrink: 0;
+  gap: 0.75rem;
+  flex: 1;
+  justify-content: center;
+  margin: 0 1rem;
 }
 
 .nav-logo {
-  width: 50px;
-  height: 50px;
-  border-radius: 8px;
-  box-shadow: var(--shadow-md);
-  transition: transform var(--transition-normal);
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  box-shadow: var(--shadow-sm);
 }
 
-.nav-logo:hover {
-  transform: scale(1.05);
-}
-
-.brand-text h1 {
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin-bottom: 0.25rem;
+.brand-title {
+  font-size: 1.25rem;
+  font-weight: 600;
   color: var(--nav-text);
-}
-
-.brand-text p {
-  font-size: 0.9rem;
-  opacity: 0.9;
-  color: var(--nav-text);
-}
-
-/* Desktop Navigation */
-.nav-desktop {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-}
-
-.nav-menu {
-  display: flex;
-  list-style: none;
-  gap: 1.5rem;
-  align-items: center;
   margin: 0;
-  padding: 0;
 }
 
-.nav-link {
-  color: var(--nav-text);
-  text-decoration: none;
-  font-weight: 500;
-  padding: 0.75rem 1.25rem;
-  border-radius: 8px;
-  transition: all var(--transition-normal);
-  position: relative;
-  min-height: 44px; /* Touch target size */
+/* Theme Toggle Button */
+.theme-toggle {
   display: flex;
   align-items: center;
-}
-
-.nav-link:hover,
-.nav-link:focus {
-  background-color: var(--nav-hover);
-  transform: translateY(-2px);
-  outline: 2px solid var(--accent-color);
-  outline-offset: 2px;
-}
-
-.nav-link[aria-current="page"],
-.router-link-active {
-  background-color: var(--nav-active);
-  box-shadow: var(--shadow-md);
-}
-
-/* Mobile Toggle Button */
-.mobile-toggle {
-  display: none;
-  flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
   width: 44px;
   height: 44px;
   background: transparent;
-  border: 2px solid var(--nav-text);
+  border: none;
   border-radius: 8px;
   cursor: pointer;
-  padding: 8px;
-  z-index: 1002;
-  position: relative;
-  transition: all var(--transition-normal);
+  color: var(--nav-text);
+  transition: all 0.2s ease;
 }
 
-.mobile-toggle:hover,
-.mobile-toggle:focus {
+.theme-toggle:hover,
+.theme-toggle:focus {
   background-color: var(--nav-hover);
   outline: 2px solid var(--accent-color);
   outline-offset: 2px;
 }
 
-.hamburger-line {
-  width: 100%;
-  height: 3px;
-  background-color: var(--nav-text);
-  border-radius: 2px;
-  transition: all var(--transition-normal);
-  transform-origin: center;
+.theme-icon {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2;
 }
 
-.hamburger-line.active:nth-child(1) {
-  transform: rotate(45deg) translate(6px, 6px);
-}
-
-.hamburger-line.active:nth-child(2) {
-  opacity: 0;
-}
-
-.hamburger-line.active:nth-child(3) {
-  transform: rotate(-45deg) translate(6px, -6px);
-}
-
-/* Sidebar Navigation */
-.nav-sidebar {
+/* Navigation Drawer */
+.nav-drawer {
   position: fixed;
   top: 0;
   left: -320px;
@@ -327,16 +341,129 @@ export default {
   background-color: var(--nav-bg);
   border-right: 1px solid var(--border-color);
   z-index: 1001;
-  transition: left 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow-y: auto;
-  padding-top: 100px; /* Space for fixed header */
+  box-shadow: var(--shadow-lg);
 }
 
-.nav-sidebar.open {
+.nav-drawer.open {
   left: 0;
 }
 
-.sidebar-backdrop {
+/* Drawer Header */
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.drawer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.drawer-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  box-shadow: var(--shadow-md);
+}
+
+.drawer-brand-text h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--nav-text);
+  margin: 0 0 0.25rem 0;
+}
+
+.drawer-brand-text p {
+  font-size: 0.875rem;
+  color: var(--nav-text);
+  opacity: 0.7;
+  margin: 0;
+}
+
+.drawer-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--nav-text);
+  transition: all 0.2s ease;
+}
+
+.drawer-close:hover,
+.drawer-close:focus {
+  background-color: var(--nav-hover);
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.drawer-close svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Navigation List */
+.drawer-nav {
+  padding: 1rem 0;
+}
+
+.nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-list li {
+  margin: 0.25rem 0;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.5rem;
+  color: var(--nav-text);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+  min-height: 48px;
+}
+
+.nav-item:hover,
+.nav-item:focus {
+  background-color: var(--nav-hover);
+  border-left-color: var(--accent-color);
+  outline: none;
+}
+
+.nav-item[aria-current="page"],
+.nav-item.router-link-active {
+  background-color: var(--nav-active);
+  border-left-color: var(--accent-color);
+  font-weight: 600;
+}
+
+.nav-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  stroke-width: 2;
+}
+
+/* Drawer Backdrop */
+.drawer-backdrop {
   position: fixed;
   top: 0;
   left: 0;
@@ -346,242 +473,81 @@ export default {
   z-index: 1000;
   opacity: 0;
   visibility: hidden;
-  transition: all var(--transition-normal);
+  transition: all 0.3s ease;
 }
 
-.sidebar-backdrop.active {
+.drawer-backdrop.active {
   opacity: 1;
   visibility: visible;
 }
 
-.sidebar-menu {
-  list-style: none;
-  margin: 0;
-  padding: 2rem 0;
-}
-
-.sidebar-item {
-  margin-bottom: 0.5rem;
-}
-
-.sidebar-link {
-  display: block;
-  color: var(--nav-text);
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 1.1rem;
-  padding: 1rem 2rem;
-  transition: all var(--transition-normal);
-  border-left: 4px solid transparent;
-  min-height: 44px;
-}
-
-.sidebar-link:hover,
-.sidebar-link:focus {
-  background-color: var(--nav-hover);
-  border-left-color: var(--accent-color);
-  outline: 2px solid var(--accent-color);
-  outline-offset: -2px;
-}
-
-.sidebar-link[aria-current="page"],
-.sidebar-link.router-link-active {
-  background-color: var(--nav-active);
-  border-left-color: var(--accent-color);
-  box-shadow: inset 0 0 0 2px var(--accent-color);
-}
-
-.sidebar-theme-toggle {
-  padding: 2rem;
-  border-top: 1px solid var(--border-color);
-  margin-top: 2rem;
-}
-
-/* Skip Link for Accessibility */
-.skip-link {
-  position: absolute;
-  top: -40px;
-  left: 2rem;
-  background: var(--accent-color);
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-  border-radius: 4px;
-  z-index: 1003;
-  transition: top var(--transition-normal);
-}
-
-.skip-link:focus {
-  top: 1rem;
-}
-
 /* Responsive Design */
-
-/* Tablet (768px - 1024px) */
-@media (max-width: 1024px) {
-  .nav-container {
-    padding: 0 1.5rem;
-  }
-  
-  .nav-menu {
-    gap: 1rem;
-  }
-  
-  .nav-link {
-    padding: 0.6rem 1rem;
-    font-size: 0.95rem;
-  }
-}
-
-/* Mobile and Small Tablet (768px and below) */
-@media (max-width: 768px) {
-  .nav-container {
-    padding: 0 1rem;
-    height: 70px;
-  }
-
-  .mobile-toggle {
-    display: flex;
-    order: -1;
-  }
-
-  .nav-brand {
-    flex: 1;
-    justify-content: center;
-    margin: 0 1rem;
-  }
-
-  .brand-text h1 {
-    font-size: 1.5rem;
-  }
-
-  .brand-text p {
-    font-size: 0.8rem;
-  }
-
-  .nav-desktop {
-    display: none;
-  }
-
-  .nav-sidebar {
-    width: 280px;
-    left: -280px;
-    padding-top: 80px;
-  }
-
-  .sidebar-link {
-    font-size: 1rem;
-    padding: 0.875rem 1.5rem;
-  }
-
-  .sidebar-theme-toggle {
-    padding: 1.5rem;
-  }
-}
-
-/* Small Mobile (320px - 480px) */
 @media (max-width: 480px) {
   .nav-container {
-    padding: 0 0.75rem;
-    height: 60px;
-  }
-
-  .nav-brand {
-    margin: 0 0.5rem;
-  }
-
-  .brand-text h1 {
-    font-size: 1.3rem;
-  }
-
-  .brand-text p {
-    font-size: 0.75rem;
+    padding: 0 1rem;
+    height: 56px;
   }
 
   .nav-logo {
+    width: 32px;
+    height: 32px;
+  }
+
+  .brand-title {
+    font-size: 1.125rem;
+  }
+
+  .menu-toggle,
+  .theme-toggle {
     width: 40px;
     height: 40px;
   }
 
-  .mobile-toggle {
-    width: 40px;
-    height: 40px;
-    padding: 6px;
+  .menu-icon,
+  .theme-icon {
+    width: 20px;
+    height: 20px;
   }
 
-  .nav-sidebar {
-    width: calc(100vw - 60px);
-    left: calc(-100vw + 60px);
-    padding-top: 70px;
+  .nav-drawer {
+    width: calc(100vw - 48px);
+    left: calc(-100vw + 48px);
   }
 
-  .nav-sidebar.open {
+  .nav-drawer.open {
     left: 0;
   }
+}
 
-  .sidebar-link {
-    font-size: 0.95rem;
-    padding: 0.75rem 1rem;
+/* Dark Mode Adjustments */
+@media (prefers-color-scheme: dark) {
+  .drawer-backdrop {
+    background-color: rgba(0, 0, 0, 0.7);
   }
 }
 
-/* Large Desktop (1024px+) */
-@media (min-width: 1025px) {
-  .nav-container {
-    padding: 0 2.5rem;
-  }
-  
-  .nav-menu {
-    gap: 2rem;
-  }
-  
-  .nav-link {
-    padding: 0.75rem 1.5rem;
-  }
-  
-  .nav-link:hover {
-    transform: translateY(-3px);
-  }
-}
-
-/* High DPI / Retina Displays */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  .nav-logo {
-    image-rendering: -webkit-optimize-contrast;
-  }
-}
-
-/* Reduced Motion Accessibility */
+/* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
-  .nav-link,
-  .sidebar-link,
-  .nav-sidebar,
-  .sidebar-backdrop,
-  .hamburger-line,
-  .nav-logo {
+  .nav-drawer,
+  .drawer-backdrop,
+  .menu-toggle,
+  .theme-toggle,
+  .nav-item {
     transition: none;
   }
 }
 
-/* High Contrast Mode Support */
+/* High Contrast */
 @media (prefers-contrast: high) {
-  .nav-link,
-  .sidebar-link {
-    border: 2px solid transparent;
+  .nav-item {
+    border: 1px solid transparent;
   }
-  
-  .nav-link:hover,
-  .nav-link:focus,
-  .sidebar-link:hover,
-  .sidebar-link:focus {
-    border-color: currentColor;
-  }
-}
 
-/* Dark Mode Specific Adjustments */
-@media (prefers-color-scheme: dark) {
-  .sidebar-backdrop {
-    background-color: rgba(0, 0, 0, 0.7);
+  .nav-item:hover,
+  .nav-item:focus,
+  .nav-item[aria-current="page"],
+  .nav-item.router-link-active {
+    border-color: currentColor;
   }
 }
 </style>
