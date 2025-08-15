@@ -8,6 +8,7 @@ import NetWorthCalculator from "./views/NetWorthCalculator.vue";
 import CashFlowCalculator from "./views/CashFlowCalculator.vue";
 import BudgetPlanner from "./views/BudgetPlanner.vue";
 import Investments from "./views/Investments.vue";
+import FinancialProfile from "./views/FinancialProfile.vue";
 
 const routes = [
   { path: "/", component: Dashboard },
@@ -17,6 +18,7 @@ const routes = [
   { path: "/calculators/cash-flow", component: CashFlowCalculator },
   { path: "/budget-planner", component: BudgetPlanner },
   { path: "/investments", component: Investments },
+  { path: "/financial-profile", component: FinancialProfile },
 ];
 
 const router = createRouter({

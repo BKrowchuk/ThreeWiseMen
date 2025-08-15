@@ -25,6 +25,11 @@
               >Investments</router-link
             >
           </li>
+          <li class="nav-item">
+            <router-link to="/financial-profile" class="nav-link"
+              >Financial Profile</router-link
+            >
+          </li>
         </ul>
       </div>
     </nav>

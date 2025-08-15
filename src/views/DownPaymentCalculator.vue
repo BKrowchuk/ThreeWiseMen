@@ -324,6 +324,13 @@
             </div>
           </div>
         </div>
+
+        <!-- Save to Profile Component -->
+        <SaveToProfile 
+          calculator-type="downPayment"
+          :calculated-data="downPaymentSaveData"
+          @saved="onProfileSaved"
+        />
       </div>
 
       <!-- Validation Errors -->
@@ -341,9 +348,13 @@
 
 <script>
 import { calculatorStore, calculatorActions } from "../store/calculators";
+import SaveToProfile from "../components/SaveToProfile.vue";
 
 export default {
   name: "DownPaymentCalculator",
+  components: {
+    SaveToProfile
+  },
   data() {
     return {
       formData: {
@@ -431,6 +442,17 @@ export default {
         return 0;
       const monthlyIncome = this.parseCurrency(this.formData.monthlyIncome);
       return ((this.monthlySavingsTarget / monthlyIncome) * 100).toFixed(1);
+    },
+
+    // Data to save to profile
+    downPaymentSaveData() {
+      return {
+        monthlyIncome: this.parseCurrency(this.formData.monthlyIncome),
+        existingSavings: this.parseCurrency(this.formData.existingSavings),
+        downPaymentTarget: this.downPaymentAmount,
+        monthlySavingsGoal: this.monthlySavingsTarget,
+        timeline: parseInt(this.formData.timeline) || 0
+      };
     },
   },
   methods: {
