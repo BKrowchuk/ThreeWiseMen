@@ -28,7 +28,13 @@
 
           <!-- Field Selection -->
           <div class="field-selection">
-            <h4>Select Fields to Save:</h4>
+            <div class="selection-header">
+              <h4>Select Fields to Save:</h4>
+              <div class="selection-actions">
+                <button @click="selectAll" class="action-btn">Select All</button>
+                <button @click="clearAll" class="action-btn">Clear All</button>
+              </div>
+            </div>
 
             <div class="field-groups">
               <div
@@ -66,6 +72,23 @@
                       >${{ formatNumber(field.value) }}</span
                     >
                   </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Save Preview -->
+          <div class="save-preview" v-if="hasSelectedFields">
+            <h4>Preview of Changes:</h4>
+            <div class="preview-summary">
+              <p>
+                <strong>{{ selectedFieldCount }} field{{ selectedFieldCount !== 1 ? 's' : '' }}</strong> 
+                will be saved to your profile.
+              </p>
+              <div class="preview-groups">
+                <div v-for="(group, groupKey) in selectedFieldSummary" :key="groupKey" class="preview-group">
+                  <span class="group-name">{{ group.title }}:</span>
+                  <span class="field-count">{{ group.count }} field{{ group.count !== 1 ? 's' : '' }}</span>
                 </div>
               </div>
             </div>
@@ -181,6 +204,30 @@ export default {
         Object.values(group).some((selected) => selected)
       );
     },
+
+    selectedFieldCount() {
+      let count = 0;
+      Object.values(this.selectedFields).forEach((group) => {
+        Object.values(group).forEach((selected) => {
+          if (selected) count++;
+        });
+      });
+      return count;
+    },
+
+    selectedFieldSummary() {
+      const summary = {};
+      Object.keys(this.selectedFields).forEach((groupKey) => {
+        const selectedInGroup = Object.values(this.selectedFields[groupKey]).filter(Boolean).length;
+        if (selectedInGroup > 0) {
+          summary[groupKey] = {
+            title: this.saveableFields[groupKey]?.title || groupKey,
+            count: selectedInGroup
+          };
+        }
+      });
+      return summary;
+    },
   },
 
   watch: {
@@ -239,14 +286,34 @@ export default {
             assets: {
               title: "Assets",
               description: "Your current asset values",
-              fields: this.calculatedData.assets || {},
+              fields: {},
             },
             liabilities: {
               title: "Liabilities",
               description: "Your current debt amounts",
-              fields: this.calculatedData.liabilities || {},
+              fields: {},
             },
           };
+
+          // Format asset fields with proper labels
+          if (this.calculatedData.assets) {
+            Object.keys(this.calculatedData.assets).forEach((key) => {
+              this.saveableFields.assets.fields[key] = {
+                label: this.formatAssetLabel(key),
+                value: this.calculatedData.assets[key] || 0,
+              };
+            });
+          }
+
+          // Format liability fields with proper labels
+          if (this.calculatedData.liabilities) {
+            Object.keys(this.calculatedData.liabilities).forEach((key) => {
+              this.saveableFields.liabilities.fields[key] = {
+                label: this.formatLiabilityLabel(key),
+                value: this.calculatedData.liabilities[key] || 0,
+              };
+            });
+          }
           break;
 
         case "cashFlow":
@@ -316,6 +383,22 @@ export default {
     updateGroupSelection(groupKey) {
       // This method is called when individual fields change
       // Group selection logic is handled by isGroupSelected computed property
+    },
+
+    selectAll() {
+      Object.keys(this.selectedFields).forEach((groupKey) => {
+        Object.keys(this.selectedFields[groupKey]).forEach((fieldKey) => {
+          this.selectedFields[groupKey][fieldKey] = true;
+        });
+      });
+    },
+
+    clearAll() {
+      Object.keys(this.selectedFields).forEach((groupKey) => {
+        Object.keys(this.selectedFields[groupKey]).forEach((fieldKey) => {
+          this.selectedFields[groupKey][fieldKey] = false;
+        });
+      });
     },
 
     async saveToProfile() {
@@ -404,6 +487,30 @@ export default {
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
       });
+    },
+
+    formatAssetLabel(key) {
+      const labels = {
+        cashChecking: "Cash & Checking",
+        highInterestSavings: "High-Interest Savings",
+        tfsa: "TFSA",
+        rrsp: "RRSP",
+        fhsa: "FHSA",
+        investments: "Other Investments",
+        otherAssets: "Other Assets",
+      };
+      return labels[key] || key;
+    },
+
+    formatLiabilityLabel(key) {
+      const labels = {
+        creditCards: "Credit Cards",
+        linesOfCredit: "Lines of Credit",
+        carLoans: "Car Loans",
+        studentLoans: "Student Loans",
+        otherDebts: "Other Debts",
+      };
+      return labels[key] || key;
     },
   },
 };
