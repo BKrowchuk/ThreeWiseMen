@@ -645,3 +645,29 @@ The recent calculator layout improvements deliver:
 - **Enhanced User Experience:** Less wasted space and better visual balance
 
 These improvements ensure that users can efficiently use the full width of their screens while maintaining excellent usability across all device types, creating a more professional and user-friendly financial planning experience.
+
+### Bug Fix: TypeError in parseCurrency Method
+
+**Issue Resolved:** Fixed `TypeError: value.replace is not a function` error that occurred when non-string values were passed to the `parseCurrency` method.
+
+**Root Cause:** The `parseCurrency` method was calling `.replace()` on values that might not be strings (e.g., `null`, `undefined`, or other data types), causing runtime errors.
+
+**Technical Fixes Applied:**
+
+- **Enhanced parseCurrency Method:** Added type checking to ensure values are strings before calling `.replace()`
+- **Safety Checks in Computed Properties:** Added null/undefined checks in reduce operations for `totalAssets`, `totalLiabilities`, `totalIncome`, `totalFixedExpenses`, `totalVariableExpenses`, and `totalSavings`
+- **Cross-Calculator Consistency:** Applied the same safety improvements to all calculator components
+
+**Files Modified:**
+
+- `src/views/CashFlowCalculator.vue` - Enhanced parseCurrency and computed properties
+- `src/views/NetWorthCalculator.vue` - Enhanced parseCurrency and computed properties
+- `src/views/DownPaymentCalculator.vue` - Enhanced parseCurrency method
+- `src/views/SavingsCalculator.vue` - Enhanced parseCurrency method
+
+**Benefits:**
+
+- **Error Prevention:** Eliminates runtime errors from invalid data types
+- **Improved Stability:** More robust handling of edge cases and data corruption
+- **Better User Experience:** Prevents application crashes during calculations
+- **Data Integrity:** Safer processing of form inputs and stored data

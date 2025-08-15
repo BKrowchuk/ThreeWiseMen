@@ -702,6 +702,8 @@ export default {
     totalFixedExpenses() {
       return Object.values(this.formData.fixedExpenses).reduce(
         (total, value) => {
+          // Ensure value is valid before processing
+          if (value === null || value === undefined) return total;
           return total + (this.parseCurrency(value) || 0);
         },
         0
@@ -712,6 +714,8 @@ export default {
     totalVariableExpenses() {
       return Object.values(this.formData.variableExpenses).reduce(
         (total, value) => {
+          // Ensure value is valid before processing
+          if (value === null || value === undefined) return total;
           return total + (this.parseCurrency(value) || 0);
         },
         0
@@ -726,6 +730,8 @@ export default {
     // Calculate total savings
     totalSavings() {
       return Object.values(this.formData.savings).reduce((total, value) => {
+        // Ensure value is valid before processing
+        if (value === null || value === undefined) return total;
         return total + (this.parseCurrency(value) || 0);
       }, 0);
     },
@@ -805,6 +811,10 @@ export default {
     // Parse currency input to number
     parseCurrency(value) {
       if (!value) return 0;
+      // Ensure value is a string before calling replace
+      if (typeof value !== "string") {
+        value = String(value);
+      }
       return parseFloat(value.replace(/[^0-9.]/g, ""));
     },
 

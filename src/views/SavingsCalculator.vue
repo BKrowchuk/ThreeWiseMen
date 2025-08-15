@@ -481,6 +481,10 @@ export default {
     // Parse currency input to number
     parseCurrency(value) {
       if (!value) return 0;
+      // Ensure value is a string before calling replace
+      if (typeof value !== "string") {
+        value = String(value);
+      }
       return parseFloat(value.replace(/[^0-9.]/g, ""));
     },
 
