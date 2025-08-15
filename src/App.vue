@@ -11,8 +11,8 @@
             <router-link to="/" class="nav-link">Dashboard</router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/savings-calculator" class="nav-link"
-              >Savings Calculator</router-link
+            <router-link to="/calculators" class="nav-link"
+              >Calculators</router-link
             >
           </li>
           <li class="nav-item">

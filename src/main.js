@@ -2,13 +2,19 @@ import { createApp } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
 import App from "./App.vue";
 import Dashboard from "./views/Dashboard.vue";
-import SavingsCalculator from "./views/SavingsCalculator.vue";
+import Calculators from "./views/Calculators.vue";
+import DownPaymentCalculator from "./views/DownPaymentCalculator.vue";
+import NetWorthCalculator from "./views/NetWorthCalculator.vue";
+import CashFlowCalculator from "./views/CashFlowCalculator.vue";
 import BudgetPlanner from "./views/BudgetPlanner.vue";
 import Investments from "./views/Investments.vue";
 
 const routes = [
   { path: "/", component: Dashboard },
-  { path: "/savings-calculator", component: SavingsCalculator },
+  { path: "/calculators", component: Calculators },
+  { path: "/calculators/down-payment", component: DownPaymentCalculator },
+  { path: "/calculators/net-worth", component: NetWorthCalculator },
+  { path: "/calculators/cash-flow", component: CashFlowCalculator },
   { path: "/budget-planner", component: BudgetPlanner },
   { path: "/investments", component: Investments },
 ];

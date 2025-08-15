@@ -1,0 +1,1054 @@
+<template>
+  <div class="net-worth-calculator">
+    <div class="page-header">
+      <div class="header-content">
+        <h1>Net Worth Calculator</h1>
+        <p>
+          Calculate your total financial position by analyzing your assets and
+          liabilities
+        </p>
+      </div>
+      <div class="header-navigation">
+        <router-link to="/calculators" class="back-link"
+          >← Back to Calculators</router-link
+        >
+      </div>
+    </div>
+
+    <div class="calculator-container">
+      <div class="form-section">
+        <h2>Your Financial Information</h2>
+
+        <form @submit.prevent="calculateNetWorth" class="calculator-form">
+          <!-- Assets Section -->
+          <div class="section-group">
+            <h3>Assets</h3>
+            <p class="section-description">
+              Enter the current value of your assets
+            </p>
+
+            <div class="form-group">
+              <label for="cashChecking">
+                Cash & Checking Accounts
+                <span class="tooltip" title="Money in your bank accounts"
+                  >ⓘ</span
+                >
+              </label>
+              <div class="input-wrapper">
+                <span class="currency-symbol">$</span>
+                <input
+                  id="cashChecking"
+                  v-model="formData.assets.cashChecking"
+                  type="text"
+                  placeholder="5,000"
+                  @blur="formatCurrency"
+                  @input="clearValidation"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="highInterestSavings">
+                High-Interest Savings
+                <span
+                  class="tooltip"
+                  title="Savings accounts with higher interest rates"
+                  >ⓘ</span
+                >
+              </label>
+              <div class="input-wrapper">
+                <span class="currency-symbol">$</span>
+                <input
+                  id="highInterestSavings"
+                  v-model="formData.assets.highInterestSavings"
+                  type="text"
+                  placeholder="15,000"
+                  @blur="formatCurrency"
+                  @input="clearValidation"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="tfsa">
+                TFSA (Tax-Free Savings Account)
+                <span
+                  class="tooltip"
+                  title="Canadian tax-free investment account"
+                  >ⓘ</span
+                >
+              </label>
+              <div class="input-wrapper">
+                <span class="currency-symbol">$</span>
+                <input
+                  id="tfsa"
+                  v-model="formData.assets.tfsa"
+                  type="text"
+                  placeholder="25,000"
+                  @blur="formatCurrency"
+                  @input="clearValidation"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="rrsp">
+                RRSP (Registered Retirement Savings Plan)
+                <span
+                  class="tooltip"
+                  title="Canadian retirement savings account with tax benefits"
+                  >ⓘ</span
+                >
+              </label>
+              <div class="input-wrapper">
+                <span class="currency-symbol">$</span>
+                <input
+                  id="rrsp"
+                  v-model="formData.assets.rrsp"
+                  type="text"
+                  placeholder="50,000"
+                  @blur="formatCurrency"
+                  @input="clearValidation"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="fhsa">
+                FHSA (First Home Savings Account)
+                <span
+                  class="tooltip"
+                  title="Canadian account for first-time homebuyers"
+                  >ⓘ</span
+                >
+              </label>
+              <div class="input-wrapper">
+                <span class="currency-symbol">$</span>
+                <input
+                  id="fhsa"
+                  v-model="formData.assets.fhsa"
+                  type="text"
+                  placeholder="8,000"
+                  @blur="formatCurrency"
+                  @input="clearValidation"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="investments">
+                Other Investments
+                <span
+                  class="tooltip"
+                  title="Stocks, bonds, mutual funds, ETFs, etc."
+                  >ⓘ</span
+                >
+              </label>
+              <div class="input-wrapper">
+                <span class="currency-symbol">$</span>
+                <input
+                  id="investments"
+                  v-model="formData.assets.investments"
+                  type="text"
+                  placeholder="30,000"
+                  @blur="formatCurrency"
+                  @input="clearValidation"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="otherAssets">
+                Other Assets
+                <span
+                  class="tooltip"
+                  title="Vehicles, jewelry, collectibles, etc."
+                  >ⓘ</span
+                >
+              </label>
+              <div class="input-wrapper">
+                <span class="currency-symbol">$</span>
+                <input
+                  id="otherAssets"
+                  v-model="formData.assets.otherAssets"
+                  type="text"
+                  placeholder="10,000"
+                  @blur="formatCurrency"
+                  @input="clearValidation"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Liabilities Section -->
+          <div class="section-group">
+            <h3>Liabilities</h3>
+            <p class="section-description">
+              Enter the current balance of your debts
+            </p>
+
+            <div class="form-group">
+              <label for="creditCards">
+                Credit Cards
+                <span
+                  class="tooltip"
+                  title="Outstanding balances on all credit cards"
+                  >ⓘ</span
+                >
+              </label>
+              <div class="input-wrapper">
+                <span class="currency-symbol">$</span>
+                <input
+                  id="creditCards"
+                  v-model="formData.liabilities.creditCards"
+                  type="text"
+                  placeholder="2,500"
+                  @blur="formatCurrency"
+                  @input="clearValidation"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="linesOfCredit">
+                Lines of Credit
+                <span
+                  class="tooltip"
+                  title="Personal or home equity lines of credit"
+                  >ⓘ</span
+                >
+              </label>
+              <div class="input-wrapper">
+                <span class="currency-symbol">$</span>
+                <input
+                  id="linesOfCredit"
+                  v-model="formData.liabilities.linesOfCredit"
+                  type="text"
+                  placeholder="15,000"
+                  @blur="formatCurrency"
+                  @input="clearValidation"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="carLoans">
+                Car Loans
+                <span
+                  class="tooltip"
+                  title="Outstanding balance on vehicle loans"
+                  >ⓘ</span
+                >
+              </label>
+              <div class="input-wrapper">
+                <span class="currency-symbol">$</span>
+                <input
+                  id="carLoans"
+                  v-model="formData.liabilities.carLoans"
+                  type="text"
+                  placeholder="18,000"
+                  @blur="formatCurrency"
+                  @input="clearValidation"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="studentLoans">
+                Student Loans
+                <span
+                  class="tooltip"
+                  title="Outstanding balance on education loans"
+                  >ⓘ</span
+                >
+              </label>
+              <div class="input-wrapper">
+                <span class="currency-symbol">$</span>
+                <input
+                  id="studentLoans"
+                  v-model="formData.liabilities.studentLoans"
+                  type="text"
+                  placeholder="25,000"
+                  @blur="formatCurrency"
+                  @input="clearValidation"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="otherDebts">
+                Other Debts
+                <span
+                  class="tooltip"
+                  title="Personal loans, medical bills, etc."
+                  >ⓘ</span
+                >
+              </label>
+              <div class="input-wrapper">
+                <span class="currency-symbol">$</span>
+                <input
+                  id="otherDebts"
+                  v-model="formData.liabilities.otherDebts"
+                  type="text"
+                  placeholder="5,000"
+                  @blur="formatCurrency"
+                  @input="clearValidation"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Calculate Button -->
+          <div class="form-group">
+            <button
+              type="submit"
+              class="calculate-btn"
+              :disabled="isCalculating"
+            >
+              {{ isCalculating ? "Calculating..." : "Calculate Net Worth" }}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Results Section -->
+      <div class="results-section" v-if="showResults">
+        <h2>Your Net Worth Summary</h2>
+
+        <div class="results-grid">
+          <!-- Total Assets -->
+          <div class="result-card assets">
+            <h3>Total Assets</h3>
+            <div class="result-value positive">
+              ${{ formatNumber(totalAssets) }}
+            </div>
+            <div class="result-detail">Combined value of all your assets</div>
+          </div>
+
+          <!-- Total Liabilities -->
+          <div class="result-card liabilities">
+            <h3>Total Liabilities</h3>
+            <div class="result-value negative">
+              ${{ formatNumber(totalLiabilities) }}
+            </div>
+            <div class="result-detail">Combined balance of all your debts</div>
+          </div>
+
+          <!-- Net Worth -->
+          <div
+            class="result-card net-worth"
+            :class="{ positive: netWorth >= 0, negative: netWorth < 0 }"
+          >
+            <h3>Net Worth</h3>
+            <div
+              class="result-value"
+              :class="{ positive: netWorth >= 0, negative: netWorth < 0 }"
+            >
+              ${{ formatNumber(Math.abs(netWorth)) }}
+            </div>
+            <div class="result-detail">
+              {{ netWorth >= 0 ? "Positive" : "Negative" }} net worth
+            </div>
+          </div>
+        </div>
+
+        <!-- Detailed Breakdown -->
+        <div class="breakdown-section">
+          <h3>Detailed Breakdown</h3>
+
+          <div class="breakdown-grid">
+            <div class="breakdown-column">
+              <h4>Assets Breakdown</h4>
+              <div
+                class="breakdown-item"
+                v-for="(value, key) in assetBreakdown"
+                :key="`asset-${key}`"
+              >
+                <span class="item-label">{{ formatAssetLabel(key) }}</span>
+                <span class="item-value positive"
+                  >${{ formatNumber(value) }}</span
+                >
+              </div>
+            </div>
+
+            <div class="breakdown-column">
+              <h4>Liabilities Breakdown</h4>
+              <div
+                class="breakdown-item"
+                v-for="(value, key) in liabilityBreakdown"
+                :key="`liability-${key}`"
+              >
+                <span class="item-label">{{ formatLiabilityLabel(key) }}</span>
+                <span class="item-value negative"
+                  >${{ formatNumber(value) }}</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Financial Health Indicator -->
+        <div class="health-indicator">
+          <h3>Financial Health Indicator</h3>
+          <div class="health-status" :class="healthStatus.class">
+            <div class="status-icon">{{ healthStatus.icon }}</div>
+            <div class="status-content">
+              <div class="status-title">{{ healthStatus.title }}</div>
+              <div class="status-description">
+                {{ healthStatus.description }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Validation Errors -->
+      <div class="validation-errors" v-if="validationErrors.length > 0">
+        <h3>Please fix the following issues:</h3>
+        <ul>
+          <li v-for="error in validationErrors" :key="error" class="error-item">
+            {{ error }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { calculatorStore, calculatorActions } from "../store/calculators";
+
+export default {
+  name: "NetWorthCalculator",
+  data() {
+    return {
+      formData: {
+        assets: {
+          cashChecking: "",
+          highInterestSavings: "",
+          tfsa: "",
+          rrsp: "",
+          fhsa: "",
+          investments: "",
+          otherAssets: "",
+        },
+        liabilities: {
+          creditCards: "",
+          linesOfCredit: "",
+          carLoans: "",
+          studentLoans: "",
+          otherDebts: "",
+        },
+      },
+      showResults: false,
+      validationErrors: [],
+      isCalculating: false,
+    };
+  },
+  mounted() {
+    // Load data from store if available
+    if (
+      calculatorStore.netWorth.assets.cashChecking ||
+      calculatorStore.netWorth.liabilities.creditCards
+    ) {
+      this.formData = { ...calculatorStore.netWorth };
+    }
+
+    // Load results if available
+    if (calculatorStore.netWorth.results) {
+      this.showResults = true;
+    }
+  },
+  computed: {
+    // Calculate total assets
+    totalAssets() {
+      return Object.values(this.formData.assets).reduce((total, value) => {
+        return total + (this.parseCurrency(value) || 0);
+      }, 0);
+    },
+
+    // Calculate total liabilities
+    totalLiabilities() {
+      return Object.values(this.formData.liabilities).reduce((total, value) => {
+        return total + (this.parseCurrency(value) || 0);
+      }, 0);
+    },
+
+    // Calculate net worth
+    netWorth() {
+      return this.totalAssets - this.totalLiabilities;
+    },
+
+    // Asset breakdown for display
+    assetBreakdown() {
+      const breakdown = {};
+      Object.entries(this.formData.assets).forEach(([key, value]) => {
+        const numValue = this.parseCurrency(value) || 0;
+        if (numValue > 0) {
+          breakdown[key] = numValue;
+        }
+      });
+      return breakdown;
+    },
+
+    // Liability breakdown for display
+    liabilityBreakdown() {
+      const breakdown = {};
+      Object.entries(this.formData.liabilities).forEach(([key, value]) => {
+        const numValue = this.parseCurrency(value) || 0;
+        if (numValue > 0) {
+          breakdown[key] = numValue;
+        }
+      });
+      return breakdown;
+    },
+
+    // Financial health status
+    healthStatus() {
+      if (this.netWorth >= 0) {
+        if (this.netWorth >= this.totalAssets * 0.5) {
+          return {
+            class: "excellent",
+            icon: "🌟",
+            title: "Excellent Financial Health",
+            description:
+              "You have a strong positive net worth with minimal debt relative to assets.",
+          };
+        } else if (this.netWorth >= this.totalAssets * 0.2) {
+          return {
+            class: "good",
+            icon: "✅",
+            title: "Good Financial Health",
+            description:
+              "You have a positive net worth and are building wealth effectively.",
+          };
+        } else {
+          return {
+            class: "fair",
+            icon: "⚠️",
+            title: "Fair Financial Health",
+            description:
+              "You have a positive net worth but could benefit from reducing debt.",
+          };
+        }
+      } else {
+        return {
+          class: "poor",
+          icon: "❌",
+          title: "Needs Improvement",
+          description:
+            "Your liabilities exceed your assets. Focus on debt reduction and building savings.",
+        };
+      }
+    },
+  },
+  methods: {
+    // Format currency input on blur
+    formatCurrency(event) {
+      const value = event.target.value.replace(/[^0-9.]/g, "");
+      if (value) {
+        const numValue = parseFloat(value);
+        if (!isNaN(numValue)) {
+          event.target.value = this.formatNumber(numValue);
+        }
+      }
+    },
+
+    // Clear validation errors when user types
+    clearValidation() {
+      this.validationErrors = [];
+      this.showResults = false;
+    },
+
+    // Parse currency input to number
+    parseCurrency(value) {
+      if (!value) return 0;
+      return parseFloat(value.replace(/[^0-9.]/g, ""));
+    },
+
+    // Format number with commas
+    formatNumber(num) {
+      return num.toLocaleString("en-US", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      });
+    },
+
+    // Format asset labels for display
+    formatAssetLabel(key) {
+      const labels = {
+        cashChecking: "Cash & Checking",
+        highInterestSavings: "High-Interest Savings",
+        tfsa: "TFSA",
+        rrsp: "RRSP",
+        fhsa: "FHSA",
+        investments: "Other Investments",
+        otherAssets: "Other Assets",
+      };
+      return labels[key] || key;
+    },
+
+    // Format liability labels for display
+    formatLiabilityLabel(key) {
+      const labels = {
+        creditCards: "Credit Cards",
+        linesOfCredit: "Lines of Credit",
+        carLoans: "Car Loans",
+        studentLoans: "Student Loans",
+        otherDebts: "Other Debts",
+      };
+      return labels[key] || key;
+    },
+
+    // Validate form inputs
+    validateForm() {
+      this.validationErrors = [];
+
+      // Check if at least one asset or liability is entered
+      const hasAssets = Object.values(this.formData.assets).some(
+        (value) => this.parseCurrency(value) > 0
+      );
+      const hasLiabilities = Object.values(this.formData.liabilities).some(
+        (value) => this.parseCurrency(value) > 0
+      );
+
+      if (!hasAssets && !hasLiabilities) {
+        this.validationErrors.push(
+          "Please enter at least one asset or liability value"
+        );
+      }
+
+      // Validate individual values
+      Object.entries(this.formData.assets).forEach(([key, value]) => {
+        if (value && this.parseCurrency(value) < 0) {
+          this.validationErrors.push(
+            `${this.formatAssetLabel(key)} cannot be negative`
+          );
+        }
+      });
+
+      Object.entries(this.formData.liabilities).forEach(([key, value]) => {
+        if (value && this.parseCurrency(value) < 0) {
+          this.validationErrors.push(
+            `${this.formatLiabilityLabel(key)} cannot be negative`
+          );
+        }
+      });
+
+      return this.validationErrors.length === 0;
+    },
+
+    // Calculate net worth
+    calculateNetWorth() {
+      this.isCalculating = true;
+
+      // Simulate calculation delay for better UX
+      setTimeout(() => {
+        if (this.validateForm()) {
+          this.showResults = true;
+
+          // Save form data and results to store
+          const results = {
+            totalAssets: this.totalAssets,
+            totalLiabilities: this.totalLiabilities,
+            netWorth: this.netWorth,
+            assetBreakdown: this.assetBreakdown,
+            liabilityBreakdown: this.liabilityBreakdown,
+            healthStatus: this.healthStatus,
+          };
+
+          calculatorActions.updateNetWorthData(this.formData);
+          calculatorActions.saveNetWorthResults(results);
+        }
+        this.isCalculating = false;
+      }, 500);
+    },
+  },
+};
+</script>
+
+<style scoped>
+.net-worth-calculator {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 3rem;
+  gap: 2rem;
+}
+
+.header-content h1 {
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.header-content p {
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  max-width: 500px;
+}
+
+.back-link {
+  display: inline-block;
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid #667eea;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.back-link:hover {
+  background-color: #667eea;
+  color: white;
+}
+
+.calculator-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.form-section,
+.results-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.form-section h2,
+.results-section h2 {
+  color: #2c3e50;
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+}
+
+.section-group {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #667eea;
+}
+
+.section-group h3 {
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.section-description {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.calculator-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tooltip {
+  color: #7f8c8d;
+  cursor: help;
+  font-size: 0.8rem;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.currency-symbol {
+  position: absolute;
+  left: 12px;
+  color: #7f8c8d;
+  font-weight: 500;
+  z-index: 1;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 12px 12px 12px 35px;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.input-wrapper input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.calculate-btn {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.calculate-btn:hover:not(:disabled) {
+  background: #5a6fd8;
+  transform: translateY(-2px);
+}
+
+.calculate-btn:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Results Section */
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.result-card {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  border-left: 4px solid #667eea;
+}
+
+.result-card.assets {
+  border-left-color: #27ae60;
+  background: #f0f9f4;
+}
+
+.result-card.liabilities {
+  border-left-color: #e74c3c;
+  background: #fdf2f2;
+}
+
+.result-card.net-worth {
+  border-left-color: #667eea;
+  background: #f0f4ff;
+}
+
+.result-card h3 {
+  font-size: 1rem;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.result-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.result-value.positive {
+  color: #27ae60;
+}
+
+.result-value.negative {
+  color: #e74c3c;
+}
+
+.result-detail {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+}
+
+.breakdown-section {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.breakdown-section h3 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.breakdown-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.breakdown-column h4 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.breakdown-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: white;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+}
+
+.item-label {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.item-value.positive {
+  color: #27ae60;
+  font-weight: 600;
+}
+
+.item-value.negative {
+  color: #e74c3c;
+  font-weight: 600;
+}
+
+.health-indicator {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.health-indicator h3 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.health-status {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 8px;
+}
+
+.health-status.excellent {
+  border-left: 4px solid #27ae60;
+}
+
+.health-status.good {
+  border-left: 4px solid #3498db;
+}
+
+.health-status.fair {
+  border-left: 4px solid #f39c12;
+}
+
+.health-status.poor {
+  border-left: 4px solid #e74c3c;
+}
+
+.status-icon {
+  font-size: 2rem;
+}
+
+.status-title {
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.25rem;
+}
+
+.status-description {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+.validation-errors {
+  background: #fdf2f2;
+  border: 2px solid #e74c3c;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.validation-errors h3 {
+  color: #e74c3c;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.validation-errors ul {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.error-item {
+  color: #e74c3c;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .calculator-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .net-worth-calculator {
+    padding: 1rem;
+  }
+
+  .page-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .header-content h1 {
+    font-size: 2rem;
+  }
+
+  .form-section,
+  .results-section {
+    padding: 1.5rem;
+  }
+
+  .results-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .breakdown-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+</style>
