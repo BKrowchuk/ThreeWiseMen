@@ -461,11 +461,15 @@ export default {
 
 .sun-center {
   animation: sunPulse 2s ease-in-out infinite alternate;
+  fill: currentColor !important;
+  stroke: none !important;
 }
 
 .sun-rays {
   animation: sunRotate 8s linear infinite;
   transform-origin: center;
+  fill: none !important;
+  stroke: currentColor !important;
 }
 
 /* Moon icon animations */
@@ -473,8 +477,15 @@ export default {
   animation: moonAppear 0.4s ease-out;
 }
 
+.moon-icon path {
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
 .stars {
   animation: starsTwinkle 3s ease-in-out infinite alternate;
+  fill: currentColor !important;
+  stroke: none !important;
 }
 
 /* Hover effects for theme toggle */
