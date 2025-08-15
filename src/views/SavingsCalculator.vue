@@ -564,7 +564,7 @@ export default {
 
 <style scoped>
 .savings-calculator {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
 }
@@ -586,10 +586,11 @@ export default {
 }
 
 .calculator-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 3rem;
   margin-bottom: 3rem;
+  width: 100%;
 }
 
 .form-section,
@@ -598,6 +599,8 @@ export default {
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  min-width: 0;
 }
 
 .form-section h2,
@@ -921,9 +924,14 @@ export default {
 }
 
 /* Responsive Design */
+@media (max-width: 1200px) {
+  .savings-calculator {
+    max-width: 1200px;
+  }
+}
+
 @media (max-width: 1024px) {
   .calculator-container {
-    grid-template-columns: 1fr;
     gap: 2rem;
   }
 }
@@ -931,6 +939,7 @@ export default {
 @media (max-width: 768px) {
   .savings-calculator {
     padding: 1rem;
+    max-width: 100%;
   }
 
   .page-header h1 {
@@ -952,6 +961,13 @@ export default {
 
   .target-amount {
     font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-section,
+  .results-section {
+    padding: 1rem;
   }
 }
 </style>

@@ -438,6 +438,172 @@ New routes have been implemented:
 - All calculations performed client-side
 - Local storage for data persistence
 
+## Calculator Layout Improvements & Responsive Design
+
+### Overview
+
+Significant improvements have been made to calculator layouts to utilize more screen width and arrange sections side-by-side for better space utilization and improved user experience.
+
+### Layout Enhancements
+
+#### Container Width Updates
+
+**Before:** Standard narrow form widths (max-width: 1200px)
+**After:** Wider breakpoints for better space utilization
+
+- **Down Payment Calculator:** max-width: 1400px
+- **Net Worth Calculator:** max-width: 1400px
+- **Cash Flow Calculator:** max-width: 1400px
+- **Savings Calculator:** max-width: 1400px
+- **Dashboard:** max-width: 1400px
+
+#### Multi-Column Form Layouts
+
+**Down Payment Calculator:**
+
+- **Left Column:** Property Details (🏠 Property Details, 💰 Financial Position)
+- **Right Column:** Results and calculations
+- Form sections grouped logically with visual separation
+- Clear column headers with icons and descriptions
+
+**Net Worth Calculator:**
+
+- **Left Column:** Assets (💰 Assets)
+- **Right Column:** Liabilities (💳 Liabilities)
+- Equal-width columns with distinct visual styling
+- Assets column: Green accent (#27ae60)
+- Liabilities column: Red accent (#e74c3c)
+
+**Cash Flow Calculator:**
+
+- **Left Column:** Income & Fixed Expenses
+  - 💰 Income section
+  - 🏠 Fixed Expenses section
+- **Right Column:** Variable Expenses & Savings
+  - 🛒 Variable Expenses section
+  - 💎 Savings & Transfers section
+- Visual separation with border between columns
+
+#### Visual Organization Improvements
+
+**Section Grouping:**
+
+- Each form section has distinct background colors
+- Colored left borders for visual hierarchy
+- Consistent spacing and padding
+- Clear section headers with emojis and descriptions
+
+**Form Field Styling:**
+
+- Input fields optimized for narrower columns
+- Proper label and input alignment
+- Consistent margins and padding
+- Responsive field sizing
+
+**Calculate Button Placement:**
+
+- Centered below form sections
+- Visual separation with border
+- Consistent styling across all calculators
+
+### Responsive Design Patterns
+
+#### Breakpoint Strategy
+
+**Desktop (1400px+):** Full multi-column layout
+**Large Tablets (1200px-1399px):** Reduced max-width, maintained layout
+**Tablets (1024px-1199px):** Single-column layout, stacked sections
+**Mobile (768px-1023px):** Optimized spacing and padding
+**Small Mobile (480px-767px):** Compact layout with reduced padding
+
+#### Responsive Behavior
+
+**CSS Grid Implementation:**
+
+```css
+.calculator-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 1024px) {
+  .calculator-form {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+```
+
+**Column Stacking:**
+
+- Multi-column layouts automatically stack on smaller screens
+- Visual separators (borders) removed on mobile
+- Padding adjusted for optimal mobile experience
+
+**Form Field Optimization:**
+
+- Input fields maintain appropriate sizing in all layouts
+- Labels and inputs remain properly aligned
+- Spacing optimized for each breakpoint
+
+### Enhanced Visual Hierarchy
+
+#### Section Headers
+
+- **Icons:** Emojis for quick visual identification
+- **Titles:** Clear, descriptive section names
+- **Descriptions:** Helpful context for each section
+- **Visual Separation:** Borders and background colors
+
+#### Color Coding System
+
+- **Assets:** Green accents (#27ae60)
+- **Liabilities:** Red accents (#e74c3c)
+- **Income:** Green accents (#27ae60)
+- **Expenses:** Red accents (#e74c3c)
+- **Savings:** Blue accents (#3498db)
+- **Neutral:** Blue accents (#667eea)
+
+#### Visual Boundaries
+
+- Subtle borders between columns
+- Background colors for section groups
+- Consistent spacing between elements
+- Clear visual separation of different areas
+
+### Testing & Validation
+
+#### Responsive Testing
+
+- **Desktop:** Verified multi-column layouts work correctly
+- **Tablet:** Confirmed single-column stacking behavior
+- **Mobile:** Validated optimal mobile experience
+- **Cross-browser:** Tested on Chrome, Firefox, Safari, Edge
+
+#### Layout Validation
+
+- **No Horizontal Scrolling:** Ensured on all device sizes
+- **Logical Tab Order:** Maintained in multi-column layouts
+- **Form Usability:** Verified optimal across all layout variations
+- **Visual Clarity:** Confirmed excellent readability in all layouts
+
+### Performance Impact
+
+#### Positive Effects
+
+- **Better Space Utilization:** More efficient use of screen real estate
+- **Improved User Experience:** Logical grouping and visual hierarchy
+- **Enhanced Readability:** Better organization of form sections
+- **Professional Appearance:** More polished and modern interface
+
+#### Technical Considerations
+
+- **CSS Grid:** Efficient layout system with minimal performance impact
+- **Responsive Images:** No additional image loading
+- **Minimal JavaScript:** Layout changes handled entirely with CSS
+- **Optimized Rendering:** Efficient DOM updates and reflows
+
 ## Conclusion
 
 The ThreeWiseMen application restructure successfully transforms a single calculator into a comprehensive financial planning suite. The new architecture provides:
@@ -449,3 +615,33 @@ The ThreeWiseMen application restructure successfully transforms a single calcul
 - **Performance:** Optimized data flow and caching
 
 The calculator suite now serves as a comprehensive financial planning toolkit, helping users make informed decisions about home purchases, net worth assessment, and cash flow management.
+
+### Layout Improvements Summary
+
+The recent calculator layout improvements deliver:
+
+- **Enhanced Space Utilization:** Wider containers and multi-column layouts
+- **Better Visual Organization:** Logical grouping with clear visual hierarchy
+- **Improved Responsiveness:** Optimized layouts for all device sizes
+- **Professional Appearance:** Modern, polished interface design
+- **Better User Experience:** Easier navigation and form completion
+
+### Calculator Card Width Optimization
+
+**Latest Enhancement:** Calculator cards now take up most of the available screen width for maximum space utilization.
+
+**Technical Changes:**
+
+- **Container Layout:** Changed `calculator-container` from CSS Grid (`1fr 1fr`) to Flexbox (`flex-direction: column`)
+- **Card Expansion:** Added `width: 100%` and `min-width: 0` to `form-section` and `results-section`
+- **Full-Width Cards:** Calculator cards expand to fill available horizontal space instead of being constrained by grid columns
+- **Responsive Behavior:** Maintained responsive stacking while maximizing horizontal space usage on larger screens
+
+**Benefits:**
+
+- **Maximum Screen Usage:** Calculator cards now utilize the full width of the screen
+- **Better Form Layout:** More space for input fields and form organization
+- **Improved Readability:** Results and calculations have more room to display
+- **Enhanced User Experience:** Less wasted space and better visual balance
+
+These improvements ensure that users can efficiently use the full width of their screens while maintaining excellent usability across all device types, creating a more professional and user-friendly financial planning experience.

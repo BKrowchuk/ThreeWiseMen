@@ -204,6 +204,9 @@ export default {
 <style scoped>
 .dashboard {
   text-align: center;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
 }
 
 .welcome-section {
@@ -219,7 +222,7 @@ export default {
 .welcome-section p {
   font-size: 1.2rem;
   color: #7f8c8d;
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
 }
 
@@ -358,7 +361,19 @@ export default {
   color: white;
 }
 
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .dashboard {
+    max-width: 1200px;
+  }
+}
+
 @media (max-width: 768px) {
+  .dashboard {
+    padding: 1rem;
+    max-width: 100%;
+  }
+
   .welcome-section h1 {
     font-size: 2rem;
   }
@@ -375,6 +390,21 @@ export default {
 
   .summary-section h2 {
     font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard {
+    padding: 0.75rem;
+  }
+
+  .welcome-section h1 {
+    font-size: 1.75rem;
+  }
+
+  .tool-card,
+  .summary-card {
+    padding: 1.5rem;
   }
 }
 </style>

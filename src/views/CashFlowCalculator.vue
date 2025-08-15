@@ -20,433 +20,452 @@
         <h2>Your Monthly Financial Information</h2>
 
         <form @submit.prevent="calculateCashFlow" class="calculator-form">
-          <!-- Income Section -->
-          <div class="section-group income-section">
-            <h3>Income</h3>
-            <p class="section-description">
-              Enter your monthly take-home income after taxes and benefits
-            </p>
+          <!-- Left Column: Income & Fixed Expenses -->
+          <div class="form-column left-column">
+            <!-- Income Section -->
+            <div class="section-group income-section">
+              <h3>💰 Income</h3>
+              <p class="section-description">
+                Enter your monthly take-home income after taxes and benefits
+              </p>
 
-            <div class="form-group">
-              <label for="monthlyIncome">
-                Monthly Income (After Tax & Benefits)
-                <span
-                  class="tooltip"
-                  title="Your take-home pay after all deductions"
-                  >ⓘ</span
-                >
-              </label>
-              <div class="input-wrapper">
-                <span class="currency-symbol">$</span>
-                <input
-                  id="monthlyIncome"
-                  v-model="formData.income.monthlyIncome"
-                  type="text"
-                  placeholder="4,800"
-                  @blur="formatCurrency"
-                  @input="clearValidation"
-                />
-              </div>
-              <div class="example-text">Example: $4,800</div>
-            </div>
-          </div>
-
-          <!-- Fixed Expenses Section -->
-          <div class="section-group expenses-section">
-            <h3>Fixed Expenses</h3>
-            <p class="section-description">
-              Monthly expenses that stay relatively consistent
-            </p>
-
-            <div class="form-group">
-              <label for="rentMortgage">
-                Rent/Mortgage
-                <span class="tooltip" title="Monthly housing payment">ⓘ</span>
-              </label>
-              <div class="input-wrapper">
-                <span class="currency-symbol">$</span>
-                <input
-                  id="rentMortgage"
-                  v-model="formData.fixedExpenses.rentMortgage"
-                  type="text"
-                  placeholder="1,800"
-                  @blur="formatCurrency"
-                  @input="clearValidation"
-                />
+              <div class="form-group">
+                <label for="monthlyIncome">
+                  Monthly Income (After Tax & Benefits)
+                  <span
+                    class="tooltip"
+                    title="Your take-home pay after all deductions"
+                    >ⓘ</span
+                  >
+                </label>
+                <div class="input-wrapper">
+                  <span class="currency-symbol">$</span>
+                  <input
+                    id="monthlyIncome"
+                    v-model="formData.income.monthlyIncome"
+                    type="text"
+                    placeholder="4,800"
+                    @blur="formatCurrency"
+                    @input="clearValidation"
+                  />
+                </div>
+                <div class="example-text">Example: $4,800</div>
               </div>
             </div>
 
-            <div class="form-group">
-              <label for="utilities">
-                Utilities
-                <span class="tooltip" title="Electricity, water, gas, etc."
-                  >ⓘ</span
-                >
-              </label>
-              <div class="input-wrapper">
-                <span class="currency-symbol">$</span>
-                <input
-                  id="utilities"
-                  v-model="formData.fixedExpenses.utilities"
-                  type="text"
-                  placeholder="200"
-                  @blur="formatCurrency"
-                  @input="clearValidation"
-                />
+            <!-- Fixed Expenses Section -->
+            <div class="section-group expenses-section">
+              <h3>🏠 Fixed Expenses</h3>
+              <p class="section-description">
+                Monthly expenses that stay relatively consistent
+              </p>
+
+              <div class="form-group">
+                <label for="rentMortgage">
+                  Rent/Mortgage
+                  <span class="tooltip" title="Monthly housing payment">ⓘ</span>
+                </label>
+                <div class="input-wrapper">
+                  <span class="currency-symbol">$</span>
+                  <input
+                    id="rentMortgage"
+                    v-model="formData.fixedExpenses.rentMortgage"
+                    type="text"
+                    placeholder="1,800"
+                    @blur="formatCurrency"
+                    @input="clearValidation"
+                  />
+                </div>
               </div>
-            </div>
 
-            <div class="form-group">
-              <label for="internet">
-                Internet
-                <span class="tooltip" title="Monthly internet service">ⓘ</span>
-              </label>
-              <div class="input-wrapper">
-                <span class="currency-symbol">$</span>
-                <input
-                  id="internet"
-                  v-model="formData.fixedExpenses.internet"
-                  type="text"
-                  placeholder="80"
-                  @blur="formatCurrency"
-                  @input="clearValidation"
-                />
+              <div class="form-group">
+                <label for="utilities">
+                  Utilities
+                  <span class="tooltip" title="Electricity, water, gas, etc."
+                    >ⓘ</span
+                  >
+                </label>
+                <div class="input-wrapper">
+                  <span class="currency-symbol">$</span>
+                  <input
+                    id="utilities"
+                    v-model="formData.fixedExpenses.utilities"
+                    type="text"
+                    placeholder="200"
+                    @blur="formatCurrency"
+                    @input="clearValidation"
+                  />
+                </div>
               </div>
-            </div>
 
-            <div class="form-group">
-              <label for="phone">
-                Phone
-                <span class="tooltip" title="Monthly phone service">ⓘ</span>
-              </label>
-              <div class="input-wrapper">
-                <span class="currency-symbol">$</span>
-                <input
-                  id="phone"
-                  v-model="formData.fixedExpenses.phone"
-                  type="text"
-                  placeholder="60"
-                  @blur="formatCurrency"
-                  @input="clearValidation"
-                />
+              <div class="form-group">
+                <label for="internet">
+                  Internet
+                  <span class="tooltip" title="Monthly internet service"
+                    >ⓘ</span
+                  >
+                </label>
+                <div class="input-wrapper">
+                  <span class="currency-symbol">$</span>
+                  <input
+                    id="internet"
+                    v-model="formData.fixedExpenses.internet"
+                    type="text"
+                    placeholder="80"
+                    @blur="formatCurrency"
+                    @input="clearValidation"
+                  />
+                </div>
               </div>
-            </div>
 
-            <div class="form-group">
-              <label for="insurance">
-                Insurance
-                <span class="tooltip" title="Health, car, home, life insurance"
-                  >ⓘ</span
-                >
-              </label>
-              <div class="input-wrapper">
-                <span class="currency-symbol">$</span>
-                <input
-                  id="insurance"
-                  v-model="formData.fixedExpenses.insurance"
-                  type="text"
-                  placeholder="150"
-                  @blur="formatCurrency"
-                  @input="clearValidation"
-                />
+              <div class="form-group">
+                <label for="phone">
+                  Phone
+                  <span class="tooltip" title="Monthly phone service">ⓘ</span>
+                </label>
+                <div class="input-wrapper">
+                  <span class="currency-symbol">$</span>
+                  <input
+                    id="phone"
+                    v-model="formData.fixedExpenses.phone"
+                    type="text"
+                    placeholder="60"
+                    @blur="formatCurrency"
+                    @input="clearValidation"
+                  />
+                </div>
               </div>
-            </div>
 
-            <div class="form-group">
-              <label for="transitCar">
-                Transit/Car
-                <span
-                  class="tooltip"
-                  title="Gas, parking, transit passes, car maintenance"
-                  >ⓘ</span
-                >
-              </label>
-              <div class="input-wrapper">
-                <span class="currency-symbol">$</span>
-                <input
-                  id="transitCar"
-                  v-model="formData.fixedExpenses.transitCar"
-                  type="text"
-                  placeholder="300"
-                  @blur="formatCurrency"
-                  @input="clearValidation"
-                />
+              <div class="form-group">
+                <label for="insurance">
+                  Insurance
+                  <span
+                    class="tooltip"
+                    title="Health, car, home, life insurance"
+                    >ⓘ</span
+                  >
+                </label>
+                <div class="input-wrapper">
+                  <span class="currency-symbol">$</span>
+                  <input
+                    id="insurance"
+                    v-model="formData.fixedExpenses.insurance"
+                    type="text"
+                    placeholder="150"
+                    @blur="formatCurrency"
+                    @input="clearValidation"
+                  />
+                </div>
               </div>
-            </div>
 
-            <div class="form-group">
-              <label for="subscriptions">
-                Subscriptions
-                <span class="tooltip" title="Streaming, gym, software, etc."
-                  >ⓘ</span
-                >
-              </label>
-              <div class="input-wrapper">
-                <span class="currency-symbol">$</span>
-                <input
-                  id="subscriptions"
-                  v-model="formData.fixedExpenses.subscriptions"
-                  type="text"
-                  placeholder="50"
-                  @blur="formatCurrency"
-                  @input="clearValidation"
-                />
+              <div class="form-group">
+                <label for="transitCar">
+                  Transit/Car
+                  <span
+                    class="tooltip"
+                    title="Gas, parking, transit passes, car maintenance"
+                    >ⓘ</span
+                  >
+                </label>
+                <div class="input-wrapper">
+                  <span class="currency-symbol">$</span>
+                  <input
+                    id="transitCar"
+                    v-model="formData.fixedExpenses.transitCar"
+                    type="text"
+                    placeholder="300"
+                    @blur="formatCurrency"
+                    @input="clearValidation"
+                  />
+                </div>
               </div>
-            </div>
 
-            <div class="form-group">
-              <label for="minimumDebtPayments">
-                Minimum Debt Payments
-                <span
-                  class="tooltip"
-                  title="Minimum payments on credit cards, loans"
-                  >ⓘ</span
-                >
-              </label>
-              <div class="input-wrapper">
-                <span class="currency-symbol">$</span>
-                <input
-                  id="minimumDebtPayments"
-                  v-model="formData.fixedExpenses.minimumDebtPayments"
-                  type="text"
-                  placeholder="200"
-                  @blur="formatCurrency"
-                  @input="clearValidation"
-                />
+              <div class="form-group">
+                <label for="subscriptions">
+                  Subscriptions
+                  <span class="tooltip" title="Streaming, gym, software, etc."
+                    >ⓘ</span
+                  >
+                </label>
+                <div class="input-wrapper">
+                  <span class="currency-symbol">$</span>
+                  <input
+                    id="subscriptions"
+                    v-model="formData.fixedExpenses.subscriptions"
+                    type="text"
+                    placeholder="50"
+                    @blur="formatCurrency"
+                    @input="clearValidation"
+                  />
+                </div>
               </div>
-            </div>
-          </div>
 
-          <!-- Variable Expenses Section -->
-          <div class="section-group variable-section">
-            <h3>Variable Expenses</h3>
-            <p class="section-description">
-              Expenses that can vary month to month
-            </p>
-
-            <div class="form-group">
-              <label for="groceries">
-                Groceries
-                <span class="tooltip" title="Food and household items">ⓘ</span>
-              </label>
-              <div class="input-wrapper">
-                <span class="currency-symbol">$</span>
-                <input
-                  id="groceries"
-                  v-model="formData.variableExpenses.groceries"
-                  type="text"
-                  placeholder="400"
-                  @blur="formatCurrency"
-                  @input="clearValidation"
-                />
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="dining">
-                Dining Out
-                <span class="tooltip" title="Restaurants, takeout, coffee shops"
-                  >ⓘ</span
-                >
-              </label>
-              <div class="input-wrapper">
-                <span class="currency-symbol">$</span>
-                <input
-                  id="dining"
-                  v-model="formData.variableExpenses.dining"
-                  type="text"
-                  placeholder="200"
-                  @blur="formatCurrency"
-                  @input="clearValidation"
-                />
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="gas">
-                Gas
-                <span class="tooltip" title="Fuel for your vehicle">ⓘ</span>
-              </label>
-              <div class="input-wrapper">
-                <span class="currency-symbol">$</span>
-                <input
-                  id="gas"
-                  v-model="formData.variableExpenses.gas"
-                  type="text"
-                  placeholder="150"
-                  @blur="formatCurrency"
-                  @input="clearValidation"
-                />
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="shopping">
-                Shopping
-                <span class="tooltip" title="Clothing, electronics, home goods"
-                  >ⓘ</span
-                >
-              </label>
-              <div class="input-wrapper">
-                <span class="currency-symbol">$</span>
-                <input
-                  id="shopping"
-                  v-model="formData.variableExpenses.shopping"
-                  type="text"
-                  placeholder="200"
-                  @blur="formatCurrency"
-                  @input="clearValidation"
-                />
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="personal">
-                Personal
-                <span class="tooltip" title="Haircuts, personal care, hobbies"
-                  >ⓘ</span
-                >
-              </label>
-              <div class="input-wrapper">
-                <span class="currency-symbol">$</span>
-                <input
-                  id="personal"
-                  v-model="formData.variableExpenses.personal"
-                  type="text"
-                  placeholder="100"
-                  @blur="formatCurrency"
-                  @input="clearValidation"
-                />
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="travel">
-                Travel
-                <span
-                  class="tooltip"
-                  title="Vacations, weekend trips, travel expenses"
-                  >ⓘ</span
-                >
-              </label>
-              <div class="input-wrapper">
-                <span class="currency-symbol">$</span>
-                <input
-                  id="travel"
-                  v-model="formData.variableExpenses.travel"
-                  type="text"
-                  placeholder="150"
-                  @blur="formatCurrency"
-                  @input="clearValidation"
-                />
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="miscellaneous">
-                Miscellaneous
-                <span class="tooltip" title="Other variable expenses">ⓘ</span>
-              </label>
-              <div class="input-wrapper">
-                <span class="currency-symbol">$</span>
-                <input
-                  id="miscellaneous"
-                  v-model="formData.variableExpenses.miscellaneous"
-                  type="text"
-                  placeholder="100"
-                  @blur="formatCurrency"
-                  @input="clearValidation"
-                />
+              <div class="form-group">
+                <label for="minimumDebtPayments">
+                  Minimum Debt Payments
+                  <span
+                    class="tooltip"
+                    title="Minimum payments on credit cards, loans"
+                    >ⓘ</span
+                  >
+                </label>
+                <div class="input-wrapper">
+                  <span class="currency-symbol">$</span>
+                  <input
+                    id="minimumDebtPayments"
+                    v-model="formData.fixedExpenses.minimumDebtPayments"
+                    type="text"
+                    placeholder="200"
+                    @blur="formatCurrency"
+                    @input="clearValidation"
+                  />
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Savings/Transfers Section -->
-          <div class="section-group savings-section">
-            <h3>Savings & Transfers</h3>
-            <p class="section-description">
-              Money you're setting aside for future goals
-            </p>
+          <!-- Right Column: Variable Expenses & Savings -->
+          <div class="form-column right-column">
+            <!-- Variable Expenses Section -->
+            <div class="section-group variable-section">
+              <h3>🛒 Variable Expenses</h3>
+              <p class="section-description">
+                Expenses that can vary month to month
+              </p>
 
-            <div class="form-group">
-              <label for="emergencyFund">
-                Emergency Fund
-                <span
-                  class="tooltip"
-                  title="Monthly contribution to emergency savings"
-                  >ⓘ</span
-                >
-              </label>
-              <div class="input-wrapper">
-                <span class="currency-symbol">$</span>
-                <input
-                  id="emergencyFund"
-                  v-model="formData.savings.emergencyFund"
-                  type="text"
-                  placeholder="200"
-                  @blur="formatCurrency"
-                  @input="clearValidation"
-                />
+              <div class="form-group">
+                <label for="groceries">
+                  Groceries
+                  <span class="tooltip" title="Food and household items"
+                    >ⓘ</span
+                  >
+                </label>
+                <div class="input-wrapper">
+                  <span class="currency-symbol">$</span>
+                  <input
+                    id="groceries"
+                    v-model="formData.variableExpenses.groceries"
+                    type="text"
+                    placeholder="400"
+                    @blur="formatCurrency"
+                    @input="clearValidation"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="dining">
+                  Dining Out
+                  <span
+                    class="tooltip"
+                    title="Restaurants, takeout, coffee shops"
+                    >ⓘ</span
+                  >
+                </label>
+                <div class="input-wrapper">
+                  <span class="currency-symbol">$</span>
+                  <input
+                    id="dining"
+                    v-model="formData.variableExpenses.dining"
+                    type="text"
+                    placeholder="200"
+                    @blur="formatCurrency"
+                    @input="clearValidation"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="gas">
+                  Gas
+                  <span class="tooltip" title="Fuel for your vehicle">ⓘ</span>
+                </label>
+                <div class="input-wrapper">
+                  <span class="currency-symbol">$</span>
+                  <input
+                    id="gas"
+                    v-model="formData.variableExpenses.gas"
+                    type="text"
+                    placeholder="150"
+                    @blur="formatCurrency"
+                    @input="clearValidation"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="shopping">
+                  Shopping
+                  <span
+                    class="tooltip"
+                    title="Clothing, electronics, home goods"
+                    >ⓘ</span
+                  >
+                </label>
+                <div class="input-wrapper">
+                  <span class="currency-symbol">$</span>
+                  <input
+                    id="shopping"
+                    v-model="formData.variableExpenses.shopping"
+                    type="text"
+                    placeholder="200"
+                    @blur="formatCurrency"
+                    @input="clearValidation"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="personal">
+                  Personal
+                  <span class="tooltip" title="Haircuts, personal care, hobbies"
+                    >ⓘ</span
+                  >
+                </label>
+                <div class="input-wrapper">
+                  <span class="currency-symbol">$</span>
+                  <input
+                    id="personal"
+                    v-model="formData.variableExpenses.personal"
+                    type="text"
+                    placeholder="100"
+                    @blur="formatCurrency"
+                    @input="clearValidation"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="travel">
+                  Travel
+                  <span
+                    class="tooltip"
+                    title="Vacations, weekend trips, travel expenses"
+                    >ⓘ</span
+                  >
+                </label>
+                <div class="input-wrapper">
+                  <span class="currency-symbol">$</span>
+                  <input
+                    id="travel"
+                    v-model="formData.variableExpenses.travel"
+                    type="text"
+                    placeholder="150"
+                    @blur="formatCurrency"
+                    @input="clearValidation"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="miscellaneous">
+                  Miscellaneous
+                  <span class="tooltip" title="Other variable expenses">ⓘ</span>
+                </label>
+                <div class="input-wrapper">
+                  <span class="currency-symbol">$</span>
+                  <input
+                    id="miscellaneous"
+                    v-model="formData.variableExpenses.miscellaneous"
+                    type="text"
+                    placeholder="100"
+                    @blur="formatCurrency"
+                    @input="clearValidation"
+                  />
+                </div>
               </div>
             </div>
 
-            <div class="form-group">
-              <label for="homeFund">
-                Home Fund
-                <span class="tooltip" title="Monthly savings for home purchase"
-                  >ⓘ</span
-                >
-              </label>
-              <div class="input-wrapper">
-                <span class="currency-symbol">$</span>
-                <input
-                  id="homeFund"
-                  v-model="formData.savings.homeFund"
-                  type="text"
-                  placeholder="2,167"
-                  @blur="formatCurrency"
-                  @input="clearValidation"
-                />
+            <!-- Savings/Transfers Section -->
+            <div class="section-group savings-section">
+              <h3>💎 Savings & Transfers</h3>
+              <p class="section-description">
+                Money you're setting aside for future goals
+              </p>
+
+              <div class="form-group">
+                <label for="emergencyFund">
+                  Emergency Fund
+                  <span
+                    class="tooltip"
+                    title="Monthly contribution to emergency savings"
+                    >ⓘ</span
+                  >
+                </label>
+                <div class="input-wrapper">
+                  <span class="currency-symbol">$</span>
+                  <input
+                    id="emergencyFund"
+                    v-model="formData.savings.emergencyFund"
+                    type="text"
+                    placeholder="200"
+                    @blur="formatCurrency"
+                    @input="clearValidation"
+                  />
+                </div>
               </div>
-              <div class="example-text">
-                Example: $2,167 (from Down Payment Calculator)
+
+              <div class="form-group">
+                <label for="homeFund">
+                  Home Fund
+                  <span
+                    class="tooltip"
+                    title="Monthly savings for home purchase"
+                    >ⓘ</span
+                  >
+                </label>
+                <div class="input-wrapper">
+                  <span class="currency-symbol">$</span>
+                  <input
+                    id="homeFund"
+                    v-model="formData.savings.homeFund"
+                    type="text"
+                    placeholder="2,167"
+                    @blur="formatCurrency"
+                    @input="clearValidation"
+                  />
+                </div>
+                <div class="example-text">
+                  Example: $2,167 (from Down Payment Calculator)
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="rrspFhsa">
+                  RRSP/FHSA Contributions
+                  <span
+                    class="tooltip"
+                    title="Monthly retirement and home savings contributions"
+                    >ⓘ</span
+                  >
+                </label>
+                <div class="input-wrapper">
+                  <span class="currency-symbol">$</span>
+                  <input
+                    id="rrspFhsa"
+                    v-model="formData.savings.rrspFhsa"
+                    type="text"
+                    placeholder="400"
+                    @blur="formatCurrency"
+                    @input="clearValidation"
+                  />
+                </div>
               </div>
             </div>
-
-            <div class="form-group">
-              <label for="rrspFhsa">
-                RRSP/FHSA Contributions
-                <span
-                  class="tooltip"
-                  title="Monthly retirement and home savings contributions"
-                  >ⓘ</span
-                >
-              </label>
-              <div class="input-wrapper">
-                <span class="currency-symbol">$</span>
-                <input
-                  id="rrspFhsa"
-                  v-model="formData.savings.rrspFhsa"
-                  type="text"
-                  placeholder="400"
-                  @blur="formatCurrency"
-                  @input="clearValidation"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- Calculate Button -->
-          <div class="form-group">
-            <button
-              type="submit"
-              class="calculate-btn"
-              :disabled="isCalculating"
-            >
-              {{ isCalculating ? "Calculating..." : "Calculate Cash Flow" }}
-            </button>
           </div>
         </form>
+
+        <!-- Calculate Button -->
+        <div class="calculate-section">
+          <button
+            type="submit"
+            class="calculate-btn"
+            :disabled="isCalculating"
+            @click="calculateCashFlow"
+          >
+            {{ isCalculating ? "Calculating..." : "Calculate Cash Flow" }}
+          </button>
+        </div>
       </div>
 
       <!-- Results Section -->
@@ -912,7 +931,7 @@ export default {
 
 <style scoped>
 .cash-flow-calculator {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
 }
@@ -934,7 +953,7 @@ export default {
 .header-content p {
   font-size: 1.2rem;
   color: #7f8c8d;
-  max-width: 500px;
+  max-width: 600px;
 }
 
 .back-link {
@@ -954,10 +973,11 @@ export default {
 }
 
 .calculator-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 3rem;
   margin-bottom: 3rem;
+  width: 100%;
 }
 
 .form-section,
@@ -966,6 +986,8 @@ export default {
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  min-width: 0;
 }
 
 .form-section h2,
@@ -975,10 +997,31 @@ export default {
   font-size: 1.5rem;
 }
 
-.section-group {
+.calculator-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
   margin-bottom: 2rem;
-  padding: 1.5rem;
+}
+
+.form-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.left-column {
+  border-right: 2px solid #e1e8ed;
+  padding-right: 1rem;
+}
+
+.right-column {
+  padding-left: 1rem;
+}
+
+.section-group {
   background: #f8f9fa;
+  padding: 1.5rem;
   border-radius: 8px;
   border-left: 4px solid #667eea;
 }
@@ -1007,6 +1050,9 @@ export default {
   color: #2c3e50;
   margin-bottom: 0.5rem;
   font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .section-description {
@@ -1015,16 +1061,15 @@ export default {
   margin-bottom: 1.5rem;
 }
 
-.calculator-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
 }
 
 .form-group label {
@@ -1077,6 +1122,12 @@ export default {
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
+.calculate-section {
+  text-align: center;
+  padding-top: 1rem;
+  border-top: 2px solid #e1e8ed;
+}
+
 .calculate-btn {
   background: #667eea;
   color: white;
@@ -1087,7 +1138,6 @@ export default {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-top: 1rem;
 }
 
 .calculate-btn:hover:not(:disabled) {
@@ -1305,16 +1355,36 @@ export default {
 }
 
 /* Responsive Design */
+@media (max-width: 1200px) {
+  .cash-flow-calculator {
+    max-width: 1200px;
+  }
+}
+
 @media (max-width: 1024px) {
   .calculator-container {
-    grid-template-columns: 1fr;
     gap: 2rem;
+  }
+
+  .calculator-form {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .left-column {
+    border-right: none;
+    padding-right: 0;
+  }
+
+  .right-column {
+    padding-left: 0;
   }
 }
 
 @media (max-width: 768px) {
   .cash-flow-calculator {
     padding: 1rem;
+    max-width: 100%;
   }
 
   .page-header {
@@ -1331,6 +1401,10 @@ export default {
     padding: 1.5rem;
   }
 
+  .section-group {
+    padding: 1rem;
+  }
+
   .results-grid {
     grid-template-columns: 1fr;
   }
@@ -1338,6 +1412,16 @@ export default {
   .summary-grid,
   .projections-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .calculator-form {
+    gap: 1rem;
+  }
+
+  .section-group {
+    padding: 0.75rem;
   }
 }
 </style>

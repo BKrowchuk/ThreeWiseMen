@@ -20,12 +20,12 @@
         <h2>Your Financial Information</h2>
 
         <form @submit.prevent="calculateNetWorth" class="calculator-form">
-          <!-- Assets Section -->
-          <div class="section-group">
-            <h3>Assets</h3>
-            <p class="section-description">
-              Enter the current value of your assets
-            </p>
+          <!-- Assets Column -->
+          <div class="form-column assets-column">
+            <div class="column-header">
+              <h3>💰 Assets</h3>
+              <p>Enter the current value of your assets</p>
+            </div>
 
             <div class="form-group">
               <label for="cashChecking">
@@ -180,12 +180,12 @@
             </div>
           </div>
 
-          <!-- Liabilities Section -->
-          <div class="section-group">
-            <h3>Liabilities</h3>
-            <p class="section-description">
-              Enter the current balance of your debts
-            </p>
+          <!-- Liabilities Column -->
+          <div class="form-column liabilities-column">
+            <div class="column-header">
+              <h3>💳 Liabilities</h3>
+              <p>Enter the current balance of your debts</p>
+            </div>
 
             <div class="form-group">
               <label for="creditCards">
@@ -297,18 +297,19 @@
               </div>
             </div>
           </div>
-
-          <!-- Calculate Button -->
-          <div class="form-group">
-            <button
-              type="submit"
-              class="calculate-btn"
-              :disabled="isCalculating"
-            >
-              {{ isCalculating ? "Calculating..." : "Calculate Net Worth" }}
-            </button>
-          </div>
         </form>
+
+        <!-- Calculate Button -->
+        <div class="calculate-section">
+          <button
+            type="submit"
+            class="calculate-btn"
+            :disabled="isCalculating"
+            @click="calculateNetWorth"
+          >
+            {{ isCalculating ? "Calculating..." : "Calculate Net Worth" }}
+          </button>
+        </div>
       </div>
 
       <!-- Results Section -->
@@ -669,7 +670,7 @@ export default {
 
 <style scoped>
 .net-worth-calculator {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
 }
@@ -691,7 +692,7 @@ export default {
 .header-content p {
   font-size: 1.2rem;
   color: #7f8c8d;
-  max-width: 500px;
+  max-width: 600px;
 }
 
 .back-link {
@@ -711,10 +712,11 @@ export default {
 }
 
 .calculator-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 3rem;
   margin-bottom: 3rem;
+  width: 100%;
 }
 
 .form-section,
@@ -723,6 +725,8 @@ export default {
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  min-width: 0;
 }
 
 .form-section h2,
@@ -732,36 +736,60 @@ export default {
   font-size: 1.5rem;
 }
 
-.section-group {
+.calculator-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
   margin-bottom: 2rem;
-  padding: 1.5rem;
+}
+
+.form-column {
   background: #f8f9fa;
+  padding: 1.5rem;
   border-radius: 8px;
   border-left: 4px solid #667eea;
 }
 
-.section-group h3 {
+.assets-column {
+  border-left-color: #27ae60;
+  background: #f0f9f4;
+}
+
+.liabilities-column {
+  border-left-color: #e74c3c;
+  background: #fdf2f2;
+}
+
+.column-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e1e8ed;
+}
+
+.column-header h3 {
   color: #2c3e50;
   margin-bottom: 0.5rem;
   font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.section-description {
+.column-header p {
   color: #7f8c8d;
   font-size: 0.9rem;
-  margin-bottom: 1.5rem;
-}
-
-.calculator-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  margin: 0;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
 }
 
 .form-group label {
@@ -808,6 +836,12 @@ export default {
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
+.calculate-section {
+  text-align: center;
+  padding-top: 1rem;
+  border-top: 2px solid #e1e8ed;
+}
+
 .calculate-btn {
   background: #667eea;
   color: white;
@@ -818,7 +852,6 @@ export default {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-top: 1rem;
 }
 
 .calculate-btn:hover:not(:disabled) {
@@ -1016,16 +1049,27 @@ export default {
 }
 
 /* Responsive Design */
+@media (max-width: 1200px) {
+  .net-worth-calculator {
+    max-width: 1200px;
+  }
+}
+
 @media (max-width: 1024px) {
   .calculator-container {
-    grid-template-columns: 1fr;
     gap: 2rem;
+  }
+
+  .calculator-form {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 }
 
 @media (max-width: 768px) {
   .net-worth-calculator {
     padding: 1rem;
+    max-width: 100%;
   }
 
   .page-header {
@@ -1042,6 +1086,10 @@ export default {
     padding: 1.5rem;
   }
 
+  .form-column {
+    padding: 1rem;
+  }
+
   .results-grid {
     grid-template-columns: 1fr;
   }
@@ -1049,6 +1097,16 @@ export default {
   .breakdown-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .calculator-form {
+    gap: 1rem;
+  }
+
+  .form-column {
+    padding: 0.75rem;
   }
 }
 </style>

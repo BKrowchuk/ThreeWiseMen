@@ -17,167 +17,178 @@
         <h2>Property & Financial Details</h2>
 
         <form @submit.prevent="calculateSavings" class="calculator-form">
-          <!-- Property Price -->
-          <div class="form-group">
-            <label for="propertyPrice">Property Price</label>
-            <div class="input-wrapper">
-              <span class="currency-symbol">$</span>
-              <input
-                id="propertyPrice"
-                v-model="formData.propertyPrice"
-                type="text"
-                placeholder="500,000"
-                @blur="formatCurrency"
-                @input="clearValidation"
-                tabindex="1"
-              />
+          <!-- Property Details Column -->
+          <div class="form-column">
+            <div class="column-header">
+              <h3>🏠 Property Details</h3>
+              <p>Basic property and cost information</p>
             </div>
-          </div>
 
-          <!-- Down Payment Toggle and Input -->
-          <div class="form-group">
-            <label>Down Payment</label>
-            <div class="toggle-container">
-              <div class="toggle-buttons">
-                <button
-                  type="button"
-                  :class="[
-                    'toggle-btn',
-                    { active: downPaymentMode === 'percentage' },
-                  ]"
-                  @click="setDownPaymentMode('percentage')"
-                >
-                  Percentage
-                </button>
-                <button
-                  type="button"
-                  :class="[
-                    'toggle-btn',
-                    { active: downPaymentMode === 'dollar' },
-                  ]"
-                  @click="setDownPaymentMode('dollar')"
-                >
-                  Dollar Amount
-                </button>
+            <div class="form-group">
+              <label for="propertyPrice">Property Price</label>
+              <div class="input-wrapper">
+                <span class="currency-symbol">$</span>
+                <input
+                  id="propertyPrice"
+                  v-model="formData.propertyPrice"
+                  type="text"
+                  placeholder="500,000"
+                  @blur="formatCurrency"
+                  @input="clearValidation"
+                  tabindex="1"
+                />
               </div>
             </div>
-            <div class="input-wrapper">
-              <span class="input-symbol">{{
-                downPaymentMode === "percentage" ? "%" : "$"
-              }}</span>
-              <input
-                v-model="formData.downPayment"
-                type="text"
-                :placeholder="
-                  downPaymentMode === 'percentage' ? '20' : '100,000'
-                "
-                @blur="formatDownPayment"
-                @input="clearValidation"
-                tabindex="2"
-              />
+
+            <div class="form-group">
+              <label>Down Payment</label>
+              <div class="toggle-container">
+                <div class="toggle-buttons">
+                  <button
+                    type="button"
+                    :class="[
+                      'toggle-btn',
+                      { active: downPaymentMode === 'percentage' },
+                    ]"
+                    @click="setDownPaymentMode('percentage')"
+                  >
+                    Percentage
+                  </button>
+                  <button
+                    type="button"
+                    :class="[
+                      'toggle-btn',
+                      { active: downPaymentMode === 'dollar' },
+                    ]"
+                    @click="setDownPaymentMode('dollar')"
+                  >
+                    Dollar Amount
+                  </button>
+                </div>
+              </div>
+              <div class="input-wrapper">
+                <span class="input-symbol">{{
+                  downPaymentMode === "percentage" ? "%" : "$"
+                }}</span>
+                <input
+                  v-model="formData.downPayment"
+                  type="text"
+                  :placeholder="
+                    downPaymentMode === 'percentage' ? '20' : '100,000'
+                  "
+                  @blur="formatDownPayment"
+                  @input="clearValidation"
+                  tabindex="2"
+                />
+              </div>
+              <div
+                class="conversion-display"
+                v-if="formData.propertyPrice && formData.downPayment"
+              >
+                <small>
+                  {{
+                    downPaymentMode === "percentage"
+                      ? `${formData.downPayment}% = $${formatNumber(
+                          downPaymentAmount
+                        )}`
+                      : `$${formatNumber(
+                          formData.downPayment
+                        )} = ${downPaymentPercentage}%`
+                  }}
+                </small>
+              </div>
             </div>
-            <div
-              class="conversion-display"
-              v-if="formData.propertyPrice && formData.downPayment"
-            >
-              <small>
-                {{
-                  downPaymentMode === "percentage"
-                    ? `${formData.downPayment}% = $${formatNumber(
-                        downPaymentAmount
-                      )}`
-                    : `$${formatNumber(
-                        formData.downPayment
-                      )} = ${downPaymentPercentage}%`
-                }}
-              </small>
+
+            <div class="form-group">
+              <label for="closingCosts">Closing Costs</label>
+              <div class="input-wrapper">
+                <span class="input-symbol">%</span>
+                <input
+                  id="closingCosts"
+                  v-model="formData.closingCosts"
+                  type="text"
+                  placeholder="3.5"
+                  @blur="formatPercentage"
+                  @input="clearValidation"
+                  tabindex="3"
+                />
+              </div>
+              <div
+                class="conversion-display"
+                v-if="formData.propertyPrice && formData.closingCosts"
+              >
+                <small>${{ formatNumber(closingCostsAmount) }}</small>
+              </div>
             </div>
           </div>
 
-          <!-- Closing Costs -->
-          <div class="form-group">
-            <label for="closingCosts">Closing Costs</label>
-            <div class="input-wrapper">
-              <span class="input-symbol">%</span>
-              <input
-                id="closingCosts"
-                v-model="formData.closingCosts"
-                type="text"
-                placeholder="3.5"
-                @blur="formatPercentage"
-                @input="clearValidation"
-                tabindex="3"
-              />
+          <!-- Financial Position Column -->
+          <div class="form-column">
+            <div class="column-header">
+              <h3>💰 Financial Position</h3>
+              <p>Your current savings and income</p>
             </div>
-            <div
-              class="conversion-display"
-              v-if="formData.propertyPrice && formData.closingCosts"
-            >
-              <small>${{ formatNumber(closingCostsAmount) }}</small>
-            </div>
-          </div>
 
-          <!-- Existing Savings -->
-          <div class="form-group">
-            <label for="existingSavings">Existing Savings</label>
-            <div class="input-wrapper">
-              <span class="currency-symbol">$</span>
-              <input
-                id="existingSavings"
-                v-model="formData.existingSavings"
-                type="text"
-                placeholder="25,000"
-                @blur="formatCurrency"
-                @input="clearValidation"
-                tabindex="4"
-              />
+            <div class="form-group">
+              <label for="existingSavings">Existing Savings</label>
+              <div class="input-wrapper">
+                <span class="currency-symbol">$</span>
+                <input
+                  id="existingSavings"
+                  v-model="formData.existingSavings"
+                  type="text"
+                  placeholder="25,000"
+                  @blur="formatCurrency"
+                  @input="clearValidation"
+                  tabindex="4"
+                />
+              </div>
             </div>
-          </div>
 
-          <!-- Timeline -->
-          <div class="form-group">
-            <label for="timeline">Timeline (months)</label>
-            <div class="input-wrapper">
-              <input
-                id="timeline"
-                v-model="formData.timeline"
-                type="number"
-                placeholder="24"
-                min="1"
-                @input="clearValidation"
-                tabindex="5"
-              />
+            <div class="form-group">
+              <label for="monthlyIncome">Monthly Income</label>
+              <div class="input-wrapper">
+                <span class="currency-symbol">$</span>
+                <input
+                  id="monthlyIncome"
+                  v-model="formData.monthlyIncome"
+                  type="text"
+                  placeholder="8,000"
+                  @blur="formatCurrency"
+                  @input="clearValidation"
+                  tabindex="5"
+                />
+              </div>
             </div>
-          </div>
 
-          <!-- Monthly Income -->
-          <div class="form-group">
-            <label for="monthlyIncome">Monthly Income</label>
-            <div class="input-wrapper">
-              <span class="currency-symbol">$</span>
-              <input
-                id="monthlyIncome"
-                v-model="formData.monthlyIncome"
-                type="text"
-                placeholder="8,000"
-                @blur="formatCurrency"
-                @input="clearValidation"
-                tabindex="6"
-              />
+            <div class="form-group">
+              <label for="timeline">Timeline (months)</label>
+              <div class="input-wrapper">
+                <input
+                  id="timeline"
+                  v-model="formData.timeline"
+                  type="number"
+                  placeholder="24"
+                  min="1"
+                  @input="clearValidation"
+                  tabindex="6"
+                />
+              </div>
             </div>
-          </div>
-
-          <!-- Calculate Button -->
-          <div class="form-group">
-            <button
-              type="submit"
-              class="calculate-btn"
-              :disabled="isCalculating"
-            >
-              {{ isCalculating ? "Calculating..." : "Calculate Savings Plan" }}
-            </button>
           </div>
         </form>
+
+        <!-- Calculate Button -->
+        <div class="calculate-section">
+          <button
+            type="submit"
+            class="calculate-btn"
+            :disabled="isCalculating"
+            @click="calculateSavings"
+          >
+            {{ isCalculating ? "Calculating..." : "Calculate Savings Plan" }}
+          </button>
+        </div>
       </div>
 
       <!-- Results Section -->
@@ -595,7 +606,7 @@ export default {
 
 <style scoped>
 .down-payment-calculator {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
 }
@@ -617,7 +628,7 @@ export default {
 .header-content p {
   font-size: 1.2rem;
   color: #7f8c8d;
-  max-width: 500px;
+  max-width: 600px;
 }
 
 .back-link {
@@ -637,10 +648,11 @@ export default {
 }
 
 .calculator-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 3rem;
   margin-bottom: 3rem;
+  width: 100%;
 }
 
 .form-section,
@@ -649,6 +661,8 @@ export default {
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  min-width: 0;
 }
 
 .form-section h2,
@@ -659,15 +673,49 @@ export default {
 }
 
 .calculator-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.form-column {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid #667eea;
+}
+
+.column-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e1e8ed;
+}
+
+.column-header h3 {
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
   display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.column-header p {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+  margin: 0;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
 }
 
 .form-group label {
@@ -744,6 +792,12 @@ export default {
   font-size: 0.85rem;
 }
 
+.calculate-section {
+  text-align: center;
+  padding-top: 1rem;
+  border-top: 2px solid #e1e8ed;
+}
+
 .calculate-btn {
   background: #667eea;
   color: white;
@@ -754,7 +808,6 @@ export default {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-top: 1rem;
 }
 
 .calculate-btn:hover:not(:disabled) {
@@ -952,16 +1005,27 @@ export default {
 }
 
 /* Responsive Design */
+@media (max-width: 1200px) {
+  .down-payment-calculator {
+    max-width: 1200px;
+  }
+}
+
 @media (max-width: 1024px) {
   .calculator-container {
-    grid-template-columns: 1fr;
     gap: 2rem;
+  }
+
+  .calculator-form {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 }
 
 @media (max-width: 768px) {
   .down-payment-calculator {
     padding: 1rem;
+    max-width: 100%;
   }
 
   .page-header {
@@ -978,6 +1042,10 @@ export default {
     padding: 1.5rem;
   }
 
+  .form-column {
+    padding: 1rem;
+  }
+
   .results-grid {
     grid-template-columns: 1fr;
   }
@@ -988,6 +1056,16 @@ export default {
 
   .target-amount {
     font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .calculator-form {
+    gap: 1rem;
+  }
+
+  .form-column {
+    padding: 0.75rem;
   }
 }
 </style>
