@@ -1,0 +1,95 @@
+{
+  "name": "three-wisemen",
+  "version": "1.0.0",
+  "description": "A modern, responsive financial planning dashboard built with vanilla JavaScript",
+  "main": "app.js",
+  "scripts": {
+    "start": "python -m http.server 8000 || npx serve . || php -S localhost:8000",
+    "dev": "python -m http.server 8000",
+    "serve": "npx serve .",
+    "test": "jest",
+    "test:unit": "jest tests/unit/",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "echo \"No linting configured - using vanilla JavaScript\"",
+    "build": "echo \"No build process required - pure vanilla implementation\"",
+    "deploy": "echo \"Deploy to your preferred hosting service\""
+  },
+  "keywords": [
+    "financial-planning",
+    "dashboard",
+    "savings-calculator",
+    "vanilla-javascript",
+    "responsive-design",
+    "accessibility",
+    "financial-tools",
+    "down-payment-calculator",
+    "budget-planning",
+    "financial-education"
+  ],
+  "author": {
+    "name": "ThreeWiseMen Development Team",
+    "email": "dev@threewisemen.com",
+    "url": "https://github.com/yourusername/ThreeWiseMen"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/ThreeWiseMen.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/ThreeWiseMen/issues"
+  },
+  "homepage": "https://github.com/yourusername/ThreeWiseMen#readme",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "Chrome >= 90",
+    "Firefox >= 88",
+    "Safari >= 14",
+    "Edge >= 90"
+  ],
+  "devDependencies": {
+    "jest": "^30.0.5",
+    "jest-environment-jsdom": "^30.0.5"
+  },
+  "bundledDependencies": [],
+  "os": [
+    "darwin",
+    "linux",
+    "win32"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
+  ],
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "index.html",
+    "styles.css",
+    "app.js",
+    "tests/",
+    "docs/",
+    "README.md",
+    "LICENSE"
+  ],
+  "directories": {
+    "lib": ".",
+    "test": "tests",
+    "docs": "docs"
+  },
+  "man": "./docs/README.md",
+  "config": {
+    "port": 8000
+  },
+  "preferGlobal": false,
+  "bin": {},
+  "bundleDependencies": []
+}
