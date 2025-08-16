@@ -347,19 +347,49 @@ export default {
             fixedExpenses: {
               title: "Fixed Expenses",
               description: "Your recurring monthly expenses",
-              fields: this.calculatedData.fixedExpenses || {},
+              fields: {},
             },
             variableExpenses: {
               title: "Variable Expenses",
               description: "Your flexible monthly expenses",
-              fields: this.calculatedData.variableExpenses || {},
+              fields: {},
             },
             savings: {
               title: "Savings Targets",
               description: "Your monthly savings goals",
-              fields: this.calculatedData.savings || {},
+              fields: {},
             },
           };
+
+          // Format fixed expenses with proper labels
+          if (this.calculatedData.fixedExpenses) {
+            Object.keys(this.calculatedData.fixedExpenses).forEach((key) => {
+              this.saveableFields.fixedExpenses.fields[key] = {
+                label: this.formatExpenseLabel(key),
+                value: this.calculatedData.fixedExpenses[key] || 0,
+              };
+            });
+          }
+
+          // Format variable expenses with proper labels
+          if (this.calculatedData.variableExpenses) {
+            Object.keys(this.calculatedData.variableExpenses).forEach((key) => {
+              this.saveableFields.variableExpenses.fields[key] = {
+                label: this.formatExpenseLabel(key),
+                value: this.calculatedData.variableExpenses[key] || 0,
+              };
+            });
+          }
+
+          // Format savings with proper labels
+          if (this.calculatedData.savings) {
+            Object.keys(this.calculatedData.savings).forEach((key) => {
+              this.saveableFields.savings.fields[key] = {
+                label: this.formatSavingsLabel(key),
+                value: this.calculatedData.savings[key] || 0,
+              };
+            });
+          }
           break;
       }
 
@@ -428,9 +458,16 @@ export default {
           Object.keys(this.selectedFields[groupKey]).forEach((fieldKey) => {
             if (this.selectedFields[groupKey][fieldKey]) {
               const field = this.saveableFields[groupKey].fields[fieldKey];
-              if (field.value !== undefined) {
-                if (!dataToSave[groupKey]) dataToSave[groupKey] = {};
-                dataToSave[groupKey][fieldKey] = field.value;
+              if (field && field.value !== undefined && field.value !== null) {
+                // Only save numerical values that are greater than 0
+                const numValue =
+                  typeof field.value === "number"
+                    ? field.value
+                    : parseFloat(field.value);
+                if (!isNaN(numValue) && numValue > 0) {
+                  if (!dataToSave[groupKey]) dataToSave[groupKey] = {};
+                  dataToSave[groupKey][fieldKey] = numValue;
+                }
               }
             }
           });
@@ -554,6 +591,36 @@ export default {
         carLoans: "Car Loans",
         studentLoans: "Student Loans",
         otherDebts: "Other Debts",
+      };
+      return labels[key] || key;
+    },
+
+    formatExpenseLabel(key) {
+      const labels = {
+        rentMortgage: "Rent/Mortgage",
+        utilities: "Utilities",
+        internet: "Internet",
+        phone: "Phone",
+        insurance: "Insurance",
+        transitCar: "Transit/Car",
+        subscriptions: "Subscriptions",
+        minimumDebtPayments: "Minimum Debt Payments",
+        groceries: "Groceries",
+        dining: "Dining Out",
+        gas: "Gas",
+        shopping: "Shopping",
+        personal: "Personal",
+        travel: "Travel",
+        miscellaneous: "Miscellaneous",
+      };
+      return labels[key] || key;
+    },
+
+    formatSavingsLabel(key) {
+      const labels = {
+        emergencyFund: "Emergency Fund",
+        homeFund: "Home Fund",
+        rrspFhsa: "RRSP/FHSA Contributions",
       };
       return labels[key] || key;
     },

@@ -457,14 +457,18 @@
 
         <!-- Calculate Button -->
         <div class="calculate-section">
-          <button
-            type="submit"
-            class="calculate-btn"
-            :disabled="isCalculating"
-            @click="calculateCashFlow"
-          >
-            {{ isCalculating ? "Calculating..." : "Calculate Cash Flow" }}
-          </button>
+          <div class="action-buttons">
+            <button
+              type="submit"
+              class="calculate-btn"
+              :disabled="isCalculating"
+              @click="calculateCashFlow"
+            >
+              {{ isCalculating ? "Calculating..." : "Calculate Cash Flow" }}
+            </button>
+
+            <LoadFromProfile calculator-type="cashFlow" @load="onProfileLoad" />
+          </div>
         </div>
       </div>
 
@@ -647,11 +651,13 @@
 <script>
 import { calculatorStore, calculatorActions } from "../store/calculators";
 import SaveToProfile from "../components/SaveToProfile.vue";
+import LoadFromProfile from "../components/LoadFromProfile.vue";
 
 export default {
   name: "CashFlowCalculator",
   components: {
     SaveToProfile,
+    LoadFromProfile,
   },
   data() {
     return {
@@ -986,6 +992,71 @@ export default {
       console.log("Profile saved:", savedData);
       // Could add additional logic here if needed
     },
+
+    // Handle profile load
+    onProfileLoad(loadedData) {
+      console.log("Profile loaded:", loadedData);
+
+      // Populate form fields with loaded data
+      if (loadedData.income?.monthlyIncome) {
+        this.formData.income.monthlyIncome = this.formatNumber(
+          loadedData.income.monthlyIncome
+        );
+      }
+
+      // Populate fixed expenses
+      if (loadedData.fixedExpenses) {
+        Object.keys(loadedData.fixedExpenses).forEach((key) => {
+          if (
+            this.formData.fixedExpenses.hasOwnProperty(key) &&
+            typeof loadedData.fixedExpenses[key] === "number" &&
+            loadedData.fixedExpenses[key] > 0
+          ) {
+            this.formData.fixedExpenses[key] = this.formatNumber(
+              loadedData.fixedExpenses[key]
+            );
+          }
+        });
+      }
+
+      // Populate variable expenses
+      if (loadedData.variableExpenses) {
+        Object.keys(loadedData.variableExpenses).forEach((key) => {
+          if (
+            this.formData.variableExpenses.hasOwnProperty(key) &&
+            typeof loadedData.variableExpenses[key] === "number" &&
+            loadedData.variableExpenses[key] > 0
+          ) {
+            this.formData.variableExpenses[key] = this.formatNumber(
+              loadedData.variableExpenses[key]
+            );
+          }
+        });
+      }
+
+      // Populate savings
+      if (loadedData.savings) {
+        Object.keys(loadedData.savings).forEach((key) => {
+          if (
+            this.formData.savings.hasOwnProperty(key) &&
+            typeof loadedData.savings[key] === "number" &&
+            loadedData.savings[key] > 0
+          ) {
+            this.formData.savings[key] = this.formatNumber(
+              loadedData.savings[key]
+            );
+          }
+        });
+      }
+
+      // Clear any existing validation errors
+      this.validationErrors = [];
+
+      // Auto-calculate if we have loaded data
+      if (this.formData.income.monthlyIncome) {
+        this.calculateCashFlow();
+      }
+    },
   },
 };
 </script>
@@ -1191,6 +1262,20 @@ export default {
   text-align: center;
   padding-top: 1rem;
   border-top: 2px solid var(--border-primary);
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .action-buttons {
+    flex-direction: row;
+    justify-content: center;
+  }
 }
 
 .calculate-btn {

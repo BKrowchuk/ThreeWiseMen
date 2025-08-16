@@ -195,6 +195,9 @@ export default {
 
   methods: {
     initializeAvailableData() {
+      // Ensure profileValues is available and is an object
+      const profileData = this.profileValues || {};
+
       switch (this.calculatorType) {
         case "downPayment":
           this.availableData = {
@@ -204,7 +207,10 @@ export default {
               fields: {
                 monthlyIncome: {
                   label: "Monthly Income",
-                  value: this.profileValues.monthlyIncome || 0,
+                  value:
+                    typeof profileData.monthlyIncome === "number"
+                      ? profileData.monthlyIncome
+                      : 0,
                 },
               },
             },
@@ -214,7 +220,10 @@ export default {
               fields: {
                 existingSavings: {
                   label: "Existing Savings",
-                  value: this.profileValues.existingSavings || 0,
+                  value:
+                    typeof profileData.existingSavings === "number"
+                      ? profileData.existingSavings
+                      : 0,
                 },
               },
             },
@@ -224,11 +233,17 @@ export default {
               fields: {
                 downPaymentTarget: {
                   label: "Down Payment Target",
-                  value: this.profileValues.downPaymentTarget || 0,
+                  value:
+                    typeof profileData.downPaymentTarget === "number"
+                      ? profileData.downPaymentTarget
+                      : 0,
                 },
                 monthlySavingsGoal: {
                   label: "Monthly Savings Goal",
-                  value: this.profileValues.monthlySavingsGoal || 0,
+                  value:
+                    typeof profileData.monthlySavingsGoal === "number"
+                      ? profileData.monthlySavingsGoal
+                      : 0,
                 },
               },
             },
@@ -250,21 +265,26 @@ export default {
           };
 
           // Populate asset fields
-          if (this.profileValues.assets) {
-            Object.keys(this.profileValues.assets).forEach((key) => {
+          if (profileData.assets && typeof profileData.assets === "object") {
+            Object.keys(profileData.assets).forEach((key) => {
+              const value = profileData.assets[key];
               this.availableData.assets.fields[key] = {
                 label: this.formatAssetLabel(key),
-                value: this.profileValues.assets[key] || 0,
+                value: typeof value === "number" ? value : 0,
               };
             });
           }
 
           // Populate liability fields
-          if (this.profileValues.liabilities) {
-            Object.keys(this.profileValues.liabilities).forEach((key) => {
+          if (
+            profileData.liabilities &&
+            typeof profileData.liabilities === "object"
+          ) {
+            Object.keys(profileData.liabilities).forEach((key) => {
+              const value = profileData.liabilities[key];
               this.availableData.liabilities.fields[key] = {
                 label: this.formatLiabilityLabel(key),
-                value: this.profileValues.liabilities[key] || 0,
+                value: typeof value === "number" ? value : 0,
               };
             });
           }
@@ -278,7 +298,10 @@ export default {
               fields: {
                 monthlyIncome: {
                   label: "Monthly Income",
-                  value: this.profileValues.monthlyIncome || 0,
+                  value:
+                    typeof profileData.monthlyIncome === "number"
+                      ? profileData.monthlyIncome
+                      : 0,
                 },
               },
             },
@@ -300,29 +323,38 @@ export default {
           };
 
           // Populate expense fields
-          if (this.profileValues.fixedExpenses) {
-            Object.keys(this.profileValues.fixedExpenses).forEach((key) => {
+          if (
+            profileData.fixedExpenses &&
+            typeof profileData.fixedExpenses === "object"
+          ) {
+            Object.keys(profileData.fixedExpenses).forEach((key) => {
+              const value = profileData.fixedExpenses[key];
               this.availableData.fixedExpenses.fields[key] = {
                 label: this.formatExpenseLabel(key),
-                value: this.profileValues.fixedExpenses[key] || 0,
+                value: typeof value === "number" ? value : 0,
               };
             });
           }
 
-          if (this.profileValues.variableExpenses) {
-            Object.keys(this.profileValues.variableExpenses).forEach((key) => {
+          if (
+            profileData.variableExpenses &&
+            typeof profileData.variableExpenses === "object"
+          ) {
+            Object.keys(profileData.variableExpenses).forEach((key) => {
+              const value = profileData.variableExpenses[key];
               this.availableData.variableExpenses.fields[key] = {
                 label: this.formatExpenseLabel(key),
-                value: this.profileValues.variableExpenses[key] || 0,
+                value: typeof value === "number" ? value : 0,
               };
             });
           }
 
-          if (this.profileValues.savings) {
-            Object.keys(this.profileValues.savings).forEach((key) => {
+          if (profileData.savings && typeof profileData.savings === "object") {
+            Object.keys(profileData.savings).forEach((key) => {
+              const value = profileData.savings[key];
               this.availableData.savings.fields[key] = {
                 label: this.formatSavingsLabel(key),
-                value: this.profileValues.savings[key] || 0,
+                value: typeof value === "number" ? value : 0,
               };
             });
           }

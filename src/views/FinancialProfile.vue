@@ -132,7 +132,7 @@
               <div class="field-value">
                 <span v-if="editingSection !== 'income'"
                   >${{
-                    formatNumber(profileStore.financialState.emergencyFund)
+                    formatNumber(profileStore.financialState.budget.savings.emergencyFund)
                   }}</span
                 >
                 <input
@@ -149,7 +149,7 @@
               <div class="field-value">
                 <span v-if="editingSection !== 'income'"
                   >${{
-                    formatNumber(profileStore.financialState.homeFund)
+                    formatNumber(profileStore.financialState.budget.savings.homeFund)
                   }}</span
                 >
                 <input
@@ -166,7 +166,7 @@
               <div class="field-value">
                 <span v-if="editingSection !== 'income'"
                   >${{
-                    formatNumber(profileStore.financialState.rrspFhsa)
+                    formatNumber(profileStore.financialState.budget.savings.rrspFhsa)
                   }}</span
                 >
                 <input
@@ -629,9 +629,9 @@ export default {
     totalSavings() {
       return (
         profileStore.financialState.existingSavings +
-        profileStore.financialState.emergencyFund +
-        profileStore.financialState.homeFund +
-        profileStore.financialState.rrspFhsa
+        profileStore.financialState.budget.savings.emergencyFund +
+        profileStore.financialState.budget.savings.homeFund +
+        profileStore.financialState.budget.savings.rrspFhsa
       );
     },
 
