@@ -196,19 +196,17 @@ export default {
 }
 
 .back-link {
-  display: inline-block;
   color: var(--color-primary);
   text-decoration: none;
   font-weight: 500;
-  padding: 0.75rem 1.5rem;
-  border: 2px solid var(--color-primary);
+  padding: 0.5rem 1rem;
   border-radius: 6px;
   transition: all var(--transition-normal);
 }
 
 .back-link:hover {
-  background-color: var(--color-primary);
-  color: var(--text-inverse);
+  background: var(--bg-tertiary);
+  color: var(--color-primary-dark);
 }
 
 @media (max-width: 768px) {
