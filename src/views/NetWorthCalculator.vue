@@ -786,8 +786,10 @@ export default {
 .page-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 3rem;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border-primary);
   gap: 2rem;
 }
 
@@ -1202,6 +1204,7 @@ export default {
   .page-header {
     flex-direction: column;
     gap: 1rem;
+    align-items: flex-start;
   }
 
   .header-content h1 {
