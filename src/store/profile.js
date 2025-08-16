@@ -339,25 +339,48 @@ export const profileActions = {
 
   // Check if profile has data for a specific calculator
   hasProfileData(calculatorType) {
-    const comparison = this.getProfileComparison(calculatorType);
+    switch (calculatorType) {
+      case "netWorth":
+        // For Net Worth, check if data has ever been saved (even if all values are 0)
+        // This is indicated by having a lastUpdated timestamp
+        return profileStore.lastUpdated.netWorth !== null;
 
-    // Check if comparison object has any meaningful data
-    for (const [key, value] of Object.entries(comparison)) {
-      if (value !== null && value !== undefined) {
-        if (typeof value === "number" && value > 0) {
-          return true;
-        } else if (typeof value === "object" && value !== null) {
-          // Check nested objects for any non-zero values
-          if (
-            Object.values(value).some((v) => typeof v === "number" && v > 0)
-          ) {
-            return true;
+      case "downPayment":
+        // For Down Payment, check for meaningful values or saved goals
+        return (
+          profileStore.lastUpdated.goals !== null ||
+          profileStore.financialState.monthlyIncome > 0 ||
+          profileStore.financialState.existingSavings > 0
+        );
+
+      case "cashFlow":
+        // For Cash Flow, check for meaningful budget data or saved cash flow history
+        return (
+          profileStore.lastUpdated.cashFlow !== null ||
+          profileStore.financialState.monthlyIncome > 0
+        );
+
+      default:
+        // Fallback to the original logic for unknown calculator types
+        const comparison = this.getProfileComparison(calculatorType);
+
+        // Check if comparison object has any meaningful data
+        for (const [key, value] of Object.entries(comparison)) {
+          if (value !== null && value !== undefined) {
+            if (typeof value === "number" && value > 0) {
+              return true;
+            } else if (typeof value === "object" && value !== null) {
+              // Check nested objects for any non-zero values
+              if (
+                Object.values(value).some((v) => typeof v === "number" && v > 0)
+              ) {
+                return true;
+              }
+            }
           }
         }
-      }
+        return false;
     }
-
-    return false;
   },
 
   // Add store property for easier access

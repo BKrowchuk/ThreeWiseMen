@@ -579,6 +579,30 @@ export default {
       );
       return hasAssetData || hasLiabilityData;
     },
+
+    // Data to save to profile
+    netWorthSaveData() {
+      const assets = {};
+      const liabilities = {};
+
+      // Convert assets to numbers - always include all asset types
+      Object.keys(this.formData.assets).forEach((key) => {
+        const value = this.parseCurrency(this.formData.assets[key]);
+        assets[key] = isNaN(value) ? 0 : value;
+      });
+
+      // Convert liabilities to numbers - always include all liability types
+      Object.keys(this.formData.liabilities).forEach((key) => {
+        const value = this.parseCurrency(this.formData.liabilities[key]);
+        liabilities[key] = isNaN(value) ? 0 : value;
+      });
+
+      return {
+        assets,
+        liabilities,
+        totalNetWorth: this.netWorth || 0,
+      };
+    },
   },
   methods: {
     // Format currency input on blur
@@ -640,30 +664,6 @@ export default {
         otherDebts: "Other Debts",
       };
       return labels[key] || key;
-    },
-
-    // Data to save to profile
-    netWorthSaveData() {
-      const assets = {};
-      const liabilities = {};
-
-      // Convert assets to numbers - always include all asset types
-      Object.keys(this.formData.assets).forEach((key) => {
-        const value = this.parseCurrency(this.formData.assets[key]);
-        assets[key] = isNaN(value) ? 0 : value;
-      });
-
-      // Convert liabilities to numbers - always include all liability types
-      Object.keys(this.formData.liabilities).forEach((key) => {
-        const value = this.parseCurrency(this.formData.liabilities[key]);
-        liabilities[key] = isNaN(value) ? 0 : value;
-      });
-
-      return {
-        assets,
-        liabilities,
-        totalNetWorth: this.netWorth || 0,
-      };
     },
 
     // Validate form inputs
