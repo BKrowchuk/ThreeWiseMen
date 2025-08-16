@@ -459,12 +459,19 @@ export default {
             if (this.selectedFields[groupKey][fieldKey]) {
               const field = this.saveableFields[groupKey].fields[fieldKey];
               if (field && field.value !== undefined && field.value !== null) {
-                // Only save numerical values that are greater than 0
                 const numValue =
                   typeof field.value === "number"
                     ? field.value
                     : parseFloat(field.value);
-                if (!isNaN(numValue) && numValue > 0) {
+
+                // For net worth, save all valid numbers including zeros
+                // For other calculators, only save values greater than 0
+                const shouldSave =
+                  this.calculatorType === "netWorth"
+                    ? !isNaN(numValue) && numValue >= 0
+                    : !isNaN(numValue) && numValue > 0;
+
+                if (shouldSave) {
                   if (!dataToSave[groupKey]) dataToSave[groupKey] = {};
                   dataToSave[groupKey][fieldKey] = numValue;
                 }

@@ -632,6 +632,7 @@
           calculator-type="cashFlow"
           :calculated-data="cashFlowSaveData"
           @saved="onProfileSaved"
+          v-if="hasDataToSave"
         />
       </div>
 
@@ -839,6 +840,27 @@ export default {
         savings,
         totalCashFlow: this.cashSurplus,
       };
+    },
+
+    // Check if there's meaningful data to save
+    hasDataToSave() {
+      // Check if income is filled or any expense/savings field is filled
+      if (
+        this.formData.income.monthlyIncome &&
+        this.parseCurrency(this.formData.income.monthlyIncome) > 0
+      ) {
+        return true;
+      }
+
+      const hasExpenseData = Object.values(this.formData.fixedExpenses)
+        .concat(Object.values(this.formData.variableExpenses))
+        .some((value) => value && this.parseCurrency(value) > 0);
+
+      const hasSavingsData = Object.values(this.formData.savings).some(
+        (value) => value && this.parseCurrency(value) > 0
+      );
+
+      return hasExpenseData || hasSavingsData;
     },
   },
   methods: {

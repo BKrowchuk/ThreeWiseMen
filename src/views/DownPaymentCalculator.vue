@@ -337,6 +337,7 @@
           calculator-type="downPayment"
           :calculated-data="downPaymentSaveData"
           @saved="onProfileSaved"
+          v-if="hasDataToSave"
         />
       </div>
 
@@ -462,6 +463,20 @@ export default {
         monthlySavingsGoal: this.monthlySavingsTarget,
         timeline: parseInt(this.formData.timeline) || 0,
       };
+    },
+
+    // Check if there's meaningful data to save
+    hasDataToSave() {
+      // Check if key fields are filled
+      return (
+        (this.formData.propertyPrice &&
+          this.parseCurrency(this.formData.propertyPrice) > 0) ||
+        (this.formData.monthlyIncome &&
+          this.parseCurrency(this.formData.monthlyIncome) > 0) ||
+        (this.formData.existingSavings &&
+          this.parseCurrency(this.formData.existingSavings) > 0) ||
+        (this.formData.timeline && parseInt(this.formData.timeline) > 0)
+      );
     },
   },
   methods: {

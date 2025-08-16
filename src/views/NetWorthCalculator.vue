@@ -301,14 +301,21 @@
 
         <!-- Calculate Button -->
         <div class="calculate-section">
-          <button
-            type="submit"
-            class="calculate-btn"
-            :disabled="isCalculating"
-            @click="calculateNetWorth"
-          >
-            {{ isCalculating ? "Calculating..." : "Calculate Net Worth" }}
-          </button>
+          <div class="action-buttons">
+            <button
+              type="submit"
+              class="calculate-btn"
+              :disabled="isCalculating"
+              @click="calculateNetWorth"
+            >
+              {{ isCalculating ? "Calculating..." : "Calculate Net Worth" }}
+            </button>
+
+            <LoadFromProfile
+              calculator-type="netWorth"
+              @load="onProfileLoaded"
+            />
+          </div>
         </div>
       </div>
 
@@ -402,14 +409,12 @@
           </div>
         </div>
 
-        <!-- Load from Profile Component -->
-        <LoadFromProfile calculator-type="netWorth" @loaded="onProfileLoaded" />
-
         <!-- Save to Profile Component -->
         <SaveToProfile
           calculator-type="netWorth"
           :calculated-data="netWorthSaveData"
           @saved="onProfileSaved"
+          v-if="hasDataToSave"
         />
       </div>
 
@@ -562,6 +567,18 @@ export default {
         };
       }
     },
+
+    // Check if there's meaningful data to save
+    hasDataToSave() {
+      // Check if any asset or liability field has been filled (even with zero)
+      const hasAssetData = Object.values(this.formData.assets).some(
+        (value) => value !== "" && value !== null && value !== undefined
+      );
+      const hasLiabilityData = Object.values(this.formData.liabilities).some(
+        (value) => value !== "" && value !== null && value !== undefined
+      );
+      return hasAssetData || hasLiabilityData;
+    },
   },
   methods: {
     // Format currency input on blur
@@ -630,21 +647,22 @@ export default {
       const assets = {};
       const liabilities = {};
 
-      // Convert assets to numbers
+      // Convert assets to numbers - always include all asset types
       Object.keys(this.formData.assets).forEach((key) => {
-        assets[key] = this.parseCurrency(this.formData.assets[key]) || 0;
+        const value = this.parseCurrency(this.formData.assets[key]);
+        assets[key] = isNaN(value) ? 0 : value;
       });
 
-      // Convert liabilities to numbers
+      // Convert liabilities to numbers - always include all liability types
       Object.keys(this.formData.liabilities).forEach((key) => {
-        liabilities[key] =
-          this.parseCurrency(this.formData.liabilities[key]) || 0;
+        const value = this.parseCurrency(this.formData.liabilities[key]);
+        liabilities[key] = isNaN(value) ? 0 : value;
       });
 
       return {
         assets,
         liabilities,
-        totalNetWorth: this.netWorth,
+        totalNetWorth: this.netWorth || 0,
       };
     },
 
@@ -932,6 +950,20 @@ export default {
   text-align: center;
   padding-top: 1rem;
   border-top: 2px solid var(--border-primary);
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .action-buttons {
+    flex-direction: row;
+    justify-content: center;
+  }
 }
 
 .calculate-btn {
