@@ -966,31 +966,32 @@ export default {
 }
 
 .result-card {
-  background: #f8f9fa;
+  background: var(--calc-result-bg);
   padding: 1.5rem;
   border-radius: 8px;
   text-align: center;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid var(--color-primary);
+  border: 1px solid var(--calc-card-border);
 }
 
 .result-card.assets {
-  border-left-color: #27ae60;
-  background: #f0f9f4;
+  border-left-color: var(--success-primary);
+  background: var(--success-light);
 }
 
 .result-card.liabilities {
-  border-left-color: #e74c3c;
-  background: #fdf2f2;
+  border-left-color: var(--error-primary);
+  background: var(--error-light);
 }
 
 .result-card.net-worth {
-  border-left-color: #667eea;
-  background: #f0f4ff;
+  border-left-color: var(--color-primary);
+  background: var(--info-light);
 }
 
 .result-card h3 {
   font-size: 1rem;
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
 }
 
@@ -1001,27 +1002,27 @@ export default {
 }
 
 .result-value.positive {
-  color: #27ae60;
+  color: var(--success-primary);
 }
 
 .result-value.negative {
-  color: #e74c3c;
+  color: var(--error-primary);
 }
 
 .result-detail {
   font-size: 0.85rem;
-  color: #7f8c8d;
+  color: var(--text-muted);
 }
 
 .breakdown-section {
-  background: #f8f9fa;
+  background: var(--bg-tertiary);
   padding: 1.5rem;
   border-radius: 8px;
   margin-bottom: 2rem;
 }
 
 .breakdown-section h3 {
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   font-size: 1.2rem;
 }
@@ -1033,7 +1034,7 @@ export default {
 }
 
 .breakdown-column h4 {
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   font-size: 1.1rem;
 }
@@ -1043,34 +1044,35 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem;
-  background: white;
+  background: var(--calc-card-bg);
   border-radius: 6px;
   margin-bottom: 0.5rem;
+  border: 1px solid var(--calc-card-border);
 }
 
 .item-label {
   font-weight: 500;
-  color: #2c3e50;
+  color: var(--text-primary);
 }
 
 .item-value.positive {
-  color: #27ae60;
+  color: var(--success-primary);
   font-weight: 600;
 }
 
 .item-value.negative {
-  color: #e74c3c;
+  color: var(--error-primary);
   font-weight: 600;
 }
 
 .health-indicator {
-  background: #f8f9fa;
+  background: var(--bg-tertiary);
   padding: 1.5rem;
   border-radius: 8px;
 }
 
 .health-indicator h3 {
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   font-size: 1.2rem;
 }
@@ -1080,24 +1082,25 @@ export default {
   align-items: center;
   gap: 1rem;
   padding: 1.5rem;
-  background: white;
+  background: var(--calc-card-bg);
   border-radius: 8px;
+  border: 1px solid var(--calc-card-border);
 }
 
 .health-status.excellent {
-  border-left: 4px solid #27ae60;
+  border-left: 4px solid var(--success-primary);
 }
 
 .health-status.good {
-  border-left: 4px solid #3498db;
+  border-left: 4px solid var(--info-primary);
 }
 
 .health-status.fair {
-  border-left: 4px solid #f39c12;
+  border-left: 4px solid var(--warning-primary);
 }
 
 .health-status.poor {
-  border-left: 4px solid #e74c3c;
+  border-left: 4px solid var(--error-primary);
 }
 
 .status-icon {
@@ -1106,25 +1109,25 @@ export default {
 
 .status-title {
   font-weight: 600;
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 0.25rem;
 }
 
 .status-description {
-  color: #7f8c8d;
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
 .validation-errors {
-  background: #fdf2f2;
-  border: 2px solid #e74c3c;
+  background: var(--error-light);
+  border: 2px solid var(--error-primary);
   border-radius: 8px;
   padding: 1.5rem;
   margin-bottom: 2rem;
 }
 
 .validation-errors h3 {
-  color: #e74c3c;
+  color: var(--error-primary);
   margin-bottom: 1rem;
   font-size: 1.2rem;
 }
@@ -1135,7 +1138,7 @@ export default {
 }
 
 .error-item {
-  color: #e74c3c;
+  color: var(--error-primary);
   margin-bottom: 0.5rem;
   line-height: 1.4;
 }

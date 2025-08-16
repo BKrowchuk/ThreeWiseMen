@@ -4,7 +4,6 @@
 
 **Todo**
 
-- net worth theme
 - load from profile
 - save to profile
 - back buttons
