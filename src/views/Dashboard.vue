@@ -138,6 +138,38 @@
         <h3>Investments</h3>
         <p>Track and analyze your investment portfolio</p>
       </div>
+
+      <div
+        class="tool-card profile-card"
+        @click="$router.push('/financial-profile')"
+      >
+        <div class="tool-icon">👤</div>
+        <h3>Financial Profile</h3>
+        <p>Manage your persistent financial data and track progress</p>
+        <div class="profile-summary" v-if="hasProfileData">
+          <div class="profile-stat">
+            <span class="stat-label">Net Worth:</span>
+            <span
+              class="stat-value"
+              :class="{
+                positive: profileNetWorth >= 0,
+                negative: profileNetWorth < 0,
+              }"
+            >
+              ${{ formatNumber(Math.abs(profileNetWorth)) }}
+            </span>
+          </div>
+          <div class="profile-stat">
+            <span class="stat-label">Monthly Income:</span>
+            <span class="stat-value"
+              >${{ formatNumber(profileMonthlyIncome) }}</span
+            >
+          </div>
+        </div>
+        <div class="profile-empty" v-else>
+          <span class="empty-text">No profile data yet</span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -146,6 +178,7 @@
 import { computed } from "vue";
 import { calculatorStore } from "../store/calculators";
 import { themeStore } from "../store/theme.js";
+import { profileStore } from "../store/profile";
 
 export default {
   name: "Dashboard",
@@ -187,6 +220,35 @@ export default {
       );
     });
 
+    // Profile data computed properties
+    const hasProfileData = computed(() => {
+      return (
+        profileStore.financialState.monthlyIncome > 0 ||
+        Object.values(profileStore.financialState.assets).some(
+          (value) => value > 0
+        ) ||
+        Object.values(profileStore.financialState.liabilities).some(
+          (value) => value > 0
+        ) ||
+        profileStore.lastUpdated.financialState !== null ||
+        profileStore.lastUpdated.netWorth !== null
+      );
+    });
+
+    const profileNetWorth = computed(() => {
+      const totalAssets = Object.values(
+        profileStore.financialState.assets
+      ).reduce((sum, value) => sum + value, 0);
+      const totalLiabilities = Object.values(
+        profileStore.financialState.liabilities
+      ).reduce((sum, value) => sum + value, 0);
+      return totalAssets - totalLiabilities;
+    });
+
+    const profileMonthlyIncome = computed(() => {
+      return profileStore.financialState.monthlyIncome || 0;
+    });
+
     // Format number with commas
     const formatNumber = (num) => {
       if (!num) return "0";
@@ -210,6 +272,9 @@ export default {
       hasCalculatorData,
       formatNumber,
       logoSource,
+      hasProfileData,
+      profileNetWorth,
+      profileMonthlyIncome,
     };
   },
 };
@@ -294,6 +359,69 @@ export default {
 .tool-card p {
   color: var(--text-secondary);
   line-height: 1.6;
+}
+
+/* Profile Card Styles */
+.profile-card {
+  position: relative;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.profile-summary {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--bg-tertiary);
+  border-radius: 8px;
+  border-left: 3px solid var(--color-primary);
+}
+
+.profile-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.profile-stat:last-child {
+  margin-bottom: 0;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.stat-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-family: monospace;
+}
+
+.stat-value.positive {
+  color: var(--success-primary);
+}
+
+.stat-value.negative {
+  color: var(--error-primary);
+}
+
+.profile-empty {
+  margin-top: 1rem;
+  padding: 1.5rem;
+  text-align: center;
+  background: var(--bg-tertiary);
+  border-radius: 8px;
+  border: 2px dashed var(--border-primary);
+}
+
+.empty-text {
+  color: var(--text-muted);
+  font-style: italic;
 }
 
 /* Summary Section Styles */

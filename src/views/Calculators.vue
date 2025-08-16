@@ -1,8 +1,13 @@
 <template>
   <div class="calculators">
     <div class="page-header">
-      <h1>Financial Calculators</h1>
-      <p>Comprehensive tools to help you plan your financial future</p>
+      <div class="header-content">
+        <h1>Financial Calculators</h1>
+        <p>Comprehensive tools to help you plan your financial future</p>
+      </div>
+      <div class="header-navigation">
+        <router-link to="/" class="back-link">← Back to Dashboard</router-link>
+      </div>
     </div>
 
     <div class="calculators-grid">
@@ -57,10 +62,6 @@
         </div>
       </div>
     </div>
-
-    <div class="back-section">
-      <router-link to="/" class="back-link">← Back to Dashboard</router-link>
-    </div>
   </div>
 </template>
 
@@ -79,21 +80,27 @@ export default {
 }
 
 .page-header {
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: 3rem;
+  gap: 2rem;
 }
 
-.page-header h1 {
+.header-content {
+  flex: 1;
+}
+
+.header-content h1 {
   font-size: 2.5rem;
   color: var(--text-primary);
   margin-bottom: 1rem;
 }
 
-.page-header p {
+.header-content p {
   font-size: 1.2rem;
   color: var(--text-secondary);
   max-width: 600px;
-  margin: 0 auto;
 }
 
 .calculators-grid {
@@ -122,7 +129,11 @@ export default {
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-secondary)
+  );
   transform: scaleX(0);
   transition: transform var(--transition-normal);
 }
@@ -182,10 +193,6 @@ export default {
   transform: translateX(4px);
 }
 
-.back-section {
-  text-align: center;
-}
-
 .back-link {
   display: inline-block;
   color: var(--color-primary);
@@ -207,7 +214,13 @@ export default {
     padding: 1rem;
   }
 
-  .page-header h1 {
+  .page-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .header-content h1 {
     font-size: 2rem;
   }
 
