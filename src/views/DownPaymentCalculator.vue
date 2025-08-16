@@ -382,14 +382,19 @@ export default {
     };
   },
   mounted() {
-    // Load data from store if available
-    if (calculatorStore.downPayment.propertyPrice) {
-      this.formData = { ...calculatorStore.downPayment };
-    }
+    // Only load data from store if coming from "View Details" link
+    const shouldLoadData = this.$route.query.loadData === "true";
 
-    // Load results if available
-    if (calculatorStore.downPayment.results) {
-      this.showResults = true;
+    if (shouldLoadData) {
+      // Load data from store if available
+      if (calculatorStore.downPayment.propertyPrice) {
+        this.formData = { ...calculatorStore.downPayment };
+      }
+
+      // Load results if available
+      if (calculatorStore.downPayment.results) {
+        this.showResults = true;
+      }
     }
   },
   computed: {

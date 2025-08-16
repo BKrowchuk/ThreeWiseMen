@@ -697,17 +697,22 @@ export default {
     };
   },
   mounted() {
-    // Load data from store if available
-    if (
-      calculatorStore.cashFlow.income.monthlyIncome ||
-      calculatorStore.cashFlow.fixedExpenses.rentMortgage
-    ) {
-      this.formData = { ...calculatorStore.cashFlow };
-    }
+    // Only load data from store if coming from "View Details" link
+    const shouldLoadData = this.$route.query.loadData === 'true';
+    
+    if (shouldLoadData) {
+      // Load data from store if available
+      if (
+        calculatorStore.cashFlow.income.monthlyIncome ||
+        calculatorStore.cashFlow.fixedExpenses.rentMortgage
+      ) {
+        this.formData = { ...calculatorStore.cashFlow };
+      }
 
-    // Load results if available
-    if (calculatorStore.cashFlow.results) {
-      this.showResults = true;
+      // Load results if available
+      if (calculatorStore.cashFlow.results) {
+        this.showResults = true;
+      }
     }
   },
   computed: {

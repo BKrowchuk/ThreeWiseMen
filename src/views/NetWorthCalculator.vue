@@ -468,17 +468,22 @@ export default {
     };
   },
   mounted() {
-    // Load data from store if available
-    if (
-      calculatorStore.netWorth.assets.cashChecking ||
-      calculatorStore.netWorth.liabilities.creditCards
-    ) {
-      this.formData = { ...calculatorStore.netWorth };
-    }
+    // Only load data from store if coming from "View Details" link
+    const shouldLoadData = this.$route.query.loadData === 'true';
+    
+    if (shouldLoadData) {
+      // Load data from store if available
+      if (
+        calculatorStore.netWorth.assets.cashChecking ||
+        calculatorStore.netWorth.liabilities.creditCards
+      ) {
+        this.formData = { ...calculatorStore.netWorth };
+      }
 
-    // Load results if available
-    if (calculatorStore.netWorth.results) {
-      this.showResults = true;
+      // Load results if available
+      if (calculatorStore.netWorth.results) {
+        this.showResults = true;
+      }
     }
   },
   computed: {
