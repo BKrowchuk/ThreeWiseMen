@@ -8,8 +8,8 @@
       name="description"
       content="Comprehensive financial planning dashboard with savings calculator, budget planner, and investment tools"
     />
-    <link rel="icon" type="image/png" href="/ThreeWiseMen/assets/logo-light-e85cf693.png" />
-    
+    <link rel="icon" type="image/png" href="/ThreeWiseMen/logo-light.png" />
+
     <!-- Start Single Page Apps for GitHub Pages -->
     <script type="text/javascript">
       // Single Page Apps for GitHub Pages
@@ -18,20 +18,26 @@
       // This script checks to see if a redirect is present in the query string,
       // converts it back into the correct url and adds it to the
       // browser's history using window.history.replaceState(...)
-      (function(l) {
-        if (l.search[1] === '/' ) {
-          var decoded = l.search.slice(1).split('&').map(function(s) { 
-            return s.replace(/~and~/g, '&')
-          }).join('?');
-          window.history.replaceState(null, null,
-              l.pathname.slice(0, -1) + decoded + l.hash
+      (function (l) {
+        if (l.search[1] === "/") {
+          var decoded = l.search
+            .slice(1)
+            .split("&")
+            .map(function (s) {
+              return s.replace(/~and~/g, "&");
+            })
+            .join("?");
+          window.history.replaceState(
+            null,
+            null,
+            l.pathname.slice(0, -1) + decoded + l.hash
           );
         }
-      }(window.location))
+      })(window.location);
     </script>
     <!-- End Single Page Apps for GitHub Pages -->
-    <script type="module" crossorigin src="/ThreeWiseMen/assets/index-8361f52f.js"></script>
-    <link rel="stylesheet" href="/ThreeWiseMen/assets/index-f84e8713.css">
+    <script type="module" crossorigin src="/ThreeWiseMen/assets/index-9ca0ba0b.js"></script>
+    <link rel="stylesheet" href="/ThreeWiseMen/assets/index-657af39b.css">
   </head>
   <body>
     <div id="app"></div>
