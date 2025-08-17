@@ -100,7 +100,9 @@
                   >
                 </div>
               </div>
-              <router-link to="/calculators/down-payment?loadData=true" class="summary-link"
+              <router-link
+                to="/calculators/down-payment?loadData=true"
+                class="summary-link"
                 >View Details →</router-link
               >
             </div>
@@ -137,7 +139,9 @@
                   </span>
                 </div>
               </div>
-              <router-link to="/calculators/net-worth?loadData=true" class="summary-link"
+              <router-link
+                to="/calculators/net-worth?loadData=true"
+                class="summary-link"
                 >View Details →</router-link
               >
             </div>
@@ -168,7 +172,9 @@
                   >
                 </div>
               </div>
-              <router-link to="/calculators/cash-flow?loadData=true" class="summary-link"
+              <router-link
+                to="/calculators/cash-flow?loadData=true"
+                class="summary-link"
                 >View Details →</router-link
               >
             </div>
