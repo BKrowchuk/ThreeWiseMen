@@ -64,6 +64,23 @@
               <span class="action-arrow">→</span>
             </div>
           </div>
+
+          <!-- Mortgage Affordability Calculator Card -->
+          <div
+            class="calculator-card"
+            @click="$router.push('/calculators/mortgage-affordability')"
+          >
+            <div class="card-icon">🏦</div>
+            <h3>Mortgage Affordability Calculator</h3>
+            <p>
+              Calculate your maximum affordable mortgage based on Canadian
+              lending standards and stress test rates
+            </p>
+            <div class="card-actions">
+              <span class="action-text">Get Started</span>
+              <span class="action-arrow">→</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -178,6 +195,52 @@
                 >View Details →</router-link
               >
             </div>
+
+            <!-- Mortgage Affordability Summary -->
+            <div class="summary-card" v-if="mortgageAffordabilitySummary">
+              <div class="summary-header">
+                <div class="summary-icon">🏦</div>
+                <h3>Mortgage Affordability</h3>
+              </div>
+              <div class="summary-content">
+                <div class="summary-item">
+                  <span class="summary-label">Max Mortgage:</span>
+                  <span class="summary-value positive"
+                    >${{
+                      formatNumber(
+                        mortgageAffordabilitySummary.maxMortgageAmount
+                      )
+                    }}</span
+                  >
+                </div>
+                <div class="summary-item">
+                  <span class="summary-label">Max Home Price:</span>
+                  <span class="summary-value positive"
+                    >${{
+                      formatNumber(mortgageAffordabilitySummary.maxHomePrice)
+                    }}</span
+                  >
+                </div>
+                <div class="summary-item">
+                  <span class="summary-label">GDS Ratio:</span>
+                  <span
+                    class="summary-value"
+                    :class="{
+                      positive: mortgageAffordabilitySummary.gdsRatio <= 32,
+                      negative: mortgageAffordabilitySummary.gdsRatio > 32,
+                    }"
+                    >{{
+                      mortgageAffordabilitySummary.gdsRatio.toFixed(1)
+                    }}%</span
+                  >
+                </div>
+              </div>
+              <router-link
+                to="/calculators/mortgage-affordability?loadData=true"
+                class="summary-link"
+                >View Details →</router-link
+              >
+            </div>
           </div>
         </div>
       </div>
@@ -221,11 +284,23 @@ export default {
       };
     });
 
+    const mortgageAffordabilitySummary = computed(() => {
+      if (!calculatorStore.mortgageAffordability.results) return null;
+      return {
+        maxMortgageAmount:
+          calculatorStore.mortgageAffordability.results.maxMortgageAmount,
+        maxHomePrice:
+          calculatorStore.mortgageAffordability.results.maxHomePrice,
+        gdsRatio: calculatorStore.mortgageAffordability.results.gdsRatio,
+      };
+    });
+
     const hasCalculatorData = computed(() => {
       return (
         downPaymentSummary.value ||
         netWorthSummary.value ||
-        cashFlowSummary.value
+        cashFlowSummary.value ||
+        mortgageAffordabilitySummary.value
       );
     });
 
@@ -242,6 +317,7 @@ export default {
       downPaymentSummary,
       netWorthSummary,
       cashFlowSummary,
+      mortgageAffordabilitySummary,
       hasCalculatorData,
       formatNumber,
     };

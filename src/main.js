@@ -6,6 +6,7 @@ import Calculators from "./views/Calculators.vue";
 import DownPaymentCalculator from "./views/DownPaymentCalculator.vue";
 import NetWorthCalculator from "./views/NetWorthCalculator.vue";
 import CashFlowCalculator from "./views/CashFlowCalculator.vue";
+import MortgageAffordabilityCalculator from "./views/MortgageAffordabilityCalculator.vue";
 import BudgetPlanner from "./views/BudgetPlanner.vue";
 import Investments from "./views/Investments.vue";
 import FinancialProfile from "./views/FinancialProfile.vue";
@@ -18,6 +19,10 @@ const routes = [
   { path: "/calculators/down-payment", component: DownPaymentCalculator },
   { path: "/calculators/net-worth", component: NetWorthCalculator },
   { path: "/calculators/cash-flow", component: CashFlowCalculator },
+  {
+    path: "/calculators/mortgage-affordability",
+    component: MortgageAffordabilityCalculator,
+  },
   { path: "/budget-planner", component: BudgetPlanner },
   { path: "/investments", component: Investments },
   { path: "/financial-profile", component: FinancialProfile },

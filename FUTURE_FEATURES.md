@@ -4,9 +4,6 @@
 
 **Todo**
 
-- load from profile
-- save to profile
-- back buttons
 - budget and investments
 
 ## 🎯 Core Calculator Enhancements
