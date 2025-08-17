@@ -237,8 +237,8 @@ export default {
   computed: {
     logoSource() {
       return themeStore.isDark
-        ? "/src/assets/logo-light.png"
-        : "/src/assets/logo.png";
+        ? "/ThreeWiseMen/logo-light.png"
+        : "/ThreeWiseMen/logo.png";
     },
     themeStore() {
       return themeStore;

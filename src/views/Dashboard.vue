@@ -116,8 +116,8 @@ export default {
     // Logo source based on theme
     const logoSource = computed(() => {
       return themeStore.isDark
-        ? "/src/assets/logo-light.png"
-        : "/src/assets/logo.png";
+        ? "/ThreeWiseMen/logo-light.png"
+        : "/ThreeWiseMen/logo.png";
     });
 
     return {
